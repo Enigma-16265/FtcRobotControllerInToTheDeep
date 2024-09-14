@@ -21,16 +21,25 @@ public class MeepMeepTesting {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(60, 0, Math.toRadians(90)))
-                                .forward(60)
-                                .turn(Math.toRadians(90))
-                                .forward(120)
-                                .strafeLeft(120)
-                                .turn(Math.toRadians(180))
-                                .forward(120)
-                                .turn(Math.toRadians(90))
+                        drive.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
                                 .forward(20)
-                                .forward(20)
+                                .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                //*epic depositing happens*
+                                .lineToSplineHeading(new Pose2d(-35, -25, Math.toRadians(180)))
+                                .forward(10)
+                                //*epic picking up happens*
+                                .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                //*epic depositing happens*
+                                .lineToSplineHeading(new Pose2d(-45, -25, Math.toRadians(180)))
+                                .forward(10)
+                                //*epic picking up happens*
+                                .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                //*epic depositing happens*
+                                .lineToSplineHeading(new Pose2d(-55, -25, Math.toRadians(180)))
+                                .forward(10)
+                                .back(15)
+                                //*epic picking up happens*
+                                .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
                                 .build()
                 );
 
