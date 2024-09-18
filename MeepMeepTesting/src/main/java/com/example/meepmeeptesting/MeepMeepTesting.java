@@ -13,8 +13,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class MeepMeepTesting {
+
+
     Vector2d testVector = new Vector2d(2,2);
     public static void main(String[] args) {
+        //Red Left = 1
+        //Red Right = 2
+        //Blue Left = 3
+        //Blue Right = 4
+        int startPos = 2;
+
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
