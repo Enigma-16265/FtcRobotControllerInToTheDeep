@@ -13,6 +13,9 @@ public class WaterGames extends LinearOpMode {
     //TODO: Variables go here.
     int Integer = 1;
     double triggerThreshold = 0.4;
+    boolean gamepad1_y_OAD = false;
+    boolean gamepad1_y_LU = false;
+
 
 
    //TODO: Make some functions
@@ -36,7 +39,32 @@ public class WaterGames extends LinearOpMode {
         }
     }
     private void specimenIntake() {
-        loopToOnce(gamepad1.y);
+
+    }
+    private void oneAndDone() {
+        //----------Y-------------
+        //o n e a n d d o n e
+        if (gamepad1_y_OAD == true) {
+            gamepad1_y_OAD = false;
+        }
+        //Y release detection
+        if (gamepad1.y == false && gamepad1_y_LU == true) {
+            gamepad1_y_OAD = false;
+        }
+        //Y press detection
+        if (gamepad1.y == true && gamepad1_y_LU == false) {
+            gamepad1_y_OAD = true;
+        }
+        //------------/Y-----------
+
+
+
+
+        oneAndDoneUpdate();
+    }
+    private void oneAndDoneUpdate() {
+        //Last Instance Update
+        gamepad1_y_LU = gamepad1.y;
     }
     private boolean loopToOnce(boolean buttonToEdit) {
         boolean returnVal = true;
@@ -56,6 +84,7 @@ public class WaterGames extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
+            oneAndDone();
             testFunction();
             intake();
             intakeIdle();
