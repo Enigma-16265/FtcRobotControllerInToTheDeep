@@ -79,8 +79,6 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         double strafe;
         double leftBackPower;
         double rightBackPower;
-        double leftBackPowerQuarter;
-        double leftBackPowerHalf;
 
         // Define and Initialize Motors
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -121,17 +119,16 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
 
-            //strafe is actually left stick x, drive is actually left stick y, and turn is actually right stick x
-            drive = gamepad1.right_stick_x;
-            strafe = gamepad1.left_stick_y;
-            turn = gamepad1.left_stick_x;
+            drive = -gamepad1.left_stick_y;
+            turn = gamepad1.right_stick_x;
+            strafe = gamepad1.left_stick_x;
 
 
             // Combine drive and turn for blended motion.
             left  = drive + turn + strafe;
-            leftBackPower = - drive - turn - strafe;
-            right = drive - turn;
-            rightBackPower = drive + turn - strafe;
+            leftBackPower = drive + turn - strafe;
+            right = drive - turn - strafe;
+            rightBackPower = drive + turn + strafe;
 
             // Normalize the values so neither exceed +/- 1.0
             max = Math.max(Math.abs(left), Math.abs(right));
