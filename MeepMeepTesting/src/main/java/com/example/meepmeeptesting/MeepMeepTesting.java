@@ -19,7 +19,9 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         //Left = 1
         //Right = 2
-        int startPos = 1;
+        //Left Specimen = 3
+        //Right Specimen = 4
+        int startPos = 2;
 
 
         MeepMeep meepMeep = new MeepMeep(800);
@@ -27,7 +29,7 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot;
 
-        Pose2d redBasketPos = new Pose2d(-60, -60, Math.toRadians(225));
+        Pose2d basketPos = new Pose2d(-60, -60, Math.toRadians(225));
 
 
         if(startPos == 1) {
@@ -37,23 +39,23 @@ public class MeepMeepTesting {
                     .followTrajectorySequence(drive ->
                             drive.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
                                     .forward(20)
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     //*epic depositing happens*
                                     .lineToSplineHeading(new Pose2d(-35, -25, Math.toRadians(180)))
                                     .forward(10)
                                     //*epic picking up happens*
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     //*epic depositing happens*
                                     .lineToSplineHeading(new Pose2d(-45, -25, Math.toRadians(180)))
                                     .forward(10)
                                     //*epic picking up happens*
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     //*epic depositing happens*
                                     .lineToSplineHeading(new Pose2d(-55, -25, Math.toRadians(180)))
                                     .forward(10)
                                     .back(15)
                                     //*epic picking up happens*
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     .build()
                     );
         }
@@ -64,16 +66,16 @@ public class MeepMeepTesting {
                     .followTrajectorySequence(drive ->
                             drive.trajectorySequenceBuilder(new Pose2d(12, -60, Math.toRadians(90)))
                                     .forward(20)
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     .lineToSplineHeading(new Pose2d(36, -25, Math.toRadians(0)))
                                     .forward(10)
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     .lineToSplineHeading(new Pose2d(46, -25, Math.toRadians(0)))
                                     .forward(10)
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     .lineToSplineHeading(new Pose2d(56, -25, Math.toRadians(0)))
                                     .forward(10)
-                                    .lineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(225)))
+                                    .lineToSplineHeading(basketPos)
                                     .build()
                     );
         }
