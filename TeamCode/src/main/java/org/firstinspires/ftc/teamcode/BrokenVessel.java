@@ -9,16 +9,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class BrokenVessel extends LinearOpMode {
 
     Servo wrist;
-    Servo Arm;
-    Servo Claw;
+    Servo shoulder;
+    Servo elbow;
 
-    DcMotor leftLift;
-    DcMotor rightLift;
+    Servo leftLift;
+    Servo rightLift;
 
     double ArmIntHeight = .5;
     double ClawIntClamp = .5;
-    double LeftHangIntSpeed = 0.0;
-    double RightHangIntSpeed = 0.0;
+    double LeftHangIntSpeed = 0.2;
+    double RightHangIntSpeed = 0.2;
     double WristIntRotation = .5;
 
     double WristPostion;
@@ -28,11 +28,15 @@ public class BrokenVessel extends LinearOpMode {
     double ArmPostion;
     //The code below is a little more done but still barely complete
 public void ServoPos() {
+    wrist = hardwareMap.get(Servo.class, "wrist");
+    elbow = hardwareMap.get(Servo.class, "elbow");
+    shoulder = hardwareMap.get(Servo.class, "shoulder");
+
     wrist.setPosition(WristPostion);
-    leftLift.setPower(LeftHangSpeed);
-    rightLift.setPower(RightHangSpeed);
-    Arm.setPosition(ArmPostion);
-    Claw.setPosition(ClawPostion);
+    //leftLift.setPosition(LeftHangSpeed);
+    //rightLift.setPosition(RightHangSpeed);
+    shoulder.setPosition(ArmPostion);
+    elbow.setPosition(ClawPostion);
 
     }
     @Override
@@ -44,6 +48,15 @@ public void ServoPos() {
         ArmPostion = ArmIntHeight;
 
         ServoPos();
+        waitForStart();
+
+
+        while(opModeIsActive()) {
+            //telemetry.addData("Selected", which.toString());
+            //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");
+            telemetry.update();
+            sleep(100);
+        }
     }
 
 
