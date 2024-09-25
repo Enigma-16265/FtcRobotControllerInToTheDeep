@@ -59,8 +59,10 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     public DcMotor leftBackDrive = null;
     public DcMotor rightFrontDrive = null;
     public DcMotor rightBackDrive = null;
-    public DcMotor leftHang = null;
+   // public DcMotor leftHang = null;
     public DcMotor rightHang = null;
+
+    public DcMotor leftHang = null;
 
 
     double clawOffset = 0;
@@ -72,6 +74,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     public static final double RIGHT_FINGER_GRIP = 0.331;
     public static final double LEFT_FINGER_INTAKE = 1;
     public static final double RIGHT_FINGER_INTAKE = 0;
+    public static final double SERVO_TOLERANCE = 0.01;
 
     // rev blinkin driver
     RevBlinkinLedDriver leftLEDSBlinkin;
@@ -88,6 +91,26 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
     private Servo leftFinger;
     private Servo rightFinger;
+    private Servo wrist;
+
+    static class IntakePosition {
+        double liftPosition;
+        double shoulderPosition;
+        double wristPosition;
+        double elbowPosition;
+        double accelerationMax;
+        double velocityMax;
+    }
+
+    private enum intakeState {
+        IDLE,
+        MOVING_LIFT,
+        MOVING_SHOULDER,
+        MOVING_WRIST,
+        MOVING_ELBOW,
+        MOVING_CLAWS,
+        START_MOVING, COMPLETED
+    }
 
     private enum scoreState {
         IDLE,
@@ -97,16 +120,38 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         MOVING_ELBOW,
         COMPLETED
     }
+
+    private enum driveState {
+        IDLE,
+        MOVING_LIFT,
+        MOVING_SHOULDER,
+        MOVING_WRIST,
+        MOVING_ELBOW,
+        COMPLETED
+    }
+
+    private driveState currentDriveState = driveState.IDLE;
+
     private scoreState currentScoreState = scoreState.IDLE;
 
+    private intakeState currentIntakeState = intakeState.IDLE;
+    private IntakePosition activeIntakePosition = null;
+
+    private boolean isServoAtPosition(Servo servo, double targetPosition, double tolerance) {
+        double currentPosition = servo.getPosition();
+        double normalizedTarget = Range.clip(targetPosition, 0.0, 1.0); // Ensure target is within valid range
+        double normalizedCurrent = Range.clip(currentPosition, 0.0, 1.0); // Ensure current position is within valid range
+
+        return Math.abs(normalizedCurrent - normalizedTarget) < tolerance;
+    }
 
     private void hangCode() {
         // hanging
         leftHang  = hardwareMap.get(DcMotor.class, "leftHang");
         rightHang  = hardwareMap.get(DcMotor.class, "rightHang");
 
-        leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
-        rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
+       // leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
+       // rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
 
         leftUpper = hardwareMap.get(RevTouchSensor.class, "leftUpper");
         rightUpper = hardwareMap.get(RevTouchSensor.class, "rightUpper");
@@ -226,6 +271,20 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         }
     }
 
+    private void handleIntakeSequence(IntakePosition intakePos) {
+        switch (currentDriveState) {
+            case MOVING_WRIST:
+                // Move the wrist to intake position
+                //moveServoGradually(wrist, intakePos.wristPosition);
+                wrist.setPosition(intakePos.wristPosition);
+                //moveServoWithTrapezoidalVelocity(wrist, intakePos.wristPosition, intakePos.accelerationMax, intakePos.velocityMax);
+                if (isServoAtPosition(wrist, intakePos.wristPosition, SERVO_TOLERANCE)) {
+                    currentIntakeState = intakeState.MOVING_ELBOW;
+                }
+                break;
+        }
+    }
+
     @Override
     public void runOpMode() {
 
@@ -245,3 +304,4 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         sleep(50);
     }
 }
+
