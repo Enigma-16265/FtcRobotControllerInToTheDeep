@@ -57,8 +57,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     public DcMotor leftBackDrive = null;
     public DcMotor rightFrontDrive = null;
     public DcMotor rightBackDrive = null;
-   // public DcMotor  rightDrive  = null;
-   // public DcMotor  leftArm     = null;
+    // public DcMotor  rightDrive  = null;
+    // public DcMotor  leftArm     = null;
     public Servo    leftClaw    = null;
     public Servo    rightClaw   = null;
 
