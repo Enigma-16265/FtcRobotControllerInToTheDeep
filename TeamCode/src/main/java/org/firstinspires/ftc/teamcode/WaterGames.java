@@ -121,7 +121,6 @@ public class WaterGames extends LinearOpMode {
 
         //Servo init positions
 
-
         telemetry.update();
         waitForStart();
 
