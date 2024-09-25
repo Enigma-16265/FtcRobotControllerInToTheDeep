@@ -26,7 +26,7 @@ public class BrokenVessel extends LinearOpMode {
     double RightHangSpeed;
     double ClawPostion;
     double ArmPostion;
-    //The code below is a little more done but still barely complete
+    //goob
 public void ServoPos() {
     wrist = hardwareMap.get(Servo.class, "wrist");
     elbow = hardwareMap.get(Servo.class, "elbow");
