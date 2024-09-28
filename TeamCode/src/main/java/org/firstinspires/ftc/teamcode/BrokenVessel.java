@@ -7,46 +7,71 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class BrokenVessel extends LinearOpMode {
-
+    //Basic Servos
     Servo wrist;
     Servo shoulder;
     Servo elbow;
+    Servo claw;
+    //Slides
+    DcMotor rightSlideSetOne;
+    DcMotor leftSlideSetOne;
+    Servo rightSlideSetTwo;
+    Servo leftSlideSetTwo;
 
-    Servo leftLift;
-    Servo rightLift;
+    //Servo doubles
+    double armIntHeight = .5;
+    double clawIntClamp = .5;
+    double wristIntRotation = .5;
+    double elbowIntPos = 0.5;
+    //Motor doubles
+    double leftSlideIntSpeed = 0.0;
+    double rightSlideIntSpeed = 0.0;
+    double servoRightSlideIntSpeed = 0.0;
+    double servoLeftSlideIntSpeed = 0.0;
 
-    double ArmIntHeight = .5;
-    double ClawIntClamp = .5;
-    double LeftHangIntSpeed = 0.2;
-    double RightHangIntSpeed = 0.2;
-    double WristIntRotation = .5;
-
+    /*
     double WristPostion;
     double LeftHangSpeed;
     double RightHangSpeed;
     double ClawPostion;
     double ArmPostion;
-    //goober
+     */
+
+    //Int of servos and motors
 public void ServoPos() {
+    //Servo hardwareMap
     wrist = hardwareMap.get(Servo.class, "wrist");
     elbow = hardwareMap.get(Servo.class, "elbow");
     shoulder = hardwareMap.get(Servo.class, "shoulder");
+    claw = hardwareMap.get(Servo.class, "claw");
+    rightSlideSetTwo = hardwareMap.get(Servo.class, "rightServoSlide");
+    leftSlideSetTwo = hardwareMap.get(Servo.class, "leftServoSlide");
+    //Motor hardwareMap
+    rightSlideSetOne = hardwareMap.get(DcMotor.class, "rightMotorSlide");
+    leftSlideSetOne = hardwareMap.get(DcMotor.class, "leftMotorSlide");
 
-    wrist.setPosition(WristPostion);
-    //leftLift.setPosition(LeftHangSpeed);
-    //rightLift.setPosition(RightHangSpeed);
-    shoulder.setPosition(ArmPostion);
-    elbow.setPosition(ClawPostion);
+    //Servo Pos
+    wrist.setPosition(wristIntRotation);
+    shoulder.setPosition(armIntHeight);
+    elbow.setPosition(elbowIntPos);
+    claw.setPosition(clawIntClamp);
+    rightSlideSetTwo.setPosition(servoRightSlideIntSpeed);
+    leftSlideSetTwo.setPosition(servoLeftSlideIntSpeed);
+    //Motor Power
+    rightSlideSetOne.setPower(rightSlideIntSpeed);
+    leftSlideSetOne.setPower(leftSlideIntSpeed);
+
 
     }
     @Override
     public void runOpMode() throws InterruptedException {
+        /*
         WristPostion = WristIntRotation;
         LeftHangSpeed = LeftHangIntSpeed;
         RightHangSpeed = RightHangIntSpeed;
         ClawPostion = ClawIntClamp;
         ArmPostion = ArmIntHeight;
-
+*/
         ServoPos();
         waitForStart();
 
