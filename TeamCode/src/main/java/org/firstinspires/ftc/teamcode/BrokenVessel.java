@@ -78,7 +78,7 @@ public void ServoPos() {
 
         while(opModeIsActive()) {
             //telemetry.addData("Selected", which.toString());
-            //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");w
+            //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");
             telemetry.update();
             sleep(100);
         }
