@@ -38,17 +38,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-/*
- * This OpMode executes a POV Game style Teleop for a direct drive robot
- * The code is structured as a LinearOpMode
- *
- * In this mode the left stick moves the robot FWD and back, the Right stick turns left and right.
- * It raises and lowers the arm using the Gamepad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
 
 @TeleOp(name="Robot: Teleop POV", group="Robot")
 //@Disabled
@@ -59,10 +48,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     public DcMotor leftBackDrive = null;
     public DcMotor rightFrontDrive = null;
     public DcMotor rightBackDrive = null;
-   // public DcMotor leftHang = null;
-    public DcMotor rightHang = null;
-
     public DcMotor leftHang = null;
+    public DcMotor rightHang = null;
 
 
     double clawOffset = 0;
@@ -94,40 +81,21 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     private Servo wrist;
 
     static class IntakePosition {
-        double liftPosition;
-        double shoulderPosition;
         double wristPosition;
-        double elbowPosition;
-        double accelerationMax;
-        double velocityMax;
     }
 
     private enum intakeState {
         IDLE,
-        MOVING_LIFT,
-        MOVING_SHOULDER,
-        MOVING_WRIST,
         MOVING_ELBOW,
-        MOVING_CLAWS,
-        START_MOVING, COMPLETED
     }
 
     private enum scoreState {
         IDLE,
-        MOVING_LIFT,
-        MOVING_SHOULDER,
-        MOVING_WRIST,
-        MOVING_ELBOW,
-        COMPLETED
     }
 
     private enum driveState {
         IDLE,
-        MOVING_LIFT,
-        MOVING_SHOULDER,
         MOVING_WRIST,
-        MOVING_ELBOW,
-        COMPLETED
     }
 
     private driveState currentDriveState = driveState.IDLE;
@@ -150,8 +118,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         leftHang  = hardwareMap.get(DcMotor.class, "leftHang");
         rightHang  = hardwareMap.get(DcMotor.class, "rightHang");
 
-       // leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
-       // rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
+        leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
+        rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
 
         leftUpper = hardwareMap.get(RevTouchSensor.class, "leftUpper");
         rightUpper = hardwareMap.get(RevTouchSensor.class, "rightUpper");
@@ -247,7 +215,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
     }
 
-    private void grapdropFunction() {
+   /* private void grapdropFunction() {
 
         leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
         rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
@@ -271,6 +239,35 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         }
     }
 
+    */
+
+    private void grapDropFunction() {
+
+        leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS");
+        rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS");
+
+        leftFinger = hardwareMap.get(Servo.class, "lFinger");
+        rightFinger = hardwareMap.get(Servo.class, "rFinger");
+
+        if (gamepad1.right_bumper && gamepad1.dpad_up) {
+            leftFinger.getPosition();
+            if (getPosition != LEFT_FINGER_GRIP) {
+                leftFinger.setPosition(LEFT_FINGER_GRIP);
+            }
+            //test to see what getPosition needs and then add it to the rest of the codes
+            rightFinger.getPosition();
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM);
+        }
+        else if (gamepad1.right_bumper && gamepad1.dpad_down) {
+            leftFinger.getPosition();
+            rightFinger.getPosition();
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        }
+    }
+
+
     private void handleIntakeSequence(IntakePosition intakePos) {
         switch (currentDriveState) {
             case MOVING_WRIST:
@@ -285,6 +282,13 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         }
     }
 
+    private void intakeFunction() {
+        if (activeIntakePosition != null) {
+            handleIntakeSequence(activeIntakePosition);
+        }
+    }
+
+
     @Override
     public void runOpMode() {
 
@@ -295,13 +299,12 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         waitForStart();
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             driveCode();
             hangCode();
-            grapdropFunction();
+            grapDropFunction();
+            //intakeFunction();
+            sleep(50);
         }
-
-        sleep(50);
     }
 }
-
