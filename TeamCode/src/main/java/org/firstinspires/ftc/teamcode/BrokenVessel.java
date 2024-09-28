@@ -30,11 +30,11 @@ public class BrokenVessel extends LinearOpMode {
     double servoLeftSlideIntSpeed = 0.0;
 
     /*
-    double WristPostion;
+    double WristPosition;
     double LeftHangSpeed;
     double RightHangSpeed;
-    double ClawPostion;
-    double ArmPostion;
+    double ClawPosition;
+    double ArmPosition;
      */
 
     //Int of servos and motors
@@ -66,11 +66,11 @@ public void ServoPos() {
     @Override
     public void runOpMode() throws InterruptedException {
         /*
-        WristPostion = WristIntRotation;
+        WristPosition = WristIntRotation;
         LeftHangSpeed = LeftHangIntSpeed;
         RightHangSpeed = RightHangIntSpeed;
-        ClawPostion = ClawIntClamp;
-        ArmPostion = ArmIntHeight;
+        ClawPosition = ClawIntClamp;
+        ArmPosition = ArmIntHeight;
 */
         ServoPos();
         waitForStart();
