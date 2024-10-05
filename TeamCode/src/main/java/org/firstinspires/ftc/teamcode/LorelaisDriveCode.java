@@ -14,20 +14,10 @@ public class LorelaisDriveCode {
     public static Gamepad gamepad1;
 
     // declare wheels
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
-
-    // variables
-    private double left;
-    private double right;
-    private double drive;
-    private double turn;
-    private double max;
-    private double strafe;
-    private double leftBackPower;
-    private double rightBackPower;
+    private final DcMotor leftFrontDrive;
+    private final DcMotor leftBackDrive;
+    private final DcMotor rightFrontDrive;
+    private final DcMotor rightBackDrive;
 
     // constructor initializes the wheels and does some stuff with direction of wheels
     public LorelaisDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
@@ -59,19 +49,20 @@ public class LorelaisDriveCode {
         // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
         // This way it's also easy to just drive straight, or just turn.
 
-        drive = -gamepad1.left_stick_y;
-        turn = gamepad1.right_stick_x;
-        strafe = gamepad1.left_stick_x;
+        double drive = -gamepad1.left_stick_y;
+        double turn = gamepad1.right_stick_x;
+        double strafe = gamepad1.left_stick_x;
 
 
         // Combine drive and turn for blended motion.
-        left  = drive + turn + strafe;
-        leftBackPower = drive + turn - strafe;
-        right = drive - turn - strafe;
-        rightBackPower = drive + turn + strafe;
+        // variables
+        double left = drive + turn + strafe;
+        double leftBackPower = drive + turn - strafe;
+        double right = drive - turn - strafe;
+        double rightBackPower = drive + turn + strafe;
 
         // Normalize the values so neither exceed +/- 1.0
-        max = Math.max(Math.abs(left), Math.abs(right));
+        double max = Math.max(Math.abs(left), Math.abs(right));
         if (max > 1.0)
         {
             left /= max;
