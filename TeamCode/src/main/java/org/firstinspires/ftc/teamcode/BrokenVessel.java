@@ -7,22 +7,35 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class BrokenVessel extends LinearOpMode {
+
     //Basic Servos
     Servo wrist;
     Servo shoulder;
     Servo elbow;
     Servo claw;
+
     //Slides
     DcMotor rightSlideSetOne;
     DcMotor leftSlideSetOne;
     Servo rightSlideSetTwo;
     Servo leftSlideSetTwo;
 
+    //Blank Servos/Motors
+    DcMotor blankM1;
+    DcMotor blankM2;
+    Servo blankS1;
+    Servo blankS2;
+    Servo blankS3;
+    Servo blankS4;
+    Servo blankS5;
+    Servo blankS6;
+
     //Servo doubles
     double armIntHeight = .5;
     double clawIntClamp = .5;
     double wristIntRotation = .5;
     double elbowIntPos = 0.5;
+
     //Motor doubles
     double leftSlideIntSpeed = 0.0;
     double rightSlideIntSpeed = 0.0;
@@ -83,8 +96,5 @@ public class BrokenVessel extends LinearOpMode {
             sleep(100);
         }
     }
-
-
-
 
 }
