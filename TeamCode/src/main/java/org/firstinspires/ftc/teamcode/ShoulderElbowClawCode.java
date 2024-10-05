@@ -16,13 +16,13 @@ public class ShoulderElbowClawCode {
     public static Gamepad gamepad1;
 
     // Servos
-    private Servo    leftClaw    = null;
-    private Servo    rightClaw   = null;
-    private Servo    shoulder    = null;
-    private Servo    elbow       = null;
-    private Servo    wrist       = null;
-    private Servo    rightLift   = null;
-    private Servo    leftLift    = null;
+    private Servo    leftClaw;
+    private Servo    rightClaw;
+    private Servo    shoulder;
+    private Servo    elbow;
+    private Servo    wrist;
+    private Servo    rightLift;
+    private Servo    leftLift;
 
     // Offset Variables
     private double clawOffset = 0;
