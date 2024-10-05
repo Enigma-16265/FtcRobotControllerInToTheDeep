@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -16,13 +14,13 @@ public class ShoulderElbowClawCode {
     public static Gamepad gamepad1;
 
     // Servos
-    private Servo    leftClaw;
-    private Servo    rightClaw;
-    private Servo    shoulder;
-    private Servo    elbow;
-    private Servo    wrist;
-    private Servo    rightLift;
-    private Servo    leftLift;
+    private final Servo    leftClaw;
+    private final Servo    rightClaw;
+    private final Servo    shoulder;
+    private final Servo    elbow;
+    private final Servo    wrist;
+    //private final Servo    leftLift;
+    //private final Servo    rightLift;
 
     // Offset Variables
     private double clawOffset = 0;
@@ -48,8 +46,7 @@ public class ShoulderElbowClawCode {
         shoulder  = hardwareMap.get(Servo.class, "shoulder");
         elbow     = hardwareMap.get(Servo.class, "elbow");
         wrist     = hardwareMap.get(Servo.class, "wrist");
-        rightLift = hardwareMap.get(Servo.class, "rightLift");
-        leftLift = hardwareMap.get(Servo.class, "leftLift");
+        //leftLift = hardwareMap.get(Servo.class, "leftLift");
         leftClaw.setPosition(MID_SERVO);
         rightClaw.setPosition(MID_SERVO);
 

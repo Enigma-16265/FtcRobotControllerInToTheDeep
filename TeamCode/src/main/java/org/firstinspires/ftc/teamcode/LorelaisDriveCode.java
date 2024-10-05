@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -11,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class LorelaisDriveCode {
 
-    public static Gamepad gamepad1;
+    public Gamepad gamepad1;
 
     // declare wheels
     private final DcMotor leftFrontDrive;
