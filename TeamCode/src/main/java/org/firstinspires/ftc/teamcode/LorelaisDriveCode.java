@@ -18,6 +18,8 @@ public class LorelaisDriveCode {
     private final DcMotor rightFrontDrive;
     private final DcMotor rightBackDrive;
 
+    private final double speed = 0.75;
+
     // constructor initializes the wheels and does some stuff with direction of wheels
     public LorelaisDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
 
@@ -69,10 +71,10 @@ public class LorelaisDriveCode {
         }
 
         // Output the safe vales to the motor drives.
-        leftFrontDrive.setPower(left);
-        leftBackDrive.setPower(leftBackPower);
-        rightFrontDrive.setPower(right);
-        rightBackDrive.setPower(rightBackPower);
+        leftFrontDrive.setPower(left * speed);
+        leftBackDrive.setPower(leftBackPower * speed);
+        rightFrontDrive.setPower(right * speed);
+        rightBackDrive.setPower(rightBackPower * speed);
 
     }
 }

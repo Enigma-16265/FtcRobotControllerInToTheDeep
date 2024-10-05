@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -19,15 +21,14 @@ public class ShoulderElbowClawCode {
     private final Servo    shoulder;
     private final Servo    elbow;
     private final Servo    wrist;
-    //private final Servo    leftLift;
-    //private final Servo    rightLift;
+    private final Servo    leftLift;
+    private final Servo    rightLift;
 
     // Offset Variables
     private double clawOffset = 0;
     private double shoulderOffset = 0;
     private double elbowOffset = 0;
     private double wristOffset = 0;
-    private double liftOffset = 0;
 
     // Middle of servo value
     private static final double MID_SERVO   =  0.5 ;
@@ -46,9 +47,17 @@ public class ShoulderElbowClawCode {
         shoulder  = hardwareMap.get(Servo.class, "shoulder");
         elbow     = hardwareMap.get(Servo.class, "elbow");
         wrist     = hardwareMap.get(Servo.class, "wrist");
-        //leftLift = hardwareMap.get(Servo.class, "leftLift");
+        leftLift = hardwareMap.get(Servo.class, "leftLift");
+        rightLift = hardwareMap.get(Servo.class, "rightLift");
+
         leftClaw.setPosition(MID_SERVO);
         rightClaw.setPosition(MID_SERVO);
+        // stole these initial positions from mcmuffin the revenge
+        wrist.setPosition(0.575);
+        shoulder.setPosition(0.425);
+        elbow.setPosition(0.5);
+        leftLift.setPosition(0.06);
+        rightLift.setPosition(0.06);
 
         this.gamepad1 = gamepad1;
     }
@@ -90,9 +99,9 @@ public class ShoulderElbowClawCode {
 
     public void runClaw() {
         // Use gamepad left & right Bumpers to open and close the claw
-        if (gamepad1.right_bumper)
+        if (gamepad1.dpad_down)
             clawOffset += CLAW_SPEED;
-        else if (gamepad1.left_bumper)
+        else if (gamepad1.dpad_up)
             clawOffset -= CLAW_SPEED;
 
         // Move both servos to new position.  Assume servos are mirror image of each other.
@@ -102,12 +111,21 @@ public class ShoulderElbowClawCode {
     }
 
     public void runLift() {
-        if (gamepad1.dpad_down) {
-            liftOffset += LIFT_SPEED;
-        } else if (gamepad1.dpad_up) {
-            liftOffset -= LIFT_SPEED;
+        if (gamepad1.left_bumper) {
+            leftLift.setPosition(leftLift.getPosition() - LIFT_SPEED);
+            rightLift.setPosition(rightLift.getPosition() - LIFT_SPEED);
         }
-
-        // move the lift servos properly
+        else if (gamepad1.right_bumper) {
+            leftLift.setPosition(rightLift.getPosition() + LIFT_SPEED);
+            rightLift.setPosition(rightLift.getPosition() + LIFT_SPEED);
+        }
     }
+
+    //public void grab() {
+
+    //}
+
+    //public String reportInfo() {
+    //    return String.format("Shoulder = %d\nElbow = %d\nLeft Claw = %d\nRight Claw = %d\nWrist = %d\nLift = %d", shoulder.getPosition(),elbow.getPosition(),leftClaw.getPosition(),rightClaw.getPosition(),wrist.getPosition(),leftLift.getPosition()));
+    //}
 }
