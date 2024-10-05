@@ -65,11 +65,14 @@ public class RobotTeleopPOV_LinearWithArm extends LinearOpMode {
             armCode.runShoulder();
             armCode.runElbow();
             armCode.runWrist();
+            armCode.runLift();
+
+            //if (gamepad1.dpad_left) {
+            //    telemetry.addData(armCode.reportInfo());
+            //}
 
 
             // Send telemetry message to signify robot running
-            // should i have the control code return some info for this? Does
-            // anyone even care?
             telemetry.update();
 
             // Pace this loop so jaw action is reasonable speed.
