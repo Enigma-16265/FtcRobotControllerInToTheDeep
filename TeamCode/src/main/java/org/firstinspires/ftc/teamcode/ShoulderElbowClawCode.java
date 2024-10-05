@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 
 public class ShoulderElbowClawCode {
 
-    public static Gamepad gamepad1;
+    public Gamepad gamepad1;
 
     // Servos
     private final Servo    leftClaw;
