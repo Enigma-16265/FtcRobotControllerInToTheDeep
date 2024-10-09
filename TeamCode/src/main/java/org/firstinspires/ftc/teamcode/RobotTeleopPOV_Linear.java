@@ -171,9 +171,6 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
 
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -251,22 +248,29 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
         if (gamepad1.right_bumper && gamepad1.dpad_up) {
             leftFinger.getPosition();
-            if (getPosition != LEFT_FINGER_GRIP) {
+            if (leftFinger.getPosition() != LEFT_FINGER_GRIP) {
                 leftFinger.setPosition(LEFT_FINGER_GRIP);
             }
-            //test to see what getPosition needs and then add it to the rest of the codes
             rightFinger.getPosition();
+            if(leftFinger.getPosition() != RIGHT_FINGER_GRIP) {
+                rightFinger.setPosition(RIGHT_FINGER_GRIP);
+            }
             leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM);
             rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM);
         }
         else if (gamepad1.right_bumper && gamepad1.dpad_down) {
             leftFinger.getPosition();
+            if (leftFinger.getPosition() != LEFT_FINGER_INTAKE) {
+                leftFinger.setPosition(LEFT_FINGER_INTAKE);
+            }
             rightFinger.getPosition();
+            if (rightFinger.getPosition() != RIGHT_FINGER_INTAKE) {
+                rightFinger.setPosition(RIGHT_FINGER_INTAKE);
+            }
             leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         }
     }
-
 
     private void handleIntakeSequence(IntakePosition intakePos) {
         switch (currentDriveState) {
@@ -303,8 +307,12 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
             driveCode();
             hangCode();
             grapDropFunction();
-            //intakeFunction();
+            intakeFunction();
             sleep(50);
         }
     }
-}
+
+
+
+
+
