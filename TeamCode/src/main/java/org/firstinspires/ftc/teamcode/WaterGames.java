@@ -37,6 +37,8 @@ public class WaterGames extends LinearOpMode {
             //release sample code
         }
     }
+
+    //TODO: add the distance sensor detector lol
     private void intake() {
         if (gamepad1.right_trigger > triggerThreshold && gamepad1.left_trigger < triggerThreshold) {
             intakeMotor.setPower(1);
