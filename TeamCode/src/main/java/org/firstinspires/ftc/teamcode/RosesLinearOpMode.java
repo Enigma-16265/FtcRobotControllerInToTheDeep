@@ -46,6 +46,7 @@ public class RosesLinearOpMode extends LinearOpMode {
     public void runOpMode() {
         // Define and initialize wheels and declare wheelCode
         LorelaisDriveCode wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+        RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
         GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
@@ -70,7 +71,7 @@ public class RosesLinearOpMode extends LinearOpMode {
             if (gamepad1.dpad_left) {
                 armCode.grab();
             }
-
+            spinCode.spinAroundFunction();
 
             // Send telemetry message to signify robot running
             telemetry.update();

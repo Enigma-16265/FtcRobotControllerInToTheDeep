@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class LorelaisDriveCode {
 
-    public Gamepad gamepad1;
+    private final Gamepad gamepad1;
 
     // declare wheels
     private final DcMotor leftFrontDrive;
@@ -18,6 +18,7 @@ public class LorelaisDriveCode {
     private final DcMotor rightFrontDrive;
     private final DcMotor rightBackDrive;
 
+    /** @noinspection FieldCanBeLocal*/
     private final double speed = 0.75;
 
     // constructor initializes the wheels and does some stuff with direction of wheels
