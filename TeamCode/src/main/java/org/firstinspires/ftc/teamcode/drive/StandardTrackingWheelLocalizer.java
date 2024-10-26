@@ -26,6 +26,31 @@ import java.util.List;
  *    \--------------/
  *
  */
+
+/*
+                                                                      .^JP?^
+                                                                   :?PBGY!YGBP7:
+                                                               .!5BB5!.     :757.
+     ~J?JJJJJJJJJJJY!    :~              .?J~      :JJ:    .~YGBP?:    ^JP7:     .?GGJ^.          .?              ^7                   ?^
+     YBB?~!!!!!!!!!!:    ~BP^            :BBY      ~BB~  ^PBGJ^    :7PBB5?PBB5!.   .~YGBP:        PB?            ^BB^                 7BB:
+     ^77                 ~BBBP^           77^      ~BB~  ?BG   .~YGBP?:    .^JGBGJ~   .BB!       ?BBB7           ~!!^                !BBBB:
+     .^:                 ~BB5PBP^         ^^.      ~BB~  ?BG   GB5~.           .!?^   .BB~      ^BBGBB!        .~~:^~^              ~BB^?BG.
+     JBB.                ~BB~ !GBP^      .BBJ      ~BB~  ~5J   GB^                    .BB~     .GB5 JBB~      .GBB.!BB~            ^BB!  YBG.
+     JBBY?JJJJJJJ7       ~BB~   !GBP^    .BBJ      ~BB~       .GB~                    .BB~     YBB.  YBB~     PBG.  YBB.          :BB7    5BP.
+     JBB?!!!!!!!!~       ~BB~     !GBP^  .BBJ      ~BB~       .GB^         ^?PGGPGGP  .BB~    !BB!    YBB^   PBG.   .GB5         .GBJ     .PBP
+     JBB.                ~BB~       !GBP^:BBJ      ~BB~       .BB!         ..    ?BG  .BB~   .BBY      YBB: 5BB:     ~BB7       .GBBP555555GBB5
+     JBB.                ~BB~         !GBGBBJ      ~BB~        JGBP7:         :?PBP?   BB!   5BG.       5BG5BB:       JBB:     .PBP:.::::::.^GBJ
+     JBB.                ~BB~           ~GBBJ      ~BB~          :75BG5!. :75BB5!.   ^JBB~   ..          5BBB:         GBG     PBG.           ..
+     JBBP555555555557    ~BB~             ~GJ      ~BB~              ^?PBBBP7:   .75BGY~.  ^GG7           5B^          :BBY   5BG.            :PGJ
+     .^^^^^^^^^^^^^~:    .^^.               .      .^^.                 .:   .~YGB57:      .::             :            .::  .::.              :::
+                                                                          ^?GBP?^
+                                                                       !5GGJ~.
+                                                                       BB?
+                                                                       .7~
+                                                                       ~.
+                                                                       5B7
+                                                                        .:
+ */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double TICKS_PER_REV = 2000;
