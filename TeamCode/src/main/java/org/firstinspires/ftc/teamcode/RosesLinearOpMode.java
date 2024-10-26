@@ -33,24 +33,28 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /*
- * This code calls LorelaisDriveCode.java and ShoulderElbowClawCode.java.
+ * This code calls LorelaisDriveCode.java and GrabCode.java.
  * It runs the wheel drive code and the arm movement code, so the robot can
  * move around and stuff
  */
 
-@TeleOp(name="Robot: Teleop POV", group="Robot")
+@TeleOp(name="Robot: Roses Teleop POV", group="Robot")
 //@Disabled
-public class RobotTeleopPOV_LinearWithArm extends LinearOpMode {
+public class RosesLinearOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
         // Define and initialize wheels and declare wheelCode
         LorelaisDriveCode wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+
         // Define and initialize ALL installed servos and declare armCode
-        ShoulderElbowClawCode armCode = new ShoulderElbowClawCode(hardwareMap, gamepad1);
+        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
+        RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
+
+
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData(">", "Robot Ready.  Press START.");    //
+        telemetry.addData(">", "Robot Ready.  Press START.");
         telemetry.update();
 
         // Wait for the game to start (driver presses START)
@@ -61,15 +65,11 @@ public class RobotTeleopPOV_LinearWithArm extends LinearOpMode {
 
             // run various control code
             wheelCode.runWheels();
-            armCode.runClaw();
-            armCode.runShoulder();
-            armCode.runElbow();
-            armCode.runWrist();
-            armCode.runLift();
+            mcMuffin.run();
 
-            //if (gamepad1.dpad_left) {
-            //    telemetry.addData(armCode.reportInfo());
-            //}
+            if (gamepad1.dpad_left) {
+                armCode.grab();
+            }
 
 
             // Send telemetry message to signify robot running
@@ -79,4 +79,6 @@ public class RobotTeleopPOV_LinearWithArm extends LinearOpMode {
             sleep(50);
         }
     }
+
+
 }
