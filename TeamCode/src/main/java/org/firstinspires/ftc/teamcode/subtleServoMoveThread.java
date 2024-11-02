@@ -18,24 +18,36 @@ public class subtleServoMoveThread extends Thread {
 
     private final HardwareMap hardwareMap;
     double position;
+    double speed = 1;
 
     // usually, either the servo or the servoType should be null
     Servo servo;
     servoTypes servoType;
 
 
-    // overridden constructor
+    // overloaded constructor
     public subtleServoMoveThread(Servo whatServo, double where, HardwareMap hardwareMap) {
         this.servo = whatServo;
         this.position = where;
         this.hardwareMap = hardwareMap;
     }
     public subtleServoMoveThread(String type, double where, HardwareMap hardwareMap) {
-        if (type.equalsIgnoreCase("LIFT")) {
-            servoType = servoTypes.LIFT;
-        }
+        this.servoType = servoTypes.valueOf(type);
 
         this.position = where;
+        this.hardwareMap = hardwareMap;
+    }
+
+    public subtleServoMoveThread(Servo whatServo, double where, double speed, HardwareMap hardwareMap) {
+        this.servo = whatServo;
+        this.position = where;
+        this.speed = speed;
+        this.hardwareMap = hardwareMap;
+    }
+    public subtleServoMoveThread(String type, double where, double speed, HardwareMap hardwareMap) {
+        this.servoType = servoTypes.valueOf(type);
+        this.position = where;
+        this.speed = speed;
         this.hardwareMap = hardwareMap;
     }
 
@@ -55,13 +67,15 @@ public class subtleServoMoveThread extends Thread {
 
     }
 
+    // slowly moves a single servo to a specific position
+    // pre: Servo is defined and not a lift
     private void runServo() {
         while (servo.getPosition() < position-0.03 || servo.getPosition() > position+0.03) {
             if (servo.getPosition() > position) {
-                servo.setPosition(servo.getPosition() - 0.01);
+                servo.setPosition(servo.getPosition() - 0.01 * speed);
             }
             else if (servo.getPosition() < position) {
-                servo.setPosition(servo.getPosition() + 0.01);
+                servo.setPosition(servo.getPosition() + 0.01 * speed);
             }
             try {
                 //noinspection BusyWait
@@ -71,6 +85,7 @@ public class subtleServoMoveThread extends Thread {
             }
         }
     }
+    // do actions related to a particular servo type
     private void runType() {
         if (servoType == servoTypes.LIFT) {
             Servo lift1 = hardwareMap.get(Servo.class, "leftLift");
@@ -79,16 +94,16 @@ public class subtleServoMoveThread extends Thread {
         }
     }
 
+    // move two servos at once in the same direction
     private void moveTwoServos(Servo a, Servo b) {
-        // you guessed it, move two servos at once. (in the same direction)
         while (a.getPosition() < position-0.03 || a.getPosition() > position+0.03) {
             if (a.getPosition() > position) {
-                a.setPosition(a.getPosition() - 0.01);
-                b.setPosition(a.getPosition() - 0.01);
+                a.setPosition(a.getPosition() - 0.01 * speed);
+                b.setPosition(a.getPosition() - 0.01 * speed);
             }
             else if (a.getPosition() < position) {
-                a.setPosition(a.getPosition() + 0.01);
-                b.setPosition(a.getPosition() + 0.01);
+                a.setPosition(a.getPosition() + 0.01 * speed);
+                b.setPosition(a.getPosition() + 0.01 * speed);
             }
             try {
                 //noinspection BusyWait
@@ -98,7 +113,6 @@ public class subtleServoMoveThread extends Thread {
             }
         }
     }
-
 
 
 }

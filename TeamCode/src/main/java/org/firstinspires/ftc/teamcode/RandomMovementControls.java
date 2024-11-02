@@ -22,7 +22,7 @@ public class RandomMovementControls {
     private double speed = 1;
     private double last_time_a_pressed;
     private boolean currently_spinning = false;
-    private int cycle_number = 0;
+    private int cycle_number = 10;
 
     // constructor
     public RandomMovementControls (HardwareMap hardwareMap, Gamepad gamePad) {
@@ -42,6 +42,11 @@ public class RandomMovementControls {
 
     }
 
+    public void startSpin () {
+        currently_spinning = true;
+        cycle_number += 20;
+    }
+
     // the function for spinning the robot 180 degrees
     public void spinAroundFunction () {
 
@@ -54,8 +59,8 @@ public class RandomMovementControls {
 
         if (currently_spinning) {
 
-            //add 1 to cycle_number
-            cycle_number++;
+            //minus 1 to cycle_number
+            cycle_number--;
 
             //spin the robot 18 degrees
             leftFrontWheel.setPower(speed);
@@ -64,11 +69,11 @@ public class RandomMovementControls {
             rightBackWheel.setPower(-speed);
 
             //stop spinning if the robot has spun 180 degrees
-            if (cycle_number >= 10) {
+            if (cycle_number == 0) {
 
                 //reset variables so previous code can be repeated
                 currently_spinning = false;
-                cycle_number = 0;
+                cycle_number = 10;
             }
         }
     }

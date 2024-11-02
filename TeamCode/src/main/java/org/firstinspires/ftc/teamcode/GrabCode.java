@@ -131,10 +131,6 @@ public class GrabCode {
 
 
 
-
-
-
-
     private void subtleServoMove(Servo servo, double position) {
         subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap);
         m.start();
