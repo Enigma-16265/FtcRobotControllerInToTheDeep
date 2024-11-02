@@ -83,7 +83,7 @@ public class BrokenVessel extends LinearOpMode {
         LeftHangSpeed = LeftHangIntSpeed;
         RightHangSpeed = RightHangIntSpeed;
         ClawPosition = ClawIntClamp;
-        ArmPosition = ArmIntHeight;
+        ArmPosition = ArmIntHeight;zle
 */
         ServoPos();
         waitForStart();
@@ -98,3 +98,4 @@ public class BrokenVessel extends LinearOpMode {
     }
 
 }
+//I like potato but I love potatos
