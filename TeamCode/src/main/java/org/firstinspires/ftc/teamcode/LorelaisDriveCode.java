@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 /*
@@ -8,42 +7,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  *
  */
 
-public class LorelaisDriveCode {
-
-    private final Gamepad gamepad1;
-
-    // declare wheels
-    private final DcMotor leftFrontDrive;
-    private final DcMotor leftBackDrive;
-    private final DcMotor rightFrontDrive;
-    private final DcMotor rightBackDrive;
-
-    /** @noinspection FieldCanBeLocal*/
-    private final double speed = 0.75;
+public class LorelaisDriveCode extends DriveCodeAbstract {
 
     // constructor initializes the wheels and does some stuff with direction of wheels
     public LorelaisDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
-
-        // Define and Initialize Motors
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "leftBack");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
-
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        // If there are encoders connected, switch to RUN_USING_ENCODER mode for greater accuracy
-        // leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-        this.gamepad1 = gamepad1;
+        super(hardwareMap, gamepad1);
     }
 
     public void runWheels() {
