@@ -33,8 +33,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.ControlClassFiles.GrabCode;
+import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
+import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
+
 /*
- * This code calls LorelaisDriveCode.java and GrabCode.java.
+ * This code calls other classes and runs their code
  * It runs the wheel drive code and the arm movement code, so the robot can
  * move around and stuff
  */
