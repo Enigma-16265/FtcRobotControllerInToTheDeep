@@ -1,31 +1,25 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.DriveCodes;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-/*
- * This class runs the wheel control code
- *
- */
+public class SammysDriveCode extends DriveCodeAbstract {
 
-public class LorelaisDriveCode extends DriveCodeAbstract {
+    private boolean wasStrafing = false;
+    private double whenStrafeStarted;
 
-    // constructor initializes the wheels and does some stuff with direction of wheels
-    public LorelaisDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
+    public SammysDriveCode(HardwareMap hardwareMap, Gamepad gamepad1) {
         super(hardwareMap, gamepad1);
     }
 
     public void runWheels() {
-        // Run wheels in POV mode (note: The joystick goes negative when pushed forward, so negate it)
-        // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
-        // This way it's also easy to just drive straight, or just turn.
-
         double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
         double strafe = gamepad1.left_stick_x;
 
+        strafe = Math.round(strafe);
+        drive = Math.round(drive);
 
-        // Combine drive and turn for blended motion.
-        // variables
         double left = drive + turn + strafe;
         double leftBackPower = drive + turn - strafe;
         double right = drive - turn - strafe;
@@ -39,11 +33,14 @@ public class LorelaisDriveCode extends DriveCodeAbstract {
             right /= max;
         }
 
+        if (!wasStrafing && strafe != 0) {
+            whenStrafeStarted = System.currentTimeMillis();
+        }
+
         // Output the safe vales to the motor drives.
         leftFrontDrive.setPower(left * speed);
         leftBackDrive.setPower(leftBackPower * speed);
         rightFrontDrive.setPower(right * speed);
         rightBackDrive.setPower(rightBackPower * speed);
-
     }
 }
