@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class SammysDriveCode extends DriveCodeAbstract {
 
+    private boolean wasStrafing = false;
+    private double whenStrafeStarted;
 
     public SammysDriveCode(HardwareMap hardwareMap, Gamepad gamepad1) {
         super(hardwareMap, gamepad1);
@@ -29,6 +31,10 @@ public class SammysDriveCode extends DriveCodeAbstract {
         {
             left /= max;
             right /= max;
+        }
+
+        if (!wasStrafing && strafe != 0) {
+            whenStrafeStarted = System.currentTimeMillis();
         }
 
         // Output the safe vales to the motor drives.
