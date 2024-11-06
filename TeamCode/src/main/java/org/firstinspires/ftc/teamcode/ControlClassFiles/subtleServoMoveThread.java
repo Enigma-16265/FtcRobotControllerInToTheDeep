@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Maybe should edit it to ask for a speed as well
 */
 
+/** @noinspection unused*/
 public class subtleServoMoveThread extends Thread {
 
     // instance variables
@@ -41,6 +42,7 @@ public class subtleServoMoveThread extends Thread {
         this.hardwareMap = hardwareMap;
         previousThread = null;
     }
+    /** @noinspection unused*/
     public subtleServoMoveThread(String type, double where, subtleServoMoveThread previous, HardwareMap hardwareMap) {
         this.servoType = servoTypes.valueOf(type.toUpperCase());
 

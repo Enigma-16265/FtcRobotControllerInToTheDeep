@@ -50,15 +50,11 @@ public class RosesLinearOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        // Define and initialize wheels and declare wheelCode
+        // Prepare necessary code
         LorelaisDriveCode wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
         RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
         HappyDance dance = new HappyDance(hardwareMap, gamepad1);
-
-        // Define and initialize ALL installed servos and declare armCode
-        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
-        //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
-
 
 
         // Send telemetry message to signify robot waiting;
@@ -73,13 +69,14 @@ public class RosesLinearOpMode extends LinearOpMode {
 
             // run various control code
             wheelCode.runWheels();
-            //mcMuffin.run();
+            spinCode.spinAroundFunction();
+            dance.doHappyDance();
 
+            // grab is set to being when be is pressed
             if (gamepad1.b) {
                 armCode.grab();
             }
-            spinCode.spinAroundFunction();
-            dance.doHappyDance();
+
 
             // Send telemetry message to signify robot running
             whatServoAt();
