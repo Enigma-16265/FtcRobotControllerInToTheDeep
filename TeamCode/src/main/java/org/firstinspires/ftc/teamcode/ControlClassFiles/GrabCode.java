@@ -99,6 +99,17 @@ public class GrabCode {
         rightClaw.setPosition(0);
         leftClaw.setPosition(1);
     }
+
+    /** @noinspection unused*/ // sets are to reaching over bar and ready to grab something from inside submersible
+    public void readyToGrabOverBar() {
+        subtleServoMove(shoulder, 0.6);
+        subtleServoMove(elbow, 0.8);
+        subtleServoMove(wrist, 0.7);
+
+        rightClaw.setPosition(0);
+        leftClaw.setPosition(1);
+    }
+
     // grab
     public void closeHand() {
         rightClaw.setPosition(0.6);
@@ -106,11 +117,11 @@ public class GrabCode {
     }
     // set to rest state
     public void restState() {
-        // inital positions
+        // initial positions
         leftClaw.setPosition(MID_SERVO);
         rightClaw.setPosition(MID_SERVO);
-        subtleServoMove(wrist, 0.575);
-        subtleServoMove(shoulder, 0.425);
+        subtleServoMove(wrist, 0.6);
+        subtleServoMove(shoulder, 0.5);
         subtleServoMove(elbow, 0.5);
         subtleServoMove("lift",0.06);
     }

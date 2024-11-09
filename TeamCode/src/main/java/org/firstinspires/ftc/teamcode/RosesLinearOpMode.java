@@ -74,7 +74,6 @@ public class RosesLinearOpMode extends LinearOpMode {
 
             // run various control code
             wheelCode.runWheels();
-            //mcMuffin.run();
 
             if (gamepad1.b) {
                 armCode.grab();
