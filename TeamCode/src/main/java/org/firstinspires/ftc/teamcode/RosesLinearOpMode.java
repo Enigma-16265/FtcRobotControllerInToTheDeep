@@ -35,8 +35,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ControlClassFiles.GrabCode;
 import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.DriveCodes.SammysDriveCode;
 import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
-import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
 
 /*
  * This code calls other classes and runs their code
@@ -50,11 +50,16 @@ public class RosesLinearOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        // Prepare necessary code
-        LorelaisDriveCode wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
-        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
+
+        // Define and initialize wheels and declare wheelCode
+        SammysDriveCode wheelCode = new SammysDriveCode(hardwareMap, gamepad1);
         RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
         HappyDance dance = new HappyDance(hardwareMap, gamepad1);
+
+        // Define and initialize ALL installed servos and declare armCode
+        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
+        //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
+
 
 
         // Send telemetry message to signify robot waiting;
@@ -69,14 +74,13 @@ public class RosesLinearOpMode extends LinearOpMode {
 
             // run various control code
             wheelCode.runWheels();
-            spinCode.spinAroundFunction();
-            dance.doHappyDance();
+            //mcMuffin.run();
 
-            // grab is set to being when be is pressed
             if (gamepad1.b) {
                 armCode.grab();
             }
-
+            spinCode.spinAroundFunction();
+            dance.doHappyDance();
 
             // Send telemetry message to signify robot running
             whatServoAt();

@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class SammysDriveCode extends DriveCodeAbstract {
 
     private boolean wasStrafing = false;
-    private double whenStrafeStarted;
 
     public SammysDriveCode(HardwareMap hardwareMap, Gamepad gamepad1) {
         super(hardwareMap, gamepad1);
@@ -34,14 +33,26 @@ public class SammysDriveCode extends DriveCodeAbstract {
             right /= max;
         }
 
-        if (!wasStrafing && strafe != 0) {
-            whenStrafeStarted = System.currentTimeMillis();
-        }
 
-        // Output the safe vales to the motor drives.
-        leftFrontDrive.setPower(left * speed);
-        leftBackDrive.setPower(leftBackPower * speed);
-        rightFrontDrive.setPower(right * speed);
-        rightBackDrive.setPower(rightBackPower * speed);
+        if (!wasStrafing && strafe != 0) {
+            double whenStrafeStarted = System.currentTimeMillis();
+            leftFrontDrive.setPower(left * speed);
+            leftBackDrive.setPower(leftBackPower * speed);
+            rightFrontDrive.setPower(right * speed);
+            rightBackDrive.setPower(rightBackPower * speed);
+
+            if (whenStrafeStarted <= System.currentTimeMillis() - 500){
+                wasStrafing = true;
+            }
+        } else {
+            // Output the safe vales to the motor drives.
+            leftFrontDrive.setPower(left * speed);
+            leftBackDrive.setPower(leftBackPower * speed);
+            rightFrontDrive.setPower(right * speed);
+            rightBackDrive.setPower(rightBackPower * speed);
+        }
+        if (strafe == 0) {
+            wasStrafing = false;
+        }
     }
 }
