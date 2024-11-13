@@ -109,6 +109,7 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     // And as I'm writing this I wonder if anybody will actually use this. Problably not,
     // but idk what to do while I wait for the robot to be ready for calibration. It's now 10:36 am.
     // I wonder if future me will use this and or remember doing this. Goober out. Edit: I have to recode :( 11/28/23
+
     //TODO: Step 6 replace all of the xyz.getPosition()0; with your servos and replace "xyz" with what that servo is
     private void whatServoAt() {
         telemetry.addData("Shoulder = ", shoulder.getPosition());
@@ -126,7 +127,7 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
         speedAmount = 0.01;
         //this is a coment to mAKE git update
 
-        //TODO: Step 2, Replace the device names with your 4 (or more if you use two servos for one task)
+        //TODO: Step 2, Replace the device names with your 4 (or more if you use two servos for one task) Into the deep me here, just replace var names and device names
         wrist = hardwareMap.get(Servo.class, "wrist");
         elbow = hardwareMap.get(Servo.class, "elbow");
         leftFinger = hardwareMap.get(Servo.class, "lFinger");
