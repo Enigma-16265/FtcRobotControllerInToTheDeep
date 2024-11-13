@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.RosesLinearOpMode;
+
 /*
  * This class runs the grab code
  *
@@ -18,9 +20,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class GrabCode {
 
-    // Instance Variables
-    public Gamepad gamepad1;
-    HardwareMap hardwareMap;
+    /** @noinspection FieldCanBeLocal, unused */ // Instance Variables
+    private final Gamepad gamepad1;
+    private final HardwareMap hardwareMap;
+    private final RosesLinearOpMode opMode;
 
     // Servos
     private final Servo    leftClaw;
@@ -37,7 +40,7 @@ public class GrabCode {
     private double time = 0;
 
     // constructor initializes all servos
-    public GrabCode(@NonNull com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
+    public GrabCode(@NonNull com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1, RosesLinearOpMode opMode) {
 
         // set all servos to the correct values
         leftClaw  = hardwareMap.get(Servo.class, "lFinger");
@@ -48,11 +51,16 @@ public class GrabCode {
         wrist     = hardwareMap.get(Servo.class, "wrist");
 
         // set initial positions
-        restState();
+        leftClaw.setPosition(MID_SERVO);
+        rightClaw.setPosition(MID_SERVO);
+        wrist.setPosition(0.6);
+        shoulder.setPosition(0.5);
+        elbow.setPosition(0.5);
 
         // set gamepad and hardware map variables
         this.gamepad1 = gamepad1;
         this.hardwareMap = hardwareMap;
+        this.opMode = opMode;
     }
 
     // runs the steps of grab: whenever it's called it does the next stage
@@ -92,7 +100,7 @@ public class GrabCode {
 
     // sets arm to lying flat ready to grab stuff
     public void readyToGrab() {
-        subtleServoMove(shoulder, 0.5);
+        subtleServoMove(shoulder, 0.6);
         subtleServoMove(elbow, 0.8);
         subtleServoMove(wrist, 0.5);
 
@@ -100,15 +108,15 @@ public class GrabCode {
         leftClaw.setPosition(1);
     }
 
-    /** @noinspection unused*/ // sets are to reaching over bar and ready to grab something from inside submersible
-    public void readyToGrabOverBar() {
+  // sets are to reaching over bar and ready to grab something from inside submersible
+  /*  public void readyToGrabOverBar() {
         subtleServoMove(shoulder, 0.6);
         subtleServoMove(elbow, 0.8);
         subtleServoMove(wrist, 0.7);
 
         rightClaw.setPosition(0);
         leftClaw.setPosition(1);
-    }
+    }*/
 
     // grab
     public void closeHand() {
@@ -127,7 +135,7 @@ public class GrabCode {
     }
     // ready to place in basket
     public void reachUp() {
-        subtleServoMove(shoulder, 0.8);
+        subtleServoMove(shoulder, 0.2);
         subtleServoMove(elbow, 0.5);
         subtleServoMove(wrist, 0.5);
 
@@ -147,12 +155,13 @@ public class GrabCode {
     // subtleServoMove slowly moves a servo to a given position
     // it does this by creating a subtleServoMoveThread and starting it
     private void subtleServoMove(Servo servo, double position) {
-        subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap);
+        subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap, opMode);
         m.start();
     }
+
     /** @noinspection SameParameterValue*/
     private void subtleServoMove(String type, double position) {
-        subtleServoMoveThread m = new subtleServoMoveThread(type, position, hardwareMap);
+        subtleServoMoveThread m = new subtleServoMoveThread(type, position, hardwareMap, opMode);
         m.start();
     }
 }

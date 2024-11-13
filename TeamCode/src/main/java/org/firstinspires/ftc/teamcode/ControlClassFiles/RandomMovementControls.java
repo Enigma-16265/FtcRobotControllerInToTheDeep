@@ -73,7 +73,7 @@ public class RandomMovementControls {
 
                 //reset variables so previous code can be repeated
                 currently_spinning = false;
-                cycle_number = 10;
+                cycle_number = 12;
             }
         }
     }

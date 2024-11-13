@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.ControlClassFiles;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.RosesLinearOpMode;
+
 /*
  * A thread to move a servo slowly, because setPosition is more than a little aggressive
  * and I don't want to hurt the servos, especially the lift. Also I feel like I might hit the
@@ -24,6 +26,7 @@ public class subtleServoMoveThread extends Thread {
 
     // hardware map for accessing servos
     private final HardwareMap hardwareMap;
+    private final RosesLinearOpMode opMode;
 
     // if previousThread is set to another subtleServoMoveThread it will wait
     // for it to complete before running
@@ -47,30 +50,32 @@ public class subtleServoMoveThread extends Thread {
     // hardware map. They can either take a particular servo or a type of servo.
     // can also take speed, default is 1, as well as a reference to a thread to wait for
     // (I just kept adding more of these as I needed them lol)
-    public subtleServoMoveThread(Servo whatServo, double where, HardwareMap hardwareMap) {
+    public subtleServoMoveThread(Servo whatServo, double where, HardwareMap hardwareMap, RosesLinearOpMode opMode) {
         this.servo = whatServo;
         this.position = where;
         this.hardwareMap = hardwareMap;
+        this.opMode = opMode;
     }
-    public subtleServoMoveThread(String type, double where, HardwareMap hardwareMap) {
+    public subtleServoMoveThread(String type, double where, HardwareMap hardwareMap, RosesLinearOpMode opMode) {
         this.servoType = servoTypes.valueOf(type.toUpperCase());
         this.position = where;
         this.hardwareMap = hardwareMap;
+        this.opMode = opMode;
     }
-    public subtleServoMoveThread(String type, double where, subtleServoMoveThread previous, HardwareMap hardwareMap) {
-        this(type, where, hardwareMap);
+    public subtleServoMoveThread(String type, double where, subtleServoMoveThread previous, HardwareMap hardwareMap, RosesLinearOpMode opMode) {
+        this(type, where, hardwareMap, opMode);
         this.previousThread = previous;
     }
-    public subtleServoMoveThread(Servo whatServo, double where, double speed, HardwareMap hardwareMap) {
-        this(whatServo, where, hardwareMap);
+    public subtleServoMoveThread(Servo whatServo, double where, double speed, HardwareMap hardwareMap, RosesLinearOpMode opMode) {
+        this(whatServo, where, hardwareMap, opMode);
         this.speed = speed;
     }
-    public subtleServoMoveThread(String type, double where, double speed, HardwareMap hardwareMap) {
-        this(type, where, hardwareMap);
+    public subtleServoMoveThread(String type, double where, double speed, HardwareMap hardwareMap, RosesLinearOpMode opMode) {
+        this(type, where, hardwareMap, opMode);
         this.speed = speed;
     }
-    public subtleServoMoveThread(String type, double where, double speed, subtleServoMoveThread previous, HardwareMap hardwareMap) {
-        this(type, where, speed, hardwareMap);
+    public subtleServoMoveThread(String type, double where, double speed, subtleServoMoveThread previous, HardwareMap hardwareMap, RosesLinearOpMode opMode) {
+        this(type, where, speed, hardwareMap, opMode);
         this.previousThread = previous;
     }
 
@@ -107,28 +112,29 @@ public class subtleServoMoveThread extends Thread {
 
     }
 
-    // slowly moves a single servo to a specific goal
+    /** @noinspection SynchronizationOnLocalVariableOrMethodParameter*/ // slowly moves a single servo to a specific goal
     // pre: Servo is defined and not a lift
     private void runServo(Servo servo, double goal) {
-        // repeatedly run while loop until the servo's value is close enough to goal
-        while (servo.getPosition() < goal -0.03 || servo.getPosition() > goal +0.03) {
-
-
-            // if servo value is greater than goal, make it smaller
-            if (servo.getPosition() > goal) {
-                servo.setPosition(servo.getPosition() - 0.01 * speed);
-            }
-            // if servo value is smaller than goal, make it bigger
-            else if (servo.getPosition() < goal) {
-                servo.setPosition(servo.getPosition() + 0.01 * speed);
-            }
-
-            // make thread sleep for 50 mils so other stuff can run
-            try {
-                //noinspection BusyWait
-                sleep(50);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        synchronized(servo) {
+            // repeatedly run while loop until the servo's value is close enough to goal
+            while (servo.getPosition() < goal - 0.03 || servo.getPosition() > goal + 0.03) {
+                if (opMode.getOpModeIsActive()) {
+                    // if servo value is greater than goal, make it smaller
+                    if (servo.getPosition() > goal) {
+                        servo.setPosition(servo.getPosition() - 0.01 * speed);
+                    }
+                    // if servo value is smaller than goal, make it bigger
+                    else if (servo.getPosition() < goal) {
+                        servo.setPosition(servo.getPosition() + 0.01 * speed);
+                    }
+                    // make thread sleep for 50 mils so other stuff can run
+                    try {
+                        //noinspection BusyWait
+                        sleep(50);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         }
     }
@@ -139,10 +145,14 @@ public class subtleServoMoveThread extends Thread {
         if (servoType == servoTypes.LIFT) {
             Servo lift1 = hardwareMap.get(Servo.class, "leftLift");
             Servo lift2 = hardwareMap.get(Servo.class, "rightLift");
-            moveTwoServos(lift1, lift2, position);
+            synchronized(lift1) {
+                synchronized(lift2) {
+                    moveTwoServos(lift1, lift2, position);
+                }
+            }
         }
         // if servo type is claw, run both claws in opposite directions
-        else if (servoType == servoTypes.CLAW) {
+        /*else if (servoType == servoTypes.CLAW) {
             // deal with this later
             // wait why did i say that whats wrong with it?
             // ahh I see this only works if you are opening or closing claw,
@@ -158,32 +168,33 @@ public class subtleServoMoveThread extends Thread {
             runServo(hardwareMap.get(Servo.class, "lFinger"), position);
             runServo(hardwareMap.get(Servo.class, "rFinger"), rightPosition);
 
-        }
+        }*/
     }
 
     // move two servos at once in the same direction
     private void moveTwoServos(Servo a, Servo b, double goal) {
         // run repeatedly until close enough to goal
-        while (a.getPosition() < goal-0.03 || a.getPosition() > goal+0.03) {
+        while (a.getPosition() < goal - 0.03 || a.getPosition() > goal + 0.03) {
+            if (opMode.getOpModeIsActive()) {
+                // if position is greater than goal, decrease it
+                if (a.getPosition() > goal) {
+                    a.setPosition(a.getPosition() - 0.01 * speed);
+                    b.setPosition(a.getPosition() - 0.01 * speed);
+                }
+                // if position is less than goal, increase it
+                else if (a.getPosition() < goal) {
+                    a.setPosition(a.getPosition() + 0.01 * speed);
+                    b.setPosition(a.getPosition() + 0.01 * speed);
+                }
 
-            // if position is greater than goal, decrease it
-            if (a.getPosition() > goal) {
-                a.setPosition(a.getPosition() - 0.01 * speed);
-                b.setPosition(a.getPosition() - 0.01 * speed);
-            }
-            // if position is less than goal, increase it
-            else if (a.getPosition() < goal) {
-                a.setPosition(a.getPosition() + 0.01 * speed);
-                b.setPosition(a.getPosition() + 0.01 * speed);
-            }
 
-
-            // make this thread sleep 50 mils
-            try {
-                //noinspection BusyWait
-                sleep(50);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                // make this thread sleep 50 mils
+                try {
+                    //noinspection BusyWait
+                    sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
