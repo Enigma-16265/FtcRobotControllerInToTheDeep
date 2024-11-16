@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -31,7 +29,7 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
         LEFT_FINGER,
         RIGHT_FINGER,
         WRIST,
-        LIFT;
+        LIFT
     }
     ServoTypes which;
     //TODO: Step 4, replace all names of Servos with yours, and replace all capitals with what you set them to from step 3
@@ -122,7 +120,7 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         which = ServoTypes.SHOULDER;
         speedAmount = 0.01;
         //this is a coment to mAKE git update
