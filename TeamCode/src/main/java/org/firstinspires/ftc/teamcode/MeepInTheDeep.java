@@ -72,7 +72,8 @@ public class MeepInTheDeep extends LinearOpMode {
                                 }
                         ),
                         drive.actionBuilder(new Pose2d(15,10,Math.toRadians(125))) // Another way of running a trajectory (not recommended because trajectories take time to build and will slow down your code, always try to build them beforehand)
-                                .splineTo(new Vector2d(25, 15), 0)
+                                .splineTo(new Vector2d(30, 30), Math.PI / 2)
+                                .splineTo(new Vector2d(0, 60), Math.PI)
                                 .build()
 
                 )
