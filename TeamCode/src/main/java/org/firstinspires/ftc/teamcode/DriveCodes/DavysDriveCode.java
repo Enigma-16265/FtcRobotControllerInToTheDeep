@@ -30,15 +30,15 @@ public class DavysDriveCode extends DriveCodeAbstract {
         double NetMoveRightFront;
         double NetMoveRightBack;
         if (strafemove > 0) {
-            NetMoveLeftFront = forwardmove - strafemove;
-            NetMoveLeftBack = forwardmove + strafemove;
-            NetMoveRightFront = forwardmove;
-            NetMoveRightBack = forwardmove;
+            NetMoveLeftFront = - strafemove;
+            NetMoveLeftBack = strafemove;
+            NetMoveRightFront = 0;
+            NetMoveRightBack = 0;
         } else {
-            NetMoveLeftFront = forwardmove;
-            NetMoveLeftBack = forwardmove;
-            NetMoveRightFront = forwardmove + strafemove;
-            NetMoveRightBack = forwardmove - strafemove;
+            NetMoveLeftFront = 0;
+            NetMoveLeftBack = 0;
+            NetMoveRightFront = strafemove;
+            NetMoveRightBack = - strafemove;
         }
         double maxmove = Math.max(Math.abs(forwardmove - strafemove), Math.abs(forwardmove + strafemove));
         if (maxmove > 1.0)
