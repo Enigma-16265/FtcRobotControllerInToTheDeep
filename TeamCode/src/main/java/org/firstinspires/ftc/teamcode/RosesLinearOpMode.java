@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ControlClassFiles.GrabCode;
 import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.DriveCodes.DavysDriveCode;
 import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
 import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
 import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
@@ -53,7 +54,7 @@ public class RosesLinearOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Define and initialize wheels and declare wheelCode
-        DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
         RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
         HappyDance dance = new HappyDance(hardwareMap, gamepad1, this);
 
@@ -104,5 +105,4 @@ public class RosesLinearOpMode extends LinearOpMode {
     public boolean getOpModeIsActive() {
         return opModeIsActive();
     }
-
 }

@@ -10,6 +10,7 @@ public class SammysDriveCode extends DriveCodeAbstract {
         super(hardwareMap, gamepad1);
     }
 
+    @Override
     public void runWheels() {
 
         //moving variables
@@ -23,10 +24,10 @@ public class SammysDriveCode extends DriveCodeAbstract {
         drive = Math.round(drive);
 
         //combine moving variables
-        double left = drive + turn + strafe;
-        double leftBackPower = drive + turn - strafe;
-        double right = drive - turn - strafe;
-        double rightBackPower = drive + turn + strafe;
+        double left =           speed * (drive + turn + strafe);
+        double leftBackPower =  speed * (drive + turn - strafe);
+        double right =          speed * (drive - turn - strafe);
+        double rightBackPower = speed * (drive + turn + strafe);
 
         // Normalize the values so neither exceed +/- 1.0
         double max = Math.max(Math.abs(left), Math.abs(right));
@@ -37,9 +38,9 @@ public class SammysDriveCode extends DriveCodeAbstract {
         }
 
             // Output the safe vales to the motor drives.
-            leftFrontDrive.setPower(left * speed);
-            leftBackDrive.setPower(leftBackPower * speed);
-            rightFrontDrive.setPower(right * speed);
-            rightBackDrive.setPower(rightBackPower * speed);
+            leftFrontDrive.setPower(left);
+            leftBackDrive.setPower(leftBackPower);
+            rightFrontDrive.setPower(right);
+            rightBackDrive.setPower(rightBackPower);
     }
 }
