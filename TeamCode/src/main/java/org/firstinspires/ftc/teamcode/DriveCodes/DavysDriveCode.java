@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.DriveCodes;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+/** @noinspection unused*/
 public class DavysDriveCode extends DriveCodeAbstract {
     public DavysDriveCode(HardwareMap hardwareMap, Gamepad gamepad1){
         super(hardwareMap, gamepad1);
@@ -29,7 +30,7 @@ public class DavysDriveCode extends DriveCodeAbstract {
         double NetMoveLeftBack;
         double NetMoveRightFront;
         double NetMoveRightBack;
-        if (Math.abs(strafemove) > forwardmove) {
+        if (Math.abs(strafemove) > Math.abs(forwardmove)) {
             NetMoveLeftFront = strafemove;
             NetMoveLeftBack = -strafemove;
             NetMoveRightFront = -strafemove;
