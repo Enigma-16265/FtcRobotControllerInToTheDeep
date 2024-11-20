@@ -32,11 +32,11 @@ public class DavysDriveCode extends DriveCodeAbstract {
         if (strafemove > 0) {
             NetMoveLeftFront = - strafemove;
             NetMoveLeftBack = strafemove;
-            NetMoveRightFront = 0;
-            NetMoveRightBack = 0;
+            NetMoveRightFront = strafemove;
+            NetMoveRightBack = -strafemove;
         } else {
-            NetMoveLeftFront = 0;
-            NetMoveLeftBack = 0;
+            NetMoveLeftFront = -strafemove;
+            NetMoveLeftBack = strafemove;
             NetMoveRightFront = strafemove;
             NetMoveRightBack = - strafemove;
         }
