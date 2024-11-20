@@ -23,8 +23,8 @@ public class DavysDriveCode extends DriveCodeAbstract {
         leftBackDrive.setPower(left);
         rightBackDrive.setPower(right);
         //Negative x strafe left, positive x strafe right
-        double forwardmove = gamepad1.right_stick_y;
-        double strafemove = gamepad1.right_stick_x;
+        double forwardmove = gamepad1.left_stick_y;
+        double strafemove = gamepad1.left_stick_x;
         double NetMoveLeftFront;
         double NetMoveLeftBack;
         double NetMoveRightFront;
