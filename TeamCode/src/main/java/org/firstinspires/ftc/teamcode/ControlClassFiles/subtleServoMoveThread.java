@@ -32,8 +32,9 @@ public class subtleServoMoveThread extends Thread {
     // enum for types of servos that can move together
     // (is this necessary? I take string input for this anyway)
     enum servoTypes {
-        LIFT,
-        CLAW
+        MANTASLIFT,
+        DEEPINTAKESLIDES,
+        DEEPOUTTAKESLIDES
     }
 
     // if servo is set, code will slowly move that particular servo.
@@ -135,7 +136,7 @@ public class subtleServoMoveThread extends Thread {
     // do actions related to a particular servo type
     private void runType() {
         // if servo type is lift run both lifts simultaneously
-        if (servoType == servoTypes.LIFT) {
+        if (servoType == servoTypes.MANTASLIFT) {
             Servo lift1 = hardwareMap.get(Servo.class, "leftLift");
             Servo lift2 = hardwareMap.get(Servo.class, "rightLift");
             synchronized(lift1) {
@@ -144,24 +145,12 @@ public class subtleServoMoveThread extends Thread {
                 }
             }
         }
-        // if servo type is claw, run both claws in opposite directions
-        /*else if (servoType == servoTypes.CLAW) {
-            // deal with this later
-            // wait why did i say that whats wrong with it?
-            // ahh I see this only works if you are opening or closing claw,
-            // not for values in between. I'll deal with it later
-            double rightPosition;
-            if (position == 1) {rightPosition = 0;}
-            else if (position == 0.4) {rightPosition = 0.6;}
-            else {
-                throw new IllegalArgumentException("Only open or close claw");
-            }
-
-            // wait this code will only move one then the other. Need to fix.
-            runServo(hardwareMap.get(Servo.class, "lFinger"), position);
-            runServo(hardwareMap.get(Servo.class, "rFinger"), rightPosition);
-
-        }*/
+        else if (servoType == servoTypes.DEEPINTAKESLIDES) {
+            // probably movetwoservos on both slides but idk yet
+        }
+        else if (servoType == servoTypes.DEEPOUTTAKESLIDES) {
+            // same as intake
+        }
     }
 
     // move two servos at once in the same direction

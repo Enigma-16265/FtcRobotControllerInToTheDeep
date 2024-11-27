@@ -2,23 +2,49 @@ package org.firstinspires.ftc.teamcode;
 
 import static java.lang.System.currentTimeMillis;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.ControlClassFiles.subtleServoMoveThread;
 
 
 /*
  * this class does all steps for intake and outtake for deep robot
  * or at least it will
  *
- * to change which button does what, go to Intake()
+ * Possible Robot Names:
+
+ * Best:
+     * Sea Cucumber
+     * Titanic
+     * A-Rray
+     * Caution: Wet Floor
+
+ * Kinda Ok
+     * Numenor
+     * Europa
+     * Electronic Coral Reef
+     * ALVIN
+     * Sea Slug
+     * Clipper
+
+ * Mildly Awful
+     * Algae
+     * Sunken Green Treasure
+     * Space Pirate
+     * Glub Glub
+     * Generally the builders decide that
+
+ * Just No
+     * Piracy Machine
+     * Jesse Pinkman
+     * Shrug
+     * Yeah
+     * RobuottyMcRobut
  *
- * How to slurp in with intake? how does it work??? what???
- * Should slurping have a stationary state?
+ * to change which button does what, go to Intake()
  */
-
-
 
 public class DeepIntake {
 
@@ -32,10 +58,17 @@ public class DeepIntake {
     private final Servo intake; // slurpy thing
 
     private final Gamepad gamepad;
+    private final HardwareMap hardwareMap;
 
     double recordedTime = 0; // last time intake steps was run
-    boolean slurping = true; // whether or not intake is currently intaking (slurping)
     private int step = 0; // current step in intake sequence
+
+    private enum SlurpStates {
+        slurp,
+        spit,
+        still
+    }
+    SlurpStates slurpState = SlurpStates.slurp;
 
     // constructor
     public DeepIntake(HardwareMap hardwareMap, Gamepad gamepad) {
@@ -54,6 +87,8 @@ public class DeepIntake {
 
         // set instance variable gamepad
         this.gamepad = gamepad;
+        this.hardwareMap = hardwareMap;
+
     }
 
     // this is the method that should be run by other classes
@@ -72,10 +107,10 @@ public class DeepIntake {
         //    step--;
         //}
 
-        if (slurping) {
+        if (slurpState == SlurpStates.slurp) {
             slurp();
         }
-        else {
+        else if (slurpState == SlurpStates.spit) {
             spit();
         }
 
@@ -103,16 +138,25 @@ public class DeepIntake {
 
     private void reachOut() {
         // slideLeft and slideRight out
-        slurping = true;
+        slurpState = SlurpStates.slurp;
     }
     private void transfer() {
         // slideLeft and slideRight in
         // wait for slides then rotate intakePivot in
         // wait for intakePivot then open lid
-        // wait for lid then slurping = false;
+        // wait for lid then slurpState = SlurpStates.spit;
         // wait for intake then close lid
 
-        // reset slurping?
+        /* DO NOT RUN THIS CODE
+        move("deepIntakeSlides",1);
+        move(intakePivot,0);
+        move(lid,1);
+        slurpState = SlurpStates.spit;
+        // somehow wait until it spits it out? idk how it works still
+        move(lid,0);
+         */
+
+        //slurpState = SlurpStates.still?
     }
     private void liftUp() {
         // outtake left and outtake right extend
@@ -129,4 +173,29 @@ public class DeepIntake {
         // spit out with intake
         // how do i do this???
     }
+
+
+    // subtleServoMove slowly moves a servo to a given position
+    // it does this by creating a subtleServoMoveThread and starting it
+    // (and joining it)
+    private void move(Servo servo, double position) {
+        subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap);
+        m.start();
+
+        try {
+            m.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void move(String servoType, double position) {
+        subtleServoMoveThread m = new subtleServoMoveThread(servoType, position, hardwareMap);
+        m.start();
+        try {
+            m.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
