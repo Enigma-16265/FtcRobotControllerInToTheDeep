@@ -8,11 +8,11 @@ import com.qualcomm.robotcore.hardware.Servo;
  * and I don't want to hurt the servos, especially the lift. Also I feel like I might hit the
  * wrist on something
  *
- * I just realized... I have it moving the servos by getting the current position and incrementing.
- * That's not good. I could accidentally try to set a servo to a value > 1 or < -1... or maybe that
- * was what was happening in the happy dance code. What could I do instead? I could save the value
- * instead of going off of the servo, like mcMuffin does. But that could interfere very annoyingly.
- * Can I synchronise it somehow?
+ * So ive been getting an error that im pretty sure meant that I was trying to run code after
+ * the robot was stopped. this is presumably cause my threads werent told to stop running if
+ * opmode is not active. I tried to fix it by passing a reference to the opmode but that caused
+ * more problems than it solved lol. Maybe I should have a function in programs that use it to
+ * turn off all other threads? hmm
 */
 
 /** @noinspection unused*/

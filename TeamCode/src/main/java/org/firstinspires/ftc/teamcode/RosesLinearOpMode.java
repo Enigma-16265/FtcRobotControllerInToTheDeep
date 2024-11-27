@@ -37,7 +37,6 @@ import org.firstinspires.ftc.teamcode.ControlClassFiles.GrabCode;
 import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
 import org.firstinspires.ftc.teamcode.DriveCodes.DavysDriveCode;
 import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
-import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
 import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
 
 /*
@@ -56,10 +55,10 @@ public class RosesLinearOpMode extends LinearOpMode {
         // Define and initialize wheels and declare wheelCode
         DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
         RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
-        HappyDance dance = new HappyDance(hardwareMap, gamepad1, this);
+        HappyDance dance = new HappyDance(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
-        GrabCode armCode = new GrabCode(hardwareMap, gamepad1, this);
+        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
 
@@ -100,9 +99,5 @@ public class RosesLinearOpMode extends LinearOpMode {
         telemetry.addData("Wrist = ", hardwareMap.get(Servo.class,"wrist").getPosition());
         telemetry.addData("Lift Left = ",hardwareMap.get(Servo.class,"leftLift").getPosition());
         telemetry.addData("Lift Right = ",hardwareMap.get(Servo.class,"rightLift").getPosition());
-    }
-
-    public boolean getOpModeIsActive() {
-        return opModeIsActive();
     }
 }
