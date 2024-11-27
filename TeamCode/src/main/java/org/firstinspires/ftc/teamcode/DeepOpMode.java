@@ -55,12 +55,6 @@ public class DeepOpMode extends LinearOpMode {
         // Prepare Drive Code
         DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
 
-        // Prepare random other drive utilities
-        RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
-
-        // Prepare intake code
-        DeepIntake intakeCode = new DeepIntake(hardwareMap, gamepad1);
-
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");
@@ -74,11 +68,6 @@ public class DeepOpMode extends LinearOpMode {
 
             // run drive code
             wheelCode.runWheels();
-            // run drive utility code
-            spinCode.spinAroundFunction();
-
-            // run intake code
-            intakeCode.Intake();
 
             // Send telemetry message to signify robot running
             whatServoAt();
