@@ -95,18 +95,20 @@ public class DeepIntake {
     public void Intake() {
 
         // if you press a it does the next step
-        if (gamepad.a && (currentTimeMillis() > recordedTime + 1000)) {
+        if (gamepad.a && (currentTimeMillis() > recordedTime + 1000 && startedTransfer == -1)) {
             nextIntakeStep();
             recordedTime = currentTimeMillis();
         }
+        // if transfer is complete close the lid
+        // I dont know the correct timing for this, currently have one sec
+        else if (startedTransfer + 1000 < currentTimeMillis()) {
+            closeLid();
+            startedTransfer = -1;
+        }
 
-        // if you press b it goes back a step.
-        // this is probably a bad idea
-        // what should I do instead? something that resets?
-        //if (gamepad.b) {
-        //    step--;
-        //}
-
+        // refers to the intake. Slurp means its currently
+        // pulling in, spit when pushing out
+        // maybe dont really need functions for this but wtv
         if (slurpState == SlurpStates.slurp) {
             slurp();
         }
@@ -131,15 +133,23 @@ public class DeepIntake {
             releaseOuttake();
         }
 
-        // increment step. lope when finish sequence
+        // increment step. loop when finish sequence
         step++;
         if (step > 3) step = 0;
     }
 
     private void reachOut() {
         // slideLeft and slideRight out
+        /* DO NOT RUN THIS CODE
+        move("deepintakeslides",1);
+         */
+        // start slurping to pull samples in
         slurpState = SlurpStates.slurp;
+        // should it stop pulling in when it has a
+        // sample? also what about the code for seeing what
+        // color the sample is? lorelai was working on that right?
     }
+    double startedTransfer = -1;
     private void transfer() {
         // slideLeft and slideRight in
         // wait for slides then rotate intakePivot in
@@ -152,26 +162,37 @@ public class DeepIntake {
         move(intakePivot,0);
         move(lid,1);
         slurpState = SlurpStates.spit;
-        // somehow wait until it spits it out? idk how it works still
-        move(lid,0);
+        startedTransfer = currentTimeMillis();
          */
 
-        //slurpState = SlurpStates.still?
+    }
+    private void closeLid() {
+        // move(lid,whatever is the close value);
+        // move outtake wrist a little?
+        // slurpState = SlurpStates.still;
     }
     private void liftUp() {
         // outtake left and outtake right extend
+        // move("deepouttakeslides",whatever the value is);
+        // rotate outtake wrist? i think thats a thing but I didnt
+        // see it on the list of servos
     }
     private void releaseOuttake() {
         // open lid
+        // lid.setPosition(whatever it is);
     }
 
     private void slurp() {
         // pull in with intake
         // how do i do this???
+        // I think its moving the intake servo a specific amount in the proper
+        // direction... it doesnt look like the build team knows how that works anyway
+        // intake.setPosition(intake.getPosition+0.1); ???
     }
     private void spit() {
         // spit out with intake
         // how do i do this???
+        // intake.setPosition(intake.getPosition-0.1); ???
     }
 
 
