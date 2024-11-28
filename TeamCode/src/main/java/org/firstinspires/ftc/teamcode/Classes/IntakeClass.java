@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.HashMap;
+
 
 public class IntakeClass {
 
@@ -29,6 +31,8 @@ public class IntakeClass {
     //TODO: Give servoh some friends.
     Servo servoh;
     Servo wrist;
+    Servo testServo;
+    Servo testServo2;
 
     CRServo contanstly_rotating_fellow;
 
@@ -52,37 +56,32 @@ public class IntakeClass {
 
     double wrist_rotation_speed = 0.01;
 
+    double extendoOffset = 0.01;
+
 
     transferingStates transferState = transferingStates.IDLE;
 
 
 
     public IntakeClass(@NonNull com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
-        //HardwareMap goes here
+        //HardwareMapping goes here
 
         this.gamepad1 = gamepad1;
         this.hardwareMap = hardwareMap;
         this.gamepad2 = gamepad2;
+        //TODO: import stuff
     }
 
 
 
 
-
-
-    private void outtakePosHandler() {
-        //outtake
-    }
-
-
-    //TODO: add the distance sensor detector lol
     private void intake() {
         if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
             intakeMotor.setPower(1);
         }
     }
     private void intakeIdle() {
-        if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
+        if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger > triggerThreshold) {
             intakeMotor.setPower(0);
         }
         if (gamepad2.right_trigger < triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
@@ -94,6 +93,7 @@ public class IntakeClass {
             intakeMotor.setPower(-1);
         }
     }
+    /*
     private void specimenIntake() {
         if (gamepad2_y_OAD == true) {
             specimenServo.setPosition(1);
@@ -103,6 +103,11 @@ public class IntakeClass {
         }
     }
 
+     */
+
+
+
+
 
     private void wristRotation() {
         if (gamepad2.right_bumper == true && gamepad2.left_bumper == false) {
@@ -111,6 +116,7 @@ public class IntakeClass {
         if (gamepad2.left_bumper == true && gamepad2.right_bumper == false) {
             wrist.setPosition(wrist.getPosition() - wrist_rotation_speed);
         }
+            //TODO: Contrainsts
     }
 
 
@@ -172,10 +178,10 @@ public class IntakeClass {
                 transferState = transferingStates.RETRACTING_WRIST;
             }
             if (transferState == transferingStates.OPENING_LID) {
-
+                //stuff
             }
             if (transferState == transferingStates.MOVING_EXTENDO) {
-
+                //stuff
             }
             if (transferState == transferingStates.TRANSFERING) {
                 transferTime = Runtime.seconds();
@@ -190,6 +196,39 @@ public class IntakeClass {
                 transferState = transferingStates.IDLE;
             }
         }
+    }
+
+
+
+
+    private void setWContraints(String servoName, double setTo) {
+        Servo servoToUse;
+        servoToUse = hardwareMap.get(Servo.class, servoName);
+
+        // strange option?
+            if (setTo < ServoConstraints.constraintsForEachServo.get("wrist").low){
+                servoToUse.setPosition(ServoConstraints.constraintsForEachServo.get("wrist").low);
+            }
+            if (setTo > ServoConstraints.constraintsForEachServo.get("wrist").high){
+                servoToUse.setPosition(ServoConstraints.constraintsForEachServo.get("wrist").high);
+            }
+
+    }
+
+    private void extendoHandler() {
+        testServo.setPosition(gamepad2.right_stick_y/10 + testServo.getPosition() + extendoOffset);
+        testServo2.setPosition(gamepad2.right_stick_y/10 + testServo2.getPosition());
+        //TODO: INVERT
+    }
+
+    public void runIntake() {
+        extendoHandler();
+        transferSequence();
+        oneAndDone();
+        wristRotation();
+        outtake();
+        intake();
+        intakeIdle();
     }
 
 
