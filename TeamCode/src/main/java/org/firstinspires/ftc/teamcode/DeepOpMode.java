@@ -33,9 +33,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
+import org.firstinspires.ftc.teamcode.Classes.DriveCode;
+import org.firstinspires.ftc.teamcode.Classes.IntakeClass;
 import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
-import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
 
 /*
  * This code calls other classes and runs their code
@@ -53,13 +54,9 @@ public class DeepOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Prepare Drive Code
-        DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
-
-        // Prepare random other drive utilities
-        RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
-
-        // Prepare intake code
-        DeepIntake intakeCode = new DeepIntake(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new DriveCode(hardwareMap, gamepad1);
+        DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
+        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
 
         // Send telemetry message to signify robot waiting;
@@ -72,13 +69,9 @@ public class DeepOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // run drive code
             wheelCode.runWheels();
-            // run drive utility code
-            spinCode.spinAroundFunction();
-
-            // run intake code
-            intakeCode.Intake();
+            outtakeCode.outtake();
+            //intakeCode.runIntake();
 
             // Send telemetry message to signify robot running
             whatServoAt();
