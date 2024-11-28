@@ -47,7 +47,7 @@ import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
 
 @TeleOp(name="Robot: Roses Teleop POV", group="Robot")
 //@Disabled
-public class RosesLinearOpMode extends LinearOpMode {
+public class RosesMantasOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
