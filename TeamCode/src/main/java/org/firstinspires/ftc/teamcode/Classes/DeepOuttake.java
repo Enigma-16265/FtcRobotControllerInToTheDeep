@@ -10,40 +10,10 @@ import org.firstinspires.ftc.teamcode.ControlClassFiles.subtleServoMoveThread;
 
 
 /*
- * this class does all steps for intake and outtake for deep robot
+ * this class does all steps for outtake for deep robot
  * or at least it will
  *
- * Possible Robot Names:
-
- * Best:
-     * Sea Cucumber
-     * Titanic
-     * A-Rray
-     * Caution: Wet Floor
-
- * Kinda Ok
-     * Numenor
-     * Europa
-     * Electronic Coral Reef
-     * ALVIN
-     * Sea Slug
-     * Clipper
-
- * Mildly Awful
-     * Algae
-     * Sunken Green Treasure
-     * Space Pirate
-     * Glub Glub
-     * Generally the builders decide that
-
- * Just No
-     * Piracy Machine
-     * Jesse Pinkman
-     * Shrug
-     * Yeah
-     * RobuottyMcRobut
- *
- * to change which button does what, go to Intake()
+ * to change which button does what, go to Outtake()
  */
 
 public class DeepOuttake {
@@ -58,7 +28,7 @@ public class DeepOuttake {
     private final HardwareMap hardwareMap;
 
     double recordedTime = 0; // last time steps was run
-    private int step = 0; // current step in sequence
+    private outtakeSteps step = outtakeSteps.LIFT; // current step in sequence
 
     enum outtakeSteps {
         LIFT,
@@ -89,21 +59,15 @@ public class DeepOuttake {
             nextOuttakeStep();
             recordedTime = currentTimeMillis();
         }
-        // if transfer is complete close the lid
-        // I dont know the correct timing for this, currently have one sec
-        /*else if (startedTransfer + 1000 < currentTimeMillis()) {
-            closeLid();
-            startedTransfer = -1;
-        }*/
 
     }
 
     // runs the next step in the outtake sequence
     private void nextOuttakeStep() {
-        if (step == 0) {
+        if (step == outtakeSteps.LIFT) {
             liftUp();
         }
-        else if (step == 1) {
+        else if (step == outtakeSteps.RELEASE) {
             releaseOuttake();
         }
 
@@ -184,4 +148,12 @@ public class DeepOuttake {
         // move outtake wrist a little?
         // slurpState = SlurpStates.still;
     }
+
+    // and this would be in Outtake
+    // if transfer is complete close the lid
+    // I dont know the correct timing for this, currently have one sec
+        /*else if (startedTransfer + 1000 < currentTimeMillis()) {
+            closeLid();
+            startedTransfer = -1;
+        }*/
 }

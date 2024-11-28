@@ -33,9 +33,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Classes.DriveCode;
 import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
-import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
 
 /*
  * This code calls other classes and runs their code
@@ -53,7 +52,7 @@ public class DeepOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Prepare Drive Code
-        DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new DriveCode(hardwareMap, gamepad1);
 
 
         // Send telemetry message to signify robot waiting;
