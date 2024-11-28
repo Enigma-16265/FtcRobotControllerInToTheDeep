@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.Classes;
 
 import static java.lang.System.currentTimeMillis;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.ControlClassFiles.subtleServoMoveThread;
 
 
 /*
@@ -18,20 +17,21 @@ import org.firstinspires.ftc.teamcode.ControlClassFiles.subtleServoMoveThread;
 
 public class DeepOuttake {
 
-    // Servos
-    private final Servo outtakeLeft; // outtake slides
+    private final Servo outtakeLeft; // outtake wrist i believe?
     private final Servo outtakeRight;
+    private final DcMotor rightLift;
+    private final DcMotor leftLift;
     private final Servo lid; // open and close the outtake box
-    private final Servo outtakeWrist;
 
     private final Gamepad gamepad;
-    private final HardwareMap hardwareMap;
 
     double recordedTime = 0; // last time steps was run
-    private outtakeSteps step = outtakeSteps.LIFT; // current step in sequence
+    private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
+    double wristOffset; // need to find value of this!!!
+    double lidOpen; // also need to find value of this
 
     enum outtakeSteps {
-        LIFT,
+        WRIST,
         RELEASE
     }
 
@@ -41,70 +41,52 @@ public class DeepOuttake {
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
         lid = hardwareMap.get(Servo.class, "lid");
-        outtakeWrist = hardwareMap.get(Servo.class, "idfk");
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
         // set directions
         outtakeRight.setDirection(Servo.Direction.REVERSE);
+        rightLift.setDirection(DcMotor.Direction.REVERSE);
 
         // set instance variable gamepad
         this.gamepad = gamepad;
-        this.hardwareMap = hardwareMap;
     }
 
     // this is the method that should be run by other classes
     public void outtake() {
 
         // if you press a it does the next step
-        if (gamepad.a && (currentTimeMillis() > recordedTime + 1000 && startedTransfer == -1)) {
+        if (gamepad.a && (currentTimeMillis() > recordedTime + 1000)) {
             nextOuttakeStep();
             recordedTime = currentTimeMillis();
+        }
+
+        // control the lifts with some other buttons
+        if (gamepad.dpad_up) {
+            rightLift.setPower(0.1);
+            leftLift.setPower(0.1);
+        }
+        else if (gamepad.dpad_down) {
+            rightLift.setPower(-0.1);
+            leftLift.setPower(-0.1);
+        }
+        else {
+            rightLift.setPower(0);
+            leftLift.setPower(0);
         }
 
     }
 
     // runs the next step in the outtake sequence
     private void nextOuttakeStep() {
-        if (step == outtakeSteps.LIFT) {
-            liftUp();
+        if (step == outtakeSteps.WRIST) {
+            //outtakeRight.setPosition(0.5 + wristOffset);
+            //outtakeLeft.setPosition(0.5);
             step = outtakeSteps.RELEASE;
         }
         else if (step == outtakeSteps.RELEASE) {
-            releaseOuttake();
-            step = outtakeSteps.LIFT;
-        }
-    }
-
-    private void liftUp() {
-        // outtake left and outtake right extend
-        // move("deepouttakeslides",whatever the value is);
-        // rotate outtake wrist
-    }
-    private void releaseOuttake() {
-        // open lid
-        // lid.setPosition(whatever it is);
-    }
-
-
-    // subtleServoMove slowly moves a servo to a given position
-    // it does this by creating a subtleServoMoveThread and starting it
-    // (and joining it)
-    private void move(Servo servo, double position) {
-        subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap);
-        m.start();
-
-        try {
-            m.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private void move(String servoType, double position) {
-        subtleServoMoveThread m = new subtleServoMoveThread(servoType, position, hardwareMap);
-        m.start();
-        try {
-            m.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            lid.setPosition(lidOpen);
+            step = outtakeSteps.WRIST;
         }
     }
 
@@ -122,8 +104,9 @@ public class DeepOuttake {
 
 
 
-    //possible transfer code
+    /** @noinspection unused*/ //possible transfer code
     double startedTransfer = -1;
+    /** @noinspection unused*/
     private void transfer() {
         // slideLeft and slideRight in
         // wait for slides then rotate intakePivot in
@@ -141,6 +124,7 @@ public class DeepOuttake {
 
 
     }
+    /** @noinspection unused*/
     private void closeLid() {
         // move(lid,whatever is the close value);
         // move outtake wrist a little?

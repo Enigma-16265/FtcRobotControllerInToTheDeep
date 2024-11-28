@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
 import org.firstinspires.ftc.teamcode.Classes.DriveCode;
+import org.firstinspires.ftc.teamcode.Classes.IntakeClass;
 import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
 
 /*
@@ -54,7 +55,8 @@ public class DeepOpMode extends LinearOpMode {
 
         // Prepare Drive Code
         DriveCodeAbstract wheelCode = new DriveCode(hardwareMap, gamepad1);
-        DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad1);
+        DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
+        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
 
         // Send telemetry message to signify robot waiting;
@@ -69,6 +71,7 @@ public class DeepOpMode extends LinearOpMode {
 
             wheelCode.runWheels();
             outtakeCode.outtake();
+            //intakeCode.runIntake();
 
             // Send telemetry message to signify robot running
             whatServoAt();
