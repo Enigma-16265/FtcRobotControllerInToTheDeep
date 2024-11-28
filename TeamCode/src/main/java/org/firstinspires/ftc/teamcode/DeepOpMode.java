@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
 import org.firstinspires.ftc.teamcode.Classes.DriveCode;
 import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
 
@@ -53,6 +54,7 @@ public class DeepOpMode extends LinearOpMode {
 
         // Prepare Drive Code
         DriveCodeAbstract wheelCode = new DriveCode(hardwareMap, gamepad1);
+        DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad1);
 
 
         // Send telemetry message to signify robot waiting;
@@ -65,8 +67,8 @@ public class DeepOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // run drive code
             wheelCode.runWheels();
+            outtakeCode.outtake();
 
             // Send telemetry message to signify robot running
             whatServoAt();

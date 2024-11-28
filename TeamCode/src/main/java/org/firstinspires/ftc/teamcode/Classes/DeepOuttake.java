@@ -52,7 +52,7 @@ public class DeepOuttake {
     }
 
     // this is the method that should be run by other classes
-    public void Outake() {
+    public void outtake() {
 
         // if you press a it does the next step
         if (gamepad.a && (currentTimeMillis() > recordedTime + 1000 && startedTransfer == -1)) {
