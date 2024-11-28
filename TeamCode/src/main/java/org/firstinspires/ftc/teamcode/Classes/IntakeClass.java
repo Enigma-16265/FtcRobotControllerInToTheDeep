@@ -9,13 +9,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.HashMap;
-
 
 public class IntakeClass {
 
     enum transferingStates {
         IDLE,
+        MOVING_LIFT,
         RETRACTING_WRIST,
         OPENING_LID,
         MOVING_EXTENDO,
@@ -28,11 +27,14 @@ public class IntakeClass {
     private final HardwareMap hardwareMap;
 
 
-    //TODO: Give servoh some friends.
-    Servo servoh;
-    Servo wrist;
-    Servo testServo;
-    Servo testServo2;
+
+    Servo intakePivot;
+    Servo slideLeft;
+    Servo slideRight;
+    Servo outtakeLeft;
+    Servo outtakeRight;
+    Servo lid;
+    Servo intake;
 
     CRServo contanstly_rotating_fellow;
 
@@ -51,6 +53,7 @@ public class IntakeClass {
     boolean gamepad2_b_release_OAD = false;
 
     boolean transferRequested = false;
+    boolean transferInProgress = false;
 
     double transferTime = 0;
 
@@ -64,7 +67,17 @@ public class IntakeClass {
 
 
     public IntakeClass(@NonNull com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
-        //HardwareMapping goes here
+        //HardwareMapping
+        slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        slideRight = hardwareMap.get(Servo.class, "slideRight");
+        outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+        outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
+        lid = hardwareMap.get(Servo.class, "lid");
+        intake = hardwareMap.get(Servo.class, "intake");
+        intakePivot = hardwareMap.get(Servo.class, "intakePivot");
+
+        outtakeRight.setDirection(Servo.Direction.REVERSE);
+        slideLeft.setDirection(Servo.Direction.REVERSE);
 
         this.gamepad1 = gamepad1;
         this.hardwareMap = hardwareMap;
@@ -111,10 +124,10 @@ public class IntakeClass {
 
     private void wristRotation() {
         if (gamepad2.right_bumper == true && gamepad2.left_bumper == false) {
-            wrist.setPosition(wrist.getPosition() + wrist_rotation_speed);
+            intakePivot.setPosition(intakePivot.getPosition() + wrist_rotation_speed);
         }
         if (gamepad2.left_bumper == true && gamepad2.right_bumper == false) {
-            wrist.setPosition(wrist.getPosition() - wrist_rotation_speed);
+            intakePivot.setPosition(intakePivot.getPosition() - wrist_rotation_speed);
         }
             //TODO: Contrainsts
     }
@@ -169,19 +182,31 @@ public class IntakeClass {
         oneAndDoneUpdate();
     }
 
+    private void oneAndDoneNew(String servoString) {
+        Servo servoToUse;
+
+        servoToUse = hardwareMap.get(Servo.class, servoString);
+    }
+
     private void transferSequence() {
-        if (transferRequested == true) {
+        if (transferRequested == true || transferInProgress == true) {
             transferRequested = false;
 
             if (transferState == transferingStates.IDLE) {
-                //Retract Wrist
+                transferInProgress = true;
+                transferState = transferingStates.MOVING_LIFT;
+            }
+            if (transferState == transferingStates.MOVING_LIFT) {
                 transferState = transferingStates.RETRACTING_WRIST;
             }
+            if (transferState == transferingStates.RETRACTING_WRIST) {
+                transferState = transferingStates.OPENING_LID;
+            }
             if (transferState == transferingStates.OPENING_LID) {
-                //stuff
+                transferState = transferingStates.MOVING_EXTENDO;
             }
             if (transferState == transferingStates.MOVING_EXTENDO) {
-                //stuff
+                transferState = transferingStates.TRANSFERING;
             }
             if (transferState == transferingStates.TRANSFERING) {
                 transferTime = Runtime.seconds();
@@ -190,17 +215,21 @@ public class IntakeClass {
                     //Set CRServo Power to 0
                     transferState = transferingStates.CLOSING_LID;
                 }
+
+                transferState = transferingStates.CLOSING_LID;
             }
             if (transferState == transferingStates.CLOSING_LID) {
-                //Close Lid
                 transferState = transferingStates.IDLE;
             }
+
+
         }
     }
 
 
 
 
+    /*
     private void setWContraints(String servoName, double setTo) {
         Servo servoToUse;
         servoToUse = hardwareMap.get(Servo.class, servoName);
@@ -215,9 +244,11 @@ public class IntakeClass {
 
     }
 
+     */
+
     private void extendoHandler() {
-        testServo.setPosition(gamepad2.right_stick_y/10 + testServo.getPosition() + extendoOffset);
-        testServo2.setPosition(gamepad2.right_stick_y/10 + testServo2.getPosition());
+        slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
+        slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
         //TODO: INVERT
     }
 
