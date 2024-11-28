@@ -66,14 +66,12 @@ public class DeepOuttake {
     private void nextOuttakeStep() {
         if (step == outtakeSteps.LIFT) {
             liftUp();
+            step = outtakeSteps.RELEASE;
         }
         else if (step == outtakeSteps.RELEASE) {
             releaseOuttake();
+            step = outtakeSteps.LIFT;
         }
-
-        // increment step. loop when finish sequence
-        step++;
-        if (step > 1) step = 0;
     }
 
     private void liftUp() {
