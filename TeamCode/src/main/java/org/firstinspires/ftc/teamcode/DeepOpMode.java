@@ -71,7 +71,7 @@ public class DeepOpMode extends LinearOpMode {
 
             wheelCode.runWheels();
             outtakeCode.outtake();
-            //intakeCode.runIntake();
+            intakeCode.runIntake();
 
             // Send telemetry message to signify robot running
             whatServoAt();
