@@ -199,7 +199,7 @@ public class IntakeClass {
     }
 
     private void transferSequence() {
-        if (gamepad2.b == false && transferRequested == false) {
+        if (gamepad2.b == true && transferRequested == false) {
             transferRequested = true;
         }
         if (transferRequested == true || transferInProgress == true) {
