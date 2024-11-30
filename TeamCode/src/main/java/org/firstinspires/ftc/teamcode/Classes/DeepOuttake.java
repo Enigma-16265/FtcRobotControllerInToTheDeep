@@ -45,7 +45,6 @@ public class DeepOuttake {
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
         // set directions
-        outtakeRight.setDirection(Servo.Direction.REVERSE);
         rightLift.setDirection(DcMotor.Direction.REVERSE);
 
         // set instance variable gamepad
