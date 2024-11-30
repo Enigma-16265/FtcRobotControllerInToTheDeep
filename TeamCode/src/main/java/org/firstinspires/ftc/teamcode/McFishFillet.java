@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class McCrispy extends LinearOpMode {
+public class McFishFillet extends LinearOpMode {
     //TODO: Step 1, Replace all "wrist","hopper", etc with your servos
     Servo slideLeft;
     Servo slideRight;
