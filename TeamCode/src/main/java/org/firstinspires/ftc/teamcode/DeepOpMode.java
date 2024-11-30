@@ -48,7 +48,7 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
  * If you make new code for the deep robot, add it to this!
  */
 
-@TeleOp(name="Robot: Roses Teleop POV", group="Robot")
+@TeleOp(name="Robot: Deep Teleop", group="Robot")
 //@Disabled
 public class DeepOpMode extends LinearOpMode {
 
