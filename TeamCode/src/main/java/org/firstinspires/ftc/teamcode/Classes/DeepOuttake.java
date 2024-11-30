@@ -27,8 +27,6 @@ public class DeepOuttake {
 
     double recordedTime = 0; // last time steps was run
     private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
-    double wristOffset; // need to find value of this!!!
-    double lidOpen; // also need to find value of this
 
     enum outtakeSteps {
         WRIST,
@@ -44,8 +42,7 @@ public class DeepOuttake {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-        // set directions
-        rightLift.setDirection(DcMotor.Direction.REVERSE);
+        lid.setDirection(Servo.Direction.REVERSE);
 
         // set instance variable gamepad
         this.gamepad = gamepad;
@@ -74,67 +71,27 @@ public class DeepOuttake {
             leftLift.setPower(0);
         }
 
+        if (gamepad.dpad_left) {
+            outtakeRight.setPosition(outtakeRight.getPosition()+0.1);
+            outtakeLeft.setPosition(outtakeLeft.getPosition()+0.1);
+        }
+        else if (gamepad.dpad_right) {
+            outtakeRight.setPosition(outtakeRight.getPosition()-0.1);
+            outtakeLeft.setPosition(outtakeLeft.getPosition()-0.1);
+        }
+
     }
 
     // runs the next step in the outtake sequence
     private void nextOuttakeStep() {
         if (step == outtakeSteps.WRIST) {
-            //outtakeRight.setPosition(0.5 + wristOffset);
-            //outtakeLeft.setPosition(0.5);
+            outtakeRight.setPosition(0.5);
+            outtakeLeft.setPosition(0.5);
             step = outtakeSteps.RELEASE;
         }
         else if (step == outtakeSteps.RELEASE) {
-            lid.setPosition(lidOpen);
+            lid.setPosition(0.6);
             step = outtakeSteps.WRIST;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /** @noinspection unused*/ //possible transfer code
-    double startedTransfer = -1;
-    /** @noinspection unused*/
-    private void transfer() {
-        // slideLeft and slideRight in
-        // wait for slides then rotate intakePivot in
-        // wait for intakePivot then open lid
-        // wait for lid then slurpState = SlurpStates.spit;
-        // wait for intake then close lid
-
-        /* DO NOT RUN THIS CODE
-        move("deepIntakeSlides",1);
-        move(intakePivot,0);
-        move(lid,1);
-        slurpState = SlurpStates.spit;
-        startedTransfer = currentTimeMillis();
-        */
-
-
-    }
-    /** @noinspection unused*/
-    private void closeLid() {
-        // move(lid,whatever is the close value);
-        // move outtake wrist a little?
-        // slurpState = SlurpStates.still;
-    }
-
-    // and this would be in Outtake
-    // if transfer is complete close the lid
-    // I dont know the correct timing for this, currently have one sec
-        /*else if (startedTransfer + 1000 < currentTimeMillis()) {
-            closeLid();
-            startedTransfer = -1;
-        }*/
 }
