@@ -149,7 +149,8 @@ public class McFishFillet extends LinearOpMode {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-
+        //sets direction to reverse
+        outtakeLeft.setDirection(Servo.Direction.REVERSE);
 
         slideLeft.setPosition(0.5);
         lid.setPosition(0.5);
