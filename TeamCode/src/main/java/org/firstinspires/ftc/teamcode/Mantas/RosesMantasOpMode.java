@@ -27,17 +27,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Mantas;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.ControlClassFiles.GrabCode;
-import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
-import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
-import org.firstinspires.ftc.teamcode.DriveCodes.LorelaisDriveCode;
-import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
+import org.firstinspires.ftc.teamcode.Mantas.FunStuffs.HappyDance;
 
 /*
  * This code calls other classes and runs their code
@@ -47,18 +47,18 @@ import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
 
 @TeleOp(name="Robot: Roses Teleop POV", group="Robot")
 //@Disabled
-public class RosesLinearOpMode extends LinearOpMode {
+public class RosesMantasOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
         // Define and initialize wheels and declare wheelCode
-        DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
         RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
-        HappyDance dance = new HappyDance(hardwareMap, gamepad1, this);
+        HappyDance dance = new HappyDance(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
-        GrabCode armCode = new GrabCode(hardwareMap, gamepad1, this);
+        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
 
@@ -100,9 +100,4 @@ public class RosesLinearOpMode extends LinearOpMode {
         telemetry.addData("Lift Left = ",hardwareMap.get(Servo.class,"leftLift").getPosition());
         telemetry.addData("Lift Right = ",hardwareMap.get(Servo.class,"rightLift").getPosition());
     }
-
-    public boolean getOpModeIsActive() {
-        return opModeIsActive();
-    }
-
 }

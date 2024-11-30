@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.FunStuffs;
+package org.firstinspires.ftc.teamcode.Mantas.FunStuffs;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
-import org.firstinspires.ftc.teamcode.ControlClassFiles.subtleServoMoveThread;
-import org.firstinspires.ftc.teamcode.RosesLinearOpMode;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.subtleServoMoveThread;
 
 public class HappyDance {
 
@@ -14,31 +13,29 @@ public class HappyDance {
     private final Gamepad gamePad;
     RandomMovementControls spinAroundFunction;
     SoundThing soundPlayer;
-    RosesLinearOpMode opMode;
 
     // constructor
-    public HappyDance (HardwareMap hardwareMap, Gamepad gamePad, RosesLinearOpMode opMode) {
+    public HappyDance (HardwareMap hardwareMap, Gamepad gamePad) {
         spinAroundFunction = new RandomMovementControls (hardwareMap, gamePad);
         soundPlayer = new SoundThing(hardwareMap);
 
         //hardware map and gamepad
         this.gamePad = gamePad;
         this.hardwareMap = hardwareMap;
-        this.opMode = opMode;
     }
 
 
     private void moveLift() {
-        subtleServoMoveThread upLift = new subtleServoMoveThread("lift", 0.7, 1.5, hardwareMap, opMode);
+        subtleServoMoveThread upLift = new subtleServoMoveThread("lift", 0.7, 1.5, hardwareMap);
         upLift.start();
-        subtleServoMoveThread downLift = new subtleServoMoveThread("lift", 0.06, 1.5, upLift, hardwareMap, opMode);
+        subtleServoMoveThread downLift = new subtleServoMoveThread("lift", 0.06, 1.5, upLift, hardwareMap);
         downLift.start();
     }
 
     private void moveClaw() {
-        subtleServoMoveThread open = new subtleServoMoveThread("claw", 1, 3, hardwareMap, opMode);
+        subtleServoMoveThread open = new subtleServoMoveThread("claw", 1, 3, hardwareMap);
         open.start();
-        subtleServoMoveThread close = new subtleServoMoveThread("claw", 0.4, 3, open, hardwareMap, opMode);
+        subtleServoMoveThread close = new subtleServoMoveThread("claw", 0.4, 3, open, hardwareMap);
         close.start();
     }
 

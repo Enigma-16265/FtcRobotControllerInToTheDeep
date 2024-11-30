@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ControlClassFiles;
+package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
 
 
 import static java.lang.System.*;
@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.RosesLinearOpMode;
 
 /*
  * This class runs the grab code
@@ -23,7 +22,6 @@ public class GrabCode {
     /** @noinspection FieldCanBeLocal, unused */ // Instance Variables
     private final Gamepad gamepad1;
     private final HardwareMap hardwareMap;
-    private final RosesLinearOpMode opMode;
 
     // Servos
     private final Servo    leftClaw;
@@ -40,7 +38,7 @@ public class GrabCode {
     private double time = 0;
 
     // constructor initializes all servos
-    public GrabCode(@NonNull com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1, RosesLinearOpMode opMode) {
+    public GrabCode(@NonNull com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
 
         // set all servos to the correct values
         leftClaw  = hardwareMap.get(Servo.class, "lFinger");
@@ -60,7 +58,6 @@ public class GrabCode {
         // set gamepad and hardware map variables
         this.gamepad1 = gamepad1;
         this.hardwareMap = hardwareMap;
-        this.opMode = opMode;
     }
 
     // runs the steps of grab: whenever it's called it does the next stage
@@ -155,13 +152,13 @@ public class GrabCode {
     // subtleServoMove slowly moves a servo to a given position
     // it does this by creating a subtleServoMoveThread and starting it
     private void subtleServoMove(Servo servo, double position) {
-        subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap, opMode);
+        subtleServoMoveThread m = new subtleServoMoveThread(servo, position, hardwareMap);
         m.start();
     }
 
     /** @noinspection SameParameterValue*/
     private void subtleServoMove(String type, double position) {
-        subtleServoMoveThread m = new subtleServoMoveThread(type, position, hardwareMap, opMode);
+        subtleServoMoveThread m = new subtleServoMoveThread(type, position, hardwareMap);
         m.start();
     }
 }

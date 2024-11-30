@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -14,6 +16,8 @@ public class McFishFillet extends LinearOpMode {
     Servo lid;
     Servo intakePivot;
     Servo intake;
+    DcMotor rightLift;
+    DcMotor leftLift;
 
     //DcMotor frontIntake;
     //DcMotor rearIntake;
@@ -29,6 +33,7 @@ public class McFishFillet extends LinearOpMode {
         OUTTAKE,
         INTAKEPIVOT,
         INTAKE,
+        LIFT
     }
     ServoTypes which;
     //TODO: Step 4, replace all names of Servos with yours, and replace all capitals with what you set them to from step 3
@@ -52,6 +57,10 @@ public class McFishFillet extends LinearOpMode {
             else if (which == ServoTypes.INTAKE) {
                 intake.setPosition(intake.getPosition() - speedAmount);
             }
+            else if (which == ServoTypes.LIFT) {
+                rightLift.setPower(0.1);
+                leftLift.setPower(0.1);
+            }
 
         }
         else if (gamepad1.right_bumper) {
@@ -72,6 +81,14 @@ public class McFishFillet extends LinearOpMode {
             else if (which == ServoTypes.INTAKE) {
                 intake.setPosition(intake.getPosition() + speedAmount);
             }
+            else if (which == ServoTypes.LIFT) {
+                rightLift.setPower(-0.1);
+                leftLift.setPower(-0.1);
+            }
+        }
+        else {
+            rightLift.setPower(0);
+            leftLift.setPower(0);
         }
     }
     //TODO: Step 5, replace all of your Servo functions below
@@ -84,6 +101,9 @@ public class McFishFillet extends LinearOpMode {
         }
         else if (gamepad1.b) {
             which = ServoTypes.OUTTAKE;
+        }
+        else if (gamepad1.a) {
+            which = ServoTypes.LIFT;
         }
 
         telemetry.addData("Selected Servo = ", which.toString());
@@ -127,9 +147,12 @@ public class McFishFillet extends LinearOpMode {
         lid = hardwareMap.get(Servo.class, "lid");
         intake = hardwareMap.get(Servo.class, "intake");
         intakePivot = hardwareMap.get(Servo.class, "intakePivot");
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
         outtakeRight.setDirection(Servo.Direction.REVERSE);
         slideLeft.setDirection(Servo.Direction.REVERSE);
+        rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         slideLeft.setPosition(0.5);
