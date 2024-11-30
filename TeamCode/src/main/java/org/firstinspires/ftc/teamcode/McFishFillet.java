@@ -151,6 +151,9 @@ public class McFishFillet extends LinearOpMode {
 
         //sets direction to reverse
         outtakeLeft.setDirection(Servo.Direction.REVERSE);
+        slideLeft.setDirection(Servo.Direction.REVERSE);
+        slideRight.setDirection(Servo.Direction.REVERSE);
+        lid.setDirection(Servo.Direction.REVERSE);
 
         slideLeft.setPosition(0.5);
         lid.setPosition(0.5);
