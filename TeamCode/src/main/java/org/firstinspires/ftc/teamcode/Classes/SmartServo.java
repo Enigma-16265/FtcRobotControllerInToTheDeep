@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Classes;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,7 +27,15 @@ class SmartServo {
         if(!isInitialized) {
             isInitialized = true;
 
-            constraintsForEachServo.put("wrist", new SingleServoConstraints(0.1, 0.9));
+            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("lid", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("intakePivot", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("rightLift", new SingleServoConstraints(0.3, 0.6));
+            constraintsForEachServo.put("leftLift", new SingleServoConstraints(0.3, 0.6));
 
         }
     }
