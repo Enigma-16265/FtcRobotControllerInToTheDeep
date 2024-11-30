@@ -27,8 +27,6 @@ public class DeepOuttake {
 
     double recordedTime = 0; // last time steps was run
     private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
-    double wristOffset; // need to find value of this!!!
-    double lidOpen; // also need to find value of this
 
     enum outtakeSteps {
         WRIST,
