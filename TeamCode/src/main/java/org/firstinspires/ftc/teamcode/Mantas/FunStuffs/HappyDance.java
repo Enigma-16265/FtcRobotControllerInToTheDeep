@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.FunStuffs;
+package org.firstinspires.ftc.teamcode.Mantas.FunStuffs;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
-import org.firstinspires.ftc.teamcode.ControlClassFiles.subtleServoMoveThread;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.subtleServoMoveThread;
 
 public class HappyDance {
 

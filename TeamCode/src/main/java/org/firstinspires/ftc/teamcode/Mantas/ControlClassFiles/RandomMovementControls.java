@@ -1,5 +1,5 @@
 //imports
-package org.firstinspires.ftc.teamcode.ControlClassFiles;
+package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;

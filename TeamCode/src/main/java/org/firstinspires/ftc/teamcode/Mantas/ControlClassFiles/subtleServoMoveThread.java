@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ControlClassFiles;
+package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;

@@ -1,18 +1,16 @@
-package org.firstinspires.ftc.teamcode.Classes;
+package org.firstinspires.ftc.teamcode.Mantas.DriveCodes;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
-import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
 
 /*
  * This class runs the wheel control code
  *
  */
 
-public class DriveCode extends DriveCodeAbstract {
+public class LorelaisDriveCode extends DriveCodeAbstract {
 
     // constructor initializes the wheels and does some stuff with direction of wheels
-    public DriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
+    public LorelaisDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
         super(hardwareMap, gamepad1);
     }
 
