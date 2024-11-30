@@ -93,7 +93,7 @@ public class DeepOpMode extends LinearOpMode {
         telemetry.addData("outtakeLeft = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
         telemetry.addData("lid = ", hardwareMap.get(Servo.class,"lid").getPosition());
-        telemetry.addData("intake = ",hardwareMap.get(Servo.class,"intake").getPosition());
+        //telemetry.addData("intake = ",hardwareMap.get(Servo.class,"intake").getPosition());
         telemetry.addData("intakePivot = ",hardwareMap.get(Servo.class,"intakePivot").getPosition());
     }
 
