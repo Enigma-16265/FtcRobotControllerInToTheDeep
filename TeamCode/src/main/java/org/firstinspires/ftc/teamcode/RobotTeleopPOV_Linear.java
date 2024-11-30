@@ -55,7 +55,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     double clawOffset = 0;
 
 
-    public static final double CLAW_SPEED  = 0.02 ;                 // sets rate to move servo
+    public static final double CLAW_SPEED = 0.02;                 // sets rate to move servo
     public static final double TRIGGER_THRESHOLD = 0.5;
     public static final double LEFT_FINGER_GRIP = 0.64;
     public static final double RIGHT_FINGER_GRIP = 0.331;
@@ -115,8 +115,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
     private void hangCode() {
         // hanging
-        leftHang  = hardwareMap.get(DcMotor.class, "leftHang");
-        rightHang  = hardwareMap.get(DcMotor.class, "rightHang");
+        leftHang = hardwareMap.get(DcMotor.class, "leftHang");
+        rightHang = hardwareMap.get(DcMotor.class, "rightHang");
 
         leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
         rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
@@ -126,9 +126,9 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         leftLower = hardwareMap.get(RevTouchSensor.class, "leftLower");
         rightLower = hardwareMap.get(RevTouchSensor.class, "rightLower");
 
-        if (gamepad1.right_trigger > TRIGGER_THRESHOLD){
-           leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-           rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        if (gamepad1.right_trigger > TRIGGER_THRESHOLD) {
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             if (!leftUpper.isPressed()) {
                 leftHang.setDirection(DcMotor.Direction.FORWARD);
                 leftHang.setPower(.9);
@@ -137,9 +137,9 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
                 rightHang.setDirection(DcMotor.Direction.FORWARD);
                 rightHang.setPower(.9);
             }
-        } else if (gamepad1.left_trigger > TRIGGER_THRESHOLD){
-           leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-           rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        } else if (gamepad1.left_trigger > TRIGGER_THRESHOLD) {
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             if (!leftLower.isPressed()) {
                 leftHang.setDirection(DcMotor.Direction.REVERSE);
                 leftHang.setPower(.9);
@@ -166,8 +166,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
         double leftBackPower;
         double rightBackPower;
 
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "leftBack");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
 
@@ -187,8 +187,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
         // Normalize the values so neither exceed +/- 1.0
         max = Math.max(Math.abs(left), Math.abs(right));
-        if (max > 1.0)
-        {
+        if (max > 1.0) {
             left /= max;
             right /= max;
         }
@@ -205,8 +204,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
         clawOffset = Range.clip(clawOffset, -0.5, 0.5);
 
-        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-        telemetry.addData("left",  "%.2f", left);
+        telemetry.addData("claw", "Offset = %.2f", clawOffset);
+        telemetry.addData("left", "%.2f", left);
         telemetry.addData("right", "%.2f", right);
         telemetry.update();
 
@@ -252,13 +251,12 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
                 leftFinger.setPosition(LEFT_FINGER_GRIP);
             }
             rightFinger.getPosition();
-            if(leftFinger.getPosition() != RIGHT_FINGER_GRIP) {
+            if (leftFinger.getPosition() != RIGHT_FINGER_GRIP) {
                 rightFinger.setPosition(RIGHT_FINGER_GRIP);
             }
             leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM);
             rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM);
-        }
-        else if (gamepad1.right_bumper && gamepad1.dpad_down) {
+        } else if (gamepad1.right_bumper && gamepad1.dpad_down) {
             leftFinger.getPosition();
             if (leftFinger.getPosition() != LEFT_FINGER_INTAKE) {
                 leftFinger.setPosition(LEFT_FINGER_INTAKE);
@@ -311,7 +309,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
             sleep(50);
         }
     }
-
+}
 
 
 
