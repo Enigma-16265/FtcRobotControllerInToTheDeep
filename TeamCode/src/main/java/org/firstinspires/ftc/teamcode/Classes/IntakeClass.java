@@ -35,6 +35,7 @@ public class IntakeClass {
     Servo outtakeRight;
     Servo lid;
     Servo intake;
+    DcMotor dcmotor;
 
     CRServo contanstly_rotating_fellow;
 
@@ -43,6 +44,8 @@ public class IntakeClass {
     //TODO: Variables go here.
 
     ElapsedTime Runtime = new ElapsedTime();
+
+
     double triggerThreshold = 0.4;
     boolean gamepad2_y_OAD = false;
     boolean gamepad2_y_LU = false;
@@ -75,16 +78,18 @@ public class IntakeClass {
         lid = hardwareMap.get(Servo.class, "lid");
         intake = hardwareMap.get(Servo.class, "intake");
         intakePivot = hardwareMap.get(Servo.class, "intakePivot");
-
+        /*
         outtakeRight.setDirection(Servo.Direction.REVERSE);
         slideLeft.setDirection(Servo.Direction.REVERSE);
+        They did this in hardware
+         */
 
         this.gamepad1 = gamepad1;
+        dcmotor.setTargetPosition(1);
         this.hardwareMap = hardwareMap;
         this.gamepad2 = gamepad2;
         //TODO: import stuff
     }
-
 
 
 
@@ -230,7 +235,7 @@ public class IntakeClass {
 
 
     /*
-    private void setWContraints(String servoName, double setTo) {
+    private void setSmartPos(String servoName, double setTo) {
         Servo servoToUse;
         servoToUse = hardwareMap.get(Servo.class, servoName);
 
@@ -250,6 +255,7 @@ public class IntakeClass {
         slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
         slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
         //TODO: INVERT
+        SmartServo.setSmartPos(hardwareMap,"wrist",389472384);
     }
 
     public void runIntake() {

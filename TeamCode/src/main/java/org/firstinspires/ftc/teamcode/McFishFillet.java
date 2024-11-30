@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class McCrispy extends LinearOpMode {
+public class McFishFillet extends LinearOpMode {
     //TODO: Step 1, Replace all "wrist","hopper", etc with your servos
     Servo slideLeft;
     Servo slideRight;
@@ -150,9 +149,6 @@ public class McCrispy extends LinearOpMode {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-        outtakeRight.setDirection(Servo.Direction.REVERSE);
-        slideLeft.setDirection(Servo.Direction.REVERSE);
-        rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         slideLeft.setPosition(0.5);
