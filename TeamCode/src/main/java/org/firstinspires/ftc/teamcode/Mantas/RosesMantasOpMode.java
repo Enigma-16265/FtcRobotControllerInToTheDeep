@@ -27,29 +27,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Mantas;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
+import org.firstinspires.ftc.teamcode.Mantas.FunStuffs.HappyDance;
 
 /*
- * This code calls LorelaisDriveCode.java and GrabCode.java.
+ * This code calls other classes and runs their code
  * It runs the wheel drive code and the arm movement code, so the robot can
  * move around and stuff
  */
 
 @TeleOp(name="Robot: Roses Teleop POV", group="Robot")
 //@Disabled
-public class RosesLinearOpMode extends LinearOpMode {
+public class RosesMantasOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         // Define and initialize wheels and declare wheelCode
-        LorelaisDriveCode wheelCode = new LorelaisDriveCode(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
+        RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
+        HappyDance dance = new HappyDance(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
         GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
-        RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
+        //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
 
 
@@ -65,14 +75,15 @@ public class RosesLinearOpMode extends LinearOpMode {
 
             // run various control code
             wheelCode.runWheels();
-            mcMuffin.run();
 
-            if (gamepad1.dpad_left) {
+            if (gamepad1.b) {
                 armCode.grab();
             }
-
+           spinCode.spinAroundFunction();
+           dance.doHappyDance();
 
             // Send telemetry message to signify robot running
+            whatServoAt();
             telemetry.update();
 
             // Pace this loop so jaw action is reasonable speed.
@@ -80,5 +91,13 @@ public class RosesLinearOpMode extends LinearOpMode {
         }
     }
 
-
+    private void whatServoAt() {
+        telemetry.addData("Shoulder = ", hardwareMap.get(Servo.class, "shoulder").getPosition());
+        telemetry.addData("Elbow = ", hardwareMap.get(Servo.class,"elbow").getPosition());
+        telemetry.addData("Left Finger = ", hardwareMap.get(Servo.class,"lFinger").getPosition());
+        telemetry.addData("Right Finger = ", hardwareMap.get(Servo.class,"rFinger").getPosition());
+        telemetry.addData("Wrist = ", hardwareMap.get(Servo.class,"wrist").getPosition());
+        telemetry.addData("Lift Left = ",hardwareMap.get(Servo.class,"leftLift").getPosition());
+        telemetry.addData("Lift Right = ",hardwareMap.get(Servo.class,"rightLift").getPosition());
+    }
 }

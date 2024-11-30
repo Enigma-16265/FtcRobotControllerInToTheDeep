@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -6,13 +6,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /*
  * A version of McMuffin tuner code that has been turned into a class
- * callable in another robot teleop thing
+ * callable in another opmode
  *
  */
 
+/** @noinspection unused*/
 public class RosesMcMuffinClass {
 
+    // gamepad
     Gamepad gamepad1;
+
+    // Servos
     Servo wrist;
     Servo elbow;
     Servo leftFinger;
@@ -21,9 +25,10 @@ public class RosesMcMuffinClass {
     Servo leftLift;
     Servo rightLift;
 
+    // speed
     double speedAmount = 0.01;
-    //double LiftLeftOffset = -.05;
 
+    // types of servos
     enum ServoTypes{
         SHOULDER,
         ELBOW,
@@ -33,7 +38,9 @@ public class RosesMcMuffinClass {
     }
     ServoTypes which = ServoTypes.SHOULDER;
 
+    // constructor
     public RosesMcMuffinClass(HardwareMap hardwareMap, Gamepad gamepad1) {
+        // set gamepad
         this.gamepad1 = gamepad1;
 
         // initialize servos
@@ -58,12 +65,14 @@ public class RosesMcMuffinClass {
         leftLift.setPosition(0.06);
         rightLift.setPosition(0.06);
     }
+
+    // this is the function that should be called in other classes
     public void run() {
         setServo();
         masterTuner();
-        setExtra();
     }
 
+    // moves the currently selected servo
     private void masterTuner() {
         if (gamepad1.left_bumper) {
             if (which == ServoTypes.SHOULDER) {
@@ -104,6 +113,8 @@ public class RosesMcMuffinClass {
             }
         }
     }
+
+    // changes which servo is selected
     private void setServo() {
         if (gamepad1.y) {
             which = ServoTypes.SHOULDER;
@@ -119,34 +130,6 @@ public class RosesMcMuffinClass {
         }
         else if (gamepad1.dpad_right) {
             which = ServoTypes.FINGER;
-        }
-        //telemetry.addData("Selected Servo = ", which.toString());
-    }
-    private void setExtra() {
-        if (gamepad1.dpad_left) {
-            which = ServoTypes.FINGER;
-        }
-    }
-
-    /** @noinspection unused*/
-    public double getPosition(String what) {
-        switch (what) {
-            case "shoulder":
-                return shoulder.getPosition();
-            case "wrist":
-                return wrist.getPosition();
-            case "elbow":
-                return elbow.getPosition();
-            case "rightFinger":
-                return rightFinger.getPosition();
-            case "leftFinger":
-                return leftFinger.getPosition();
-            case "rightLift":
-                return rightLift.getPosition();
-            case "leftLift":
-                return leftLift.getPosition();
-            default:
-                throw new IllegalStateException("Unexpected value: " + what);
         }
     }
 }

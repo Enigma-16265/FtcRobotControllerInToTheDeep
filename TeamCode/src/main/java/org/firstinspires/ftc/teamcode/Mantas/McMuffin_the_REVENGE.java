@@ -1,9 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Mantas;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -31,7 +29,7 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
         LEFT_FINGER,
         RIGHT_FINGER,
         WRIST,
-        LIFT;
+        LIFT
     }
     ServoTypes which;
     //TODO: Step 4, replace all names of Servos with yours, and replace all capitals with what you set them to from step 3
@@ -109,6 +107,7 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     // And as I'm writing this I wonder if anybody will actually use this. Problably not,
     // but idk what to do while I wait for the robot to be ready for calibration. It's now 10:36 am.
     // I wonder if future me will use this and or remember doing this. Goober out. Edit: I have to recode :( 11/28/23
+
     //TODO: Step 6 replace all of the xyz.getPosition()0; with your servos and replace "xyz" with what that servo is
     private void whatServoAt() {
         telemetry.addData("Shoulder = ", shoulder.getPosition());
@@ -121,12 +120,12 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         which = ServoTypes.SHOULDER;
         speedAmount = 0.01;
         //this is a coment to mAKE git update
 
-        //TODO: Step 2, Replace the device names with your 4 (or more if you use two servos for one task)
+        //TODO: Step 2, Replace the device names with your 4 (or more if you use two servos for one task) Into the deep me here, just replace var names and device names
         wrist = hardwareMap.get(Servo.class, "wrist");
         elbow = hardwareMap.get(Servo.class, "elbow");
         leftFinger = hardwareMap.get(Servo.class, "lFinger");
