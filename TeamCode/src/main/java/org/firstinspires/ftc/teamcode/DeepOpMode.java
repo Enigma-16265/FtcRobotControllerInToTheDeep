@@ -51,15 +51,15 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 @TeleOp(name="Robot: Deep Teleop", group="Robot")
 //@Disabled
 public class DeepOpMode extends LinearOpMode {
-    // Prepare Drive Code
-    DriveCodeAbstract wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
-    DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
-    IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
+
 
     @Override
     public void runOpMode() {
 
-
+        // Prepare Drive Code
+        DriveCodeAbstract wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
+        DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
+        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
         initialize();
 
@@ -97,7 +97,7 @@ public class DeepOpMode extends LinearOpMode {
         telemetry.addData("lid = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intake = ",hardwareMap.get(Servo.class,"intake").getPosition());
         telemetry.addData("intakePivot = ",hardwareMap.get(Servo.class,"intakePivot").getPosition());
-        telemetry.addData("if transfer requested?", intakeCode.transferRequested);
+        //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
     }
 
     private void initialize() {
