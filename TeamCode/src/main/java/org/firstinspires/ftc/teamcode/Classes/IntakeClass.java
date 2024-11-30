@@ -85,7 +85,7 @@ public class IntakeClass {
          */
 
         this.gamepad1 = gamepad1;
-        dcmotor.setTargetPosition(1);
+        //dcmotor.setTargetPosition(1);
         this.hardwareMap = hardwareMap;
         this.gamepad2 = gamepad2;
         //TODO: import stuff
