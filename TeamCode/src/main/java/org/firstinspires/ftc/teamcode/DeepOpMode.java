@@ -48,7 +48,7 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
  * If you make new code for the deep robot, add it to this!
  */
 
-@TeleOp(name="Robot: Roses Teleop POV", group="Robot")
+@TeleOp(name="Robot: Deep Op Mode", group="Robot")
 //@Disabled
 public class DeepOpMode extends LinearOpMode {
 
@@ -61,13 +61,6 @@ public class DeepOpMode extends LinearOpMode {
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
         initialize();
-
-        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
-        SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
-        SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
-        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
-        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
-        SmartServo.setSmartPos(hardwareMap,"lid", 0.0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");
@@ -105,15 +98,15 @@ public class DeepOpMode extends LinearOpMode {
     }
 
     private void initialize() {
-        hardwareMap.get(Servo.class, "slideLeft").setPosition(0.5);
-        hardwareMap.get(Servo.class, "slideRight").setPosition(0.5);
-        hardwareMap.get(Servo.class, "intake").setPosition(0.5);
-        hardwareMap.get(Servo.class, "intakePivot").setPosition(0.5);
 
-        hardwareMap.get(Servo.class, "outtakeLeft").setPosition(0.5);
-        hardwareMap.get(Servo.class, "outtakeRight").setPosition(0.5);
-        hardwareMap.get(Servo.class, "lid").setPosition(0.5);
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
+
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"lid", 0.0);
     }
 }
