@@ -55,8 +55,8 @@ public class IntakeClass {
     boolean gamepad2_b_LU = false;
     boolean gamepad2_b_release_OAD = false;
 
-    boolean transferRequested = false;
-    boolean transferInProgress = false;
+    public boolean transferRequested = false;
+    public boolean transferInProgress = false;
 
     double transferTime = 0;
 
@@ -259,7 +259,7 @@ public class IntakeClass {
                 if (Runtime.seconds() - transferTime >= 0.5) {
                     transferState = transferingStates.TRANSFERING;
                 }
-
+                transferInProgress = false;
                 transferState = transferingStates.IDLE;
             }
 
@@ -289,9 +289,9 @@ public class IntakeClass {
 
     private void extendoHandler() {
         //slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
-        SmartServo.setSmartPos(hardwareMap,"slideLeft",gamepad2.right_stick_y/100 + slideLeft.getPosition() + extendoOffset);
+        SmartServo.setSmartPos(hardwareMap,"slideLeft",gamepad2.right_stick_y/60 + slideLeft.getPosition() + extendoOffset);
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
-        SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/100 + slideRight.getPosition());
+        SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/60 + slideRight.getPosition());
         //TODO: INVERT
     }
 
