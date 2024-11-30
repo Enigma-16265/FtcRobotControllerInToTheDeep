@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
@@ -59,6 +60,7 @@ public class DeepOpMode extends LinearOpMode {
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
+        initialize();
 
         SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
         SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
@@ -100,5 +102,18 @@ public class DeepOpMode extends LinearOpMode {
         telemetry.addData("lid = ", hardwareMap.get(Servo.class,"lid").getPosition());
         telemetry.addData("intake = ",hardwareMap.get(Servo.class,"intake").getPosition());
         telemetry.addData("intakePivot = ",hardwareMap.get(Servo.class,"intakePivot").getPosition());
+    }
+
+    private void initialize() {
+        hardwareMap.get(Servo.class, "slideLeft").setPosition(0.5);
+        hardwareMap.get(Servo.class, "slideRight").setPosition(0.5);
+        hardwareMap.get(Servo.class, "intake").setPosition(0.5);
+        hardwareMap.get(Servo.class, "intakePivot").setPosition(0.5);
+
+        hardwareMap.get(Servo.class, "outtakeLeft").setPosition(0.5);
+        hardwareMap.get(Servo.class, "outtakeRight").setPosition(0.5);
+        hardwareMap.get(Servo.class, "lid").setPosition(0.5);
+        hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
+        hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
     }
 }
