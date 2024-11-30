@@ -205,6 +205,7 @@ public class IntakeClass {
             }
             if (transferState == transferingStates.MOVING_LIFT) {
                 transferTime = Runtime.seconds();
+                //TODO: Add
 
                 if (Runtime.seconds() - transferTime >= 1) {
                     transferState = transferingStates.RETRACTING_WRIST;
@@ -213,6 +214,8 @@ public class IntakeClass {
             }
             if (transferState == transferingStates.RETRACTING_WRIST) {
                 transferTime = Runtime.seconds();
+
+                SmartServo.setSmartPos(hardwareMap,"intakePivot",0.5);
 
                 if (Runtime.seconds() - transferTime >= 1) {
                     transferState = transferingStates.OPENING_LID;
@@ -231,6 +234,9 @@ public class IntakeClass {
             }
             if (transferState == transferingStates.MOVING_EXTENDO) {
                 transferTime = Runtime.seconds();
+
+                SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
+                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
 
                 if (Runtime.seconds() - transferTime >= 1) {
                     transferState = transferingStates.TRANSFERING;
