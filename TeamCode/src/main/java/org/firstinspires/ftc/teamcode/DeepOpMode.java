@@ -48,7 +48,7 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
  * If you make new code for the deep robot, add it to this!
  */
 
-@TeleOp(name="Robot: Deep Op Mode", group="Robot")
+@TeleOp(name="Robot: Roses Teleop POV", group="Robot")
 //@Disabled
 public class DeepOpMode extends LinearOpMode {
 
@@ -98,6 +98,13 @@ public class DeepOpMode extends LinearOpMode {
     }
 
     private void initialize() {
+        Servo lid = hardwareMap.get(Servo.class, "lid");
+        Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
+
+        slideLeft.setDirection(Servo.Direction.REVERSE);
+        slideRight.setDirection(Servo.Direction.REVERSE);
+        lid.setDirection(Servo.Direction.REVERSE);
 
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
