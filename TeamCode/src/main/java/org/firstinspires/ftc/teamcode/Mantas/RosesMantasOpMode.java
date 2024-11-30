@@ -27,17 +27,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Mantas;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.ControlClassFiles.GrabCode;
-import org.firstinspires.ftc.teamcode.ControlClassFiles.RandomMovementControls;
-import org.firstinspires.ftc.teamcode.DriveCodes.DavysDriveCode;
-import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
-import org.firstinspires.ftc.teamcode.FunStuffs.HappyDance;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
+import org.firstinspires.ftc.teamcode.Mantas.FunStuffs.HappyDance;
 
 /*
  * This code calls other classes and runs their code

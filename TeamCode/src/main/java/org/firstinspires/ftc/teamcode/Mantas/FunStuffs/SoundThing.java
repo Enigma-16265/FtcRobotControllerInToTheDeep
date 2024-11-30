@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.FunStuffs;
+package org.firstinspires.ftc.teamcode.Mantas.FunStuffs;
 
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.hardware.HardwareMap;

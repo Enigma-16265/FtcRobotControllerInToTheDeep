@@ -34,9 +34,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
-import org.firstinspires.ftc.teamcode.Classes.DriveCode;
+import org.firstinspires.ftc.teamcode.Classes.DeepDriveCode;
 import org.firstinspires.ftc.teamcode.Classes.IntakeClass;
-import org.firstinspires.ftc.teamcode.DriveCodes.DriveCodeAbstract;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 
 /*
  * This code calls other classes and runs their code
@@ -54,7 +54,7 @@ public class DeepOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Prepare Drive Code
-        DriveCodeAbstract wheelCode = new DriveCode(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
