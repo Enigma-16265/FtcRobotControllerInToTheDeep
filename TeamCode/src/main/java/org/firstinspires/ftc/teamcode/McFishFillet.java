@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Classes.SmartServo;
+
 @TeleOp
 public class McFishFillet extends LinearOpMode {
     //TODO: Step 1, Replace all "wrist","hopper", etc with your servos
@@ -151,13 +153,12 @@ public class McFishFillet extends LinearOpMode {
 
 
 
-        slideLeft.setPosition(0.5);
-        lid.setPosition(0.5);
-        slideRight.setPosition(0.5);
-        outtakeRight.setPosition(0.5);
-        outtakeLeft.setPosition(0.5);
-        intakePivot.setPosition(0.5);
-        intake.setPosition(0.5);
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"lid", 0.0);
 
 
         telemetry.update();

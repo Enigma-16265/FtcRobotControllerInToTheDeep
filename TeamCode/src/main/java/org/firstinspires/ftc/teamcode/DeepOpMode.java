@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
 import org.firstinspires.ftc.teamcode.Classes.DeepDriveCode;
 import org.firstinspires.ftc.teamcode.Classes.IntakeClass;
+import org.firstinspires.ftc.teamcode.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 
 /*
@@ -59,7 +60,12 @@ public class DeepOpMode extends LinearOpMode {
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
 
-
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"lid", 0.0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");

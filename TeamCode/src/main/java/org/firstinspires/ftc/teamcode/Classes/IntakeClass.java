@@ -62,7 +62,7 @@ public class IntakeClass {
 
     double wrist_rotation_speed = 0.01;
 
-    double extendoOffset = 0.01;
+    double extendoOffset = 0.0;
 
 
     transferingStates transferState = transferingStates.IDLE;
@@ -129,10 +129,12 @@ public class IntakeClass {
 
     private void wristRotation() {
         if (gamepad2.right_bumper == true && gamepad2.left_bumper == false) {
-            intakePivot.setPosition(intakePivot.getPosition() + wrist_rotation_speed);
+            //intakePivot.setPosition(intakePivot.getPosition() + wrist_rotation_speed);
+            SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()+wrist_rotation_speed);
         }
         if (gamepad2.left_bumper == true && gamepad2.right_bumper == false) {
-            intakePivot.setPosition(intakePivot.getPosition() - wrist_rotation_speed);
+            //intakePivot.setPosition(intakePivot.getPosition() - wrist_rotation_speed);
+            SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()-wrist_rotation_speed);
         }
             //TODO: Contrainsts
     }
@@ -252,8 +254,10 @@ public class IntakeClass {
      */
 
     private void extendoHandler() {
-        slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
-        slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
+        //slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
+        SmartServo.setSmartPos(hardwareMap,"slideLeft",gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
+        //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
+        SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/10 + slideLeft.getPosition());
         //TODO: INVERT
         SmartServo.setSmartPos(hardwareMap,"wrist",389472384);
     }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 
-class SmartServo {
+public class SmartServo {
 
     static class SingleServoConstraints {
 
@@ -27,16 +27,13 @@ class SmartServo {
         if(!isInitialized) {
             isInitialized = true;
 
-            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("lid", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("intakePivot", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("rightLift", new SingleServoConstraints(0.3, 0.6));
-            constraintsForEachServo.put("leftLift", new SingleServoConstraints(0.3, 0.6));
-
+            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.0, 0.5));
+            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.0, 0.5));
+            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0.0, 1.0));
+            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0.0, 1.0));
+            constraintsForEachServo.put("lid", new SingleServoConstraints(0.32, 0.63));
+            constraintsForEachServo.put("intake", new SingleServoConstraints(0.1, 0.6));
+            constraintsForEachServo.put("intakePivot", new SingleServoConstraints(0.31, 0.8));
         }
     }
 
