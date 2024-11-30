@@ -149,8 +149,6 @@ public class McCrispy extends LinearOpMode {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-        outtakeRight.setDirection(Servo.Direction.REVERSE);
-        slideLeft.setDirection(Servo.Direction.REVERSE);
 
 
         slideLeft.setPosition(0.5);

@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 
-class ServoConstraints {
+class SmartServo {
 
-    class SingleServoConstraints {
+    static class SingleServoConstraints {
 
         double low, high;
         SingleServoConstraints(double low, double high){
@@ -19,16 +19,26 @@ class ServoConstraints {
 
     }
 
-    static HashMap<String, SingleServoConstraints> constraintsForEachServo = new HashMap<String, SingleServoConstraints>();
 
-    public void init() {
-        constraintsForEachServo.put("wrist", new SingleServoConstraints(.1, .9));
+    static HashMap<String, SingleServoConstraints> constraintsForEachServo = new HashMap<String, SingleServoConstraints>();
+    static boolean isInitialized = false;
+    static  void init() {
+        if(!isInitialized) {
+            isInitialized = true;
+
+            constraintsForEachServo.put("wrist", new SingleServoConstraints(0.1, 0.9));
+
+        }
     }
 
-    public void setSmartPos(HardwareMap hardwareMap, String servoName, double setTo) {
+    static public void setSmartPos(HardwareMap hardwareMap, String servoName, double setTo) {
+
+        init();
+
         Servo servoToUse;
         servoToUse = hardwareMap.get(Servo.class, servoName);
-        SingleServoConstraints thisServosConstraints = Objects.requireNonNull(ServoConstraints.constraintsForEachServo.get(servoName));
+        SingleServoConstraints thisServosConstraints = Objects.requireNonNull(SmartServo.constraintsForEachServo.get(servoName));
+
 
         // strange option?
         if (setTo < thisServosConstraints.low){
