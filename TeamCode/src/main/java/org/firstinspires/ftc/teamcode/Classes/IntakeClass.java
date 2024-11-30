@@ -259,7 +259,6 @@ public class IntakeClass {
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
         SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/10 + slideLeft.getPosition());
         //TODO: INVERT
-        SmartServo.setSmartPos(hardwareMap,"wrist",389472384);
     }
 
     public void runIntake() {
