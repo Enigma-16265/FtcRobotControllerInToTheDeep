@@ -101,9 +101,6 @@ public class DeepOpMode extends LinearOpMode {
     private void initialize() {
         hardwareMap.get(Servo.class, "slideLeft").setPosition(0.5);
         hardwareMap.get(Servo.class, "slideRight").setPosition(0.5);
-        hardwareMap.get(Servo.class, "outtakeLeft").setPosition(0.5);
-        hardwareMap.get(Servo.class, "outtakeRight").setPosition(0.5);
-        hardwareMap.get(Servo.class, "lid").setPosition(0.5);
         hardwareMap.get(Servo.class, "intake").setPosition(0.5);
         hardwareMap.get(Servo.class, "intakePivot").setPosition(0.5);
 
