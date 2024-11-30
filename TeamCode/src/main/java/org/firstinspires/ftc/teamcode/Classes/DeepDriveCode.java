@@ -28,24 +28,24 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
         // Combine drive and turn for blended motion.
         // variables
-        double left = drive + turn + strafe;
-        double leftBackPower = drive + turn - strafe;
-        double right = drive - turn - strafe;
-        double rightBackPower = drive + turn + strafe;
+        double leftFront = drive + turn + strafe;
+        double leftBack = drive + turn - strafe;
+        double rightFront = drive - turn - strafe;
+        double rightBack = drive - turn + strafe;
 
         // Normalize the values so neither exceed +/- 1.0
-        double max = Math.max(Math.abs(left), Math.abs(right));
+        double max = Math.max(Math.abs(leftFront), Math.abs(rightFront));
         if (max > 1.0)
         {
-            left /= max;
-            right /= max;
+            leftFront /= max;
+            rightFront /= max;
         }
 
         // Output the safe vales to the motor drives.
-        leftFrontDrive.setPower(left * speed);
-        leftBackDrive.setPower(leftBackPower * speed);
-        rightFrontDrive.setPower(right * speed);
-        rightBackDrive.setPower(rightBackPower * speed);
+        leftFrontDrive.setPower(leftFront * speed);
+        leftBackDrive.setPower(leftBack * speed);
+        rightFrontDrive.setPower(rightFront * speed);
+        rightBackDrive.setPower(rightBack * speed);
 
     }
 }

@@ -63,7 +63,7 @@ public class DeepOpMode extends LinearOpMode {
 
         initialize();
 
-        // Send telemetry message to signify robot waiting;
+        //Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");
         telemetry.update();
 
