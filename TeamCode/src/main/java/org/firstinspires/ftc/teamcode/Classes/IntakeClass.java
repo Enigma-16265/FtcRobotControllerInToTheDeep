@@ -161,6 +161,7 @@ public class IntakeClass {
         }
         //------------/Y-----------
 
+        /*
         //----------B-------------
         //o n e a n d d o n e
         if (gamepad2_b_OAD == true) {
@@ -181,6 +182,8 @@ public class IntakeClass {
             transferRequested = true;
 
         }
+
+         */
         //------------/B-----------
 
 
@@ -196,6 +199,9 @@ public class IntakeClass {
     }
 
     private void transferSequence() {
+        if (gamepad2.b == false && transferRequested == false) {
+            transferRequested = true;
+        }
         if (transferRequested == true || transferInProgress == true) {
             transferRequested = false;
 
@@ -289,9 +295,9 @@ public class IntakeClass {
 
     private void extendoHandler() {
         //slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
-        SmartServo.setSmartPos(hardwareMap,"slideLeft",gamepad2.right_stick_y/60 + slideLeft.getPosition() + extendoOffset);
+        SmartServo.setSmartPos(hardwareMap,"slideLeft",-1*gamepad2.right_stick_y/60 + slideLeft.getPosition() + extendoOffset);
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
-        SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/60 + slideRight.getPosition());
+        SmartServo.setSmartPos(hardwareMap,"slideRight",-1*gamepad2.right_stick_y/60 + slideRight.getPosition());
         //TODO: INVERT
     }
 
