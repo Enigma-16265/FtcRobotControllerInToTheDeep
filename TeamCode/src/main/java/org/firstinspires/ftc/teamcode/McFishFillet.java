@@ -176,6 +176,7 @@ public class McFishFillet extends LinearOpMode {
             //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");
             telemetry.update();
             sleep(100);
+            idle();
         }
     }
 }

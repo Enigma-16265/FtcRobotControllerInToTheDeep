@@ -84,6 +84,7 @@ public class DeepOpMode extends LinearOpMode {
 
             // Pace this loop so jaw action is reasonable speed.
             sleep(50);
+            idle();
         }
     }
 

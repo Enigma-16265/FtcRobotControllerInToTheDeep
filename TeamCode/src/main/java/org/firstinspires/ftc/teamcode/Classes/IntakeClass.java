@@ -178,7 +178,7 @@ public class IntakeClass {
         if (gamepad2.b == true && gamepad2_b_LU == false) {
             gamepad2_b_OAD = true;
             gamepad2_b_release_OAD = false;
-
+            transferRequested = true;
 
         }
         //------------/B-----------
@@ -204,16 +204,36 @@ public class IntakeClass {
                 transferState = transferingStates.MOVING_LIFT;
             }
             if (transferState == transferingStates.MOVING_LIFT) {
-                transferState = transferingStates.RETRACTING_WRIST;
+                transferTime = Runtime.seconds();
+
+                if (Runtime.seconds() - transferTime >= 1) {
+                    transferState = transferingStates.RETRACTING_WRIST;
+                }
+
             }
             if (transferState == transferingStates.RETRACTING_WRIST) {
-                transferState = transferingStates.OPENING_LID;
+                transferTime = Runtime.seconds();
+
+                if (Runtime.seconds() - transferTime >= 1) {
+                    transferState = transferingStates.OPENING_LID;
+                }
+
             }
             if (transferState == transferingStates.OPENING_LID) {
-                transferState = transferingStates.MOVING_EXTENDO;
+                transferTime = Runtime.seconds();
+
+                if (Runtime.seconds() - transferTime >= 1) {
+                    transferState = transferingStates.MOVING_EXTENDO;
+                }
+
             }
             if (transferState == transferingStates.MOVING_EXTENDO) {
-                transferState = transferingStates.TRANSFERING;
+                transferTime = Runtime.seconds();
+
+                if (Runtime.seconds() - transferTime >= 1) {
+                    transferState = transferingStates.TRANSFERING;
+                }
+
             }
             if (transferState == transferingStates.TRANSFERING) {
                 transferTime = Runtime.seconds();
@@ -223,9 +243,15 @@ public class IntakeClass {
                     transferState = transferingStates.CLOSING_LID;
                 }
 
-                transferState = transferingStates.CLOSING_LID;
+
             }
             if (transferState == transferingStates.CLOSING_LID) {
+                transferTime = Runtime.seconds();
+
+                if (Runtime.seconds() - transferTime >= 0.5) {
+                    transferState = transferingStates.TRANSFERING;
+                }
+
                 transferState = transferingStates.IDLE;
             }
 
@@ -257,7 +283,7 @@ public class IntakeClass {
         //slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
         SmartServo.setSmartPos(hardwareMap,"slideLeft",gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
-        SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/10 + slideLeft.getPosition());
+        SmartServo.setSmartPos(hardwareMap,"slideRight",gamepad2.right_stick_y/10 + slideRight.getPosition());
         //TODO: INVERT
     }
 
