@@ -34,13 +34,13 @@ public class IntakeClass {
     Servo outtakeLeft;
     Servo outtakeRight;
     Servo lid;
-    Servo intake;
+    CRServo intake;
     DcMotor dcmotor;
 
     CRServo contanstly_rotating_fellow;
 
     Servo specimenServo;
-    DcMotor intakeMotor;
+
     //TODO: Variables go here.
 
     ElapsedTime Runtime = new ElapsedTime();
@@ -76,7 +76,7 @@ public class IntakeClass {
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
         lid = hardwareMap.get(Servo.class, "lid");
-        intake = hardwareMap.get(Servo.class, "intake");
+        intake = hardwareMap.get(CRServo.class, "intake");
         intakePivot = hardwareMap.get(Servo.class, "intakePivot");
         /*
         outtakeRight.setDirection(Servo.Direction.REVERSE);
@@ -95,20 +95,20 @@ public class IntakeClass {
 
     private void intake() {
         if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
-            intakeMotor.setPower(1);
+            intake.setPower(1);
         }
     }
     private void intakeIdle() {
         if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger > triggerThreshold) {
-            intakeMotor.setPower(0);
+            intake.setPower(0);
         }
         if (gamepad2.right_trigger < triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
-            intakeMotor.setPower(0);
+            intake.setPower(0);
         }
     }
     private void outtake() {
         if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger < triggerThreshold) {
-            intakeMotor.setPower(-1);
+            intake.setPower(-1);
         }
     }
     /*
