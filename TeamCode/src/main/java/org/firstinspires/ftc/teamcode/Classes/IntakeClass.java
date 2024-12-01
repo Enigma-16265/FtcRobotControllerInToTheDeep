@@ -331,6 +331,7 @@ public class IntakeClass {
         }
     }
 
+
     private void returnToDefaultPos() {
         if (gamepad2.b == true && bWasPressed == false) {
             hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
