@@ -31,7 +31,7 @@ public class DeepOuttake {
     boolean yWasPressed = false;
 
     double recordedTime = 0; // last time steps was run
-    private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
+    private outtakeSteps step = outtakeSteps.CLOSE; // current step in sequence
 
     enum outtakeSteps {
         CLOSE,
@@ -94,12 +94,12 @@ public class DeepOuttake {
         }
 
         if (gamepad.dpad_left) {
-            outtakeRight.setPosition(outtakeRight.getPosition()+0.1);
-            outtakeLeft.setPosition(outtakeLeft.getPosition()+0.1);
+            SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()+0.1);
+            SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()+0.1);
         }
         else if (gamepad.dpad_right) {
-            outtakeRight.setPosition(outtakeRight.getPosition()-0.1);
-            outtakeLeft.setPosition(outtakeLeft.getPosition()-0.1);
+            SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()-0.1);
+            SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()-0.1);
         }
 
         yWasPressed = gamepad.y;
@@ -109,21 +109,21 @@ public class DeepOuttake {
     // runs the next step in the outtake sequence
     private void nextOuttakeStep() {
         if (step == outtakeSteps.CLOSE) {
-            SmartServo.setSmartPos(hardwareMap,"lid", 0.35);
+            SmartServo.setSmartPos(hardwareMap,"lid", 0);
             step = outtakeSteps.WRIST;
         }
         else if (step == outtakeSteps.WRIST) {
-            outtakeRight.setPosition(0.5);
-            outtakeLeft.setPosition(0.5);
+            SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
+            SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
             step = outtakeSteps.RELEASE;
         }
         else if (step == outtakeSteps.RELEASE) {
-            lid.setPosition(0.6);
+            SmartServo.setSmartPos(hardwareMap,"lid",0.6);
             step = outtakeSteps.RETURN;
         }
         else if (step == outtakeSteps.RETURN) {
-            SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
-            SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+            SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0);
+            SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0);
             SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
             step = outtakeSteps.CLOSE;
         }
