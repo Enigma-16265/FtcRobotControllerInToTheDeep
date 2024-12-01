@@ -65,11 +65,11 @@ public class DeepOuttake {
         if (gamepad.y && yWasPressed == false) {
             if (lidToggle == false) {
                 lidToggle = true;
-                SmartServo.setSmartPos(hardwareMap,"lid", 0.63);
+                SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
             }
             if (lidToggle == true) {
                 lidToggle = false;
-                SmartServo.setSmartPos(hardwareMap,"lid", 0.35);
+                SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
             }
         }
 
