@@ -106,6 +106,7 @@ public class DeepOpMode extends LinearOpMode {
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
 
@@ -115,8 +116,12 @@ public class DeepOpMode extends LinearOpMode {
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
+
 
         SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0 + IntakeClass.extendoOffset);
         SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
