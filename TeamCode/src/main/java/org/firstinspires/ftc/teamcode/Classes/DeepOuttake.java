@@ -81,8 +81,8 @@ public class DeepOuttake {
 
         // control the lifts with some other buttons
         if (gamepad.dpad_up) {
-            rightLift.setPower(0.5);
-            leftLift.setPower(0.5);
+            rightLift.setPower(1);
+            leftLift.setPower(1);
         }
         else if (gamepad.dpad_down) {
             rightLift.setPower(-0.5);
