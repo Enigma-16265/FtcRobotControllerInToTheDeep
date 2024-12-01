@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 
 /*
@@ -18,15 +17,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class DeepOuttake {
 
-    private final Servo outtakeLeft; // outtake wrist i believe?
-    private final Servo outtakeRight;
+    // lifts
+    // all servos are controlled through smart servo anyway
     private final DcMotor rightLift;
     private final DcMotor leftLift;
-    private final Servo lid; // open and close the outtake box
 
+    // instance variables
     private final Gamepad gamepad;
     private final HardwareMap hardwareMap;
 
+    // control variables
     boolean lidToggle = false;
     boolean yWasPressed = false;
 
@@ -43,18 +43,15 @@ public class DeepOuttake {
     // constructor
     public DeepOuttake(HardwareMap hardwareMap, Gamepad gamepad) {
         // initialize servos
-        outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
-        outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
-        lid = hardwareMap.get(Servo.class, "lid");
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-        lid.setDirection(Servo.Direction.REVERSE);
+        // reverse necessary motor
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
-        // set instance variable gamepad
+        // set instance variables
         this.gamepad = gamepad;
         this.hardwareMap = hardwareMap;
     }
@@ -62,7 +59,7 @@ public class DeepOuttake {
     // this is the method that should be run by other classes
     public void outtake() {
 
-        if (gamepad.y && yWasPressed == false) {
+        if (gamepad.y && (yWasPressed == false)) {
             if (lidToggle == false) {
                 lidToggle = true;
                 SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
@@ -92,7 +89,7 @@ public class DeepOuttake {
             rightLift.setPower(0);
             leftLift.setPower(0);
         }
-
+/*
         if (gamepad.dpad_left) {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()+0.1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()+0.1);
@@ -100,7 +97,7 @@ public class DeepOuttake {
         else if (gamepad.dpad_right) {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()-0.1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()-0.1);
-        }
+        }*/
 
         yWasPressed = gamepad.y;
 
@@ -109,19 +106,24 @@ public class DeepOuttake {
     // runs the next step in the outtake sequence
     private void nextOuttakeStep() {
         if (step == outtakeSteps.CLOSE) {
+            // close lid, move to next step
             SmartServo.setSmartPos(hardwareMap,"lid", 0);
             step = outtakeSteps.WRIST;
         }
         else if (step == outtakeSteps.WRIST) {
+            // make sure lid is closed, turn wrist, move to next step
+            SmartServo.setSmartPos(hardwareMap,"lid", 0);
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
             step = outtakeSteps.RELEASE;
         }
         else if (step == outtakeSteps.RELEASE) {
+            // open lid, move to next step
             SmartServo.setSmartPos(hardwareMap,"lid",0.6);
             step = outtakeSteps.RETURN;
         }
         else if (step == outtakeSteps.RETURN) {
+            // return to transfer position
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0);
             SmartServo.setSmartPos(hardwareMap,"lid", 0.6);

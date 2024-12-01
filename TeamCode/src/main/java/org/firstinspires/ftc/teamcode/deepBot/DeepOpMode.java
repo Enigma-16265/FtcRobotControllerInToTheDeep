@@ -102,25 +102,31 @@ public class DeepOpMode extends LinearOpMode {
     }
 
     private void initialize() {
+        // declare servos
         Servo lid = hardwareMap.get(Servo.class, "lid");
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
-
+        // set servos in directions
+        // Is this necessary? SmartServo sets the directions anyway
+        // for that matter is it important to declare them at all?
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
         lid.setDirection(Servo.Direction.REVERSE);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        // set powers to zero
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
 
+        // set initialization positions
         SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0 + IntakeClass.extendoOffset);
         SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
         SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+        // are these two correct? it looks like it holds the outtake up instead of in
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.51);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.51);
         SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
