@@ -67,7 +67,7 @@ public class IntakeClass {
 
     double wrist_rotation_speed = 0.05;
 
-    double extendoOffset = 0.0;
+    double extendoOffset = 0.05;
 
 
     transferingStates transferState = transferingStates.IDLE;
