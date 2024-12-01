@@ -49,6 +49,7 @@ public class IntakeClass {
     double triggerThreshold = 0.4;
     boolean intakeToggle = false;
     boolean intakeWasPressed = false;
+    boolean bWasPressed = false;
     boolean spitToggle = false;
     boolean spitWasPressed = false;
     boolean gamepad2_y_OAD = false;
@@ -260,9 +261,6 @@ public class IntakeClass {
     }
 
     private void transferSequence() {
-        if (gamepad2.b == true && transferRequested == false) {
-            transferRequested = true;
-        }
         if (transferRequested == true || transferInProgress == true) {
             transferRequested = false;
 
@@ -330,8 +328,22 @@ public class IntakeClass {
                 transferState = transferingStates.IDLE;
             }
 
-
         }
+    }
+
+    private void returnToDefaultPos() {
+        if (gamepad2.b == true && bWasPressed == false) {
+            hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
+            hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
+
+            SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
+            SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
+            SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+            SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
+            SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+            SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        }
+        bWasPressed = gamepad2.b;
     }
 
 
@@ -363,6 +375,7 @@ public class IntakeClass {
     }
 
     public void runIntake() {
+        returnToDefaultPos();
         extendoHandler();
         transferSequence();
         oneAndDone();
