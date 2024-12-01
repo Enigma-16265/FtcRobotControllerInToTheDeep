@@ -47,6 +47,10 @@ public class IntakeClass {
 
 
     double triggerThreshold = 0.4;
+    boolean intakeToggle = false;
+    boolean intakeWasPressed = false;
+    boolean spitToggle = false;
+    boolean spitWasPressed = false;
     boolean gamepad2_y_OAD = false;
     boolean gamepad2_y_LU = false;
     boolean gamepad2_y_release_OAD = false;
@@ -60,7 +64,7 @@ public class IntakeClass {
 
     double transferTime = 0;
 
-    double wrist_rotation_speed = 0.01;
+    double wrist_rotation_speed = 0.05;
 
     double extendoOffset = 0.0;
 
@@ -109,6 +113,63 @@ public class IntakeClass {
     private void outtake() {
         if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger < triggerThreshold) {
             intake.setPower(-1);
+        }
+    }
+    private void intakeHandling() {
+        //Toggle intake on/off
+        if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold && intakeWasPressed == false) {
+            intakeToggle = true;
+        }
+        if (gamepad2.right_trigger < triggerThreshold && intakeWasPressed == false) {
+            intakeToggle = false;
+        }
+        //Toggle spit on/off
+        if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger < triggerThreshold && spitWasPressed == false) {
+            spitToggle = true;
+        }
+        if (gamepad2.left_trigger < triggerThreshold && spitWasPressed == false) {
+            spitToggle = false;
+        }
+        //Other Conditions
+        if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger > triggerThreshold) {
+            spitToggle = false;
+            intakeToggle = false;
+        }
+        if (gamepad2.left_trigger < triggerThreshold && gamepad2.right_trigger < triggerThreshold) {
+            spitToggle = false;
+            intakeToggle = false;
+        }
+
+
+        //Set Power based on logic
+        if (intakeToggle == true && spitToggle == false) {
+            intake.setPower(1);
+        }
+        if (intakeToggle == false && spitToggle == true) {
+            intake.setPower(-1);
+        }
+        if (intakeToggle == false && spitToggle == false) {
+            intake.setPower(0);
+        }
+
+        //Safety
+        if (spitToggle == true && intakeToggle == true) {
+            intake.setPower(1);
+        }
+
+
+        //Update current state
+        if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
+            intakeWasPressed = true;
+        }
+        if (gamepad2.right_trigger < triggerThreshold) {
+            intakeWasPressed = false;
+        }
+        if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger < triggerThreshold) {
+            spitWasPressed = true;
+        }
+        if (gamepad2.left_trigger < triggerThreshold) {
+            spitWasPressed = false;
         }
     }
     /*
@@ -306,9 +367,7 @@ public class IntakeClass {
         transferSequence();
         oneAndDone();
         wristRotation();
-        outtake();
-        intake();
-        intakeIdle();
+        intakeHandling();
     }
 
 
