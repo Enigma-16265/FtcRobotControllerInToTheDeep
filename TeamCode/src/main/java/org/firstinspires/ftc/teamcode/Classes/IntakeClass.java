@@ -67,7 +67,7 @@ public class IntakeClass {
 
     double wrist_rotation_speed = 0.05;
 
-    double extendoOffset = 0.05;
+    public static double extendoOffset = 0.05;
 
 
     transferingStates transferState = transferingStates.IDLE;
@@ -301,7 +301,7 @@ public class IntakeClass {
                 transferTime = Runtime.seconds();
 
                 SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
-                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0 + extendoOffset);
 
                 if (Runtime.seconds() - transferTime >= 1) {
                     transferState = transferingStates.TRANSFERING;
@@ -336,7 +336,7 @@ public class IntakeClass {
             hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
             hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
 
-            SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
+            SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0 + extendoOffset);
             SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
             SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
@@ -368,10 +368,9 @@ public class IntakeClass {
 
     private void extendoHandler() {
         //slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
-        SmartServo.setSmartPos(hardwareMap,"slideLeft",-1*gamepad2.right_stick_y/60 + slideLeft.getPosition() + extendoOffset);
+        SmartServo.setSmartPos(hardwareMap,"slideLeft",(-1*gamepad2.right_stick_y/60 + slideLeft.getPosition()));
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
         SmartServo.setSmartPos(hardwareMap,"slideRight",-1*gamepad2.right_stick_y/60 + slideRight.getPosition());
-        //TODO: INVERT
     }
 
     public void runIntake() {

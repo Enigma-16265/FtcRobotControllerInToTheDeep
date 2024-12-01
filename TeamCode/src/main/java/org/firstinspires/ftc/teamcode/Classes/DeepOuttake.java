@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Classes;
 import static java.lang.System.currentTimeMillis;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -26,6 +27,9 @@ public class DeepOuttake {
     private final Gamepad gamepad;
     private final HardwareMap hardwareMap;
 
+    boolean lidToggle = false;
+    boolean yWasPressed = false;
+
     double recordedTime = 0; // last time steps was run
     private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
 
@@ -46,6 +50,9 @@ public class DeepOuttake {
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
         lid.setDirection(Servo.Direction.REVERSE);
+        rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
 
         // set instance variable gamepad
         this.gamepad = gamepad;
@@ -55,6 +62,17 @@ public class DeepOuttake {
     // this is the method that should be run by other classes
     public void outtake() {
 
+        if (gamepad.y && yWasPressed == false) {
+            if (lidToggle == false) {
+                lidToggle = true;
+                SmartServo.setSmartPos(hardwareMap,"lid", 0.63);
+            }
+            if (lidToggle == true) {
+                lidToggle = false;
+                SmartServo.setSmartPos(hardwareMap,"lid", 0.35);
+            }
+        }
+
         // if you press a it does the next step
         if (gamepad.a && (currentTimeMillis() > recordedTime + 1000)) {
             nextOuttakeStep();
@@ -63,12 +81,12 @@ public class DeepOuttake {
 
         // control the lifts with some other buttons
         if (gamepad.dpad_up) {
-            rightLift.setPower(0.1);
-            leftLift.setPower(0.1);
+            rightLift.setPower(0.5);
+            leftLift.setPower(0.5);
         }
         else if (gamepad.dpad_down) {
-            rightLift.setPower(-0.1);
-            leftLift.setPower(-0.1);
+            rightLift.setPower(-0.5);
+            leftLift.setPower(-0.5);
         }
         else {
             rightLift.setPower(0);
@@ -84,6 +102,7 @@ public class DeepOuttake {
             outtakeLeft.setPosition(outtakeLeft.getPosition()-0.1);
         }
 
+        yWasPressed = gamepad.y;
 
     }
 

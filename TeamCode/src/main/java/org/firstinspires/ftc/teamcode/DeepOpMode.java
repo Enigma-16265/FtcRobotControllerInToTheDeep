@@ -116,11 +116,11 @@ public class DeepOpMode extends LinearOpMode {
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
 
-        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0 + IntakeClass.extendoOffset);
         SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
         SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
-        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
-        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.51);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.51);
         SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
     }
 }

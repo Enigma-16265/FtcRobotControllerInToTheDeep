@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -16,7 +17,7 @@ public class McFishFillet extends LinearOpMode {
     Servo outtakeRight;
     Servo lid;
     Servo intakePivot;
-    Servo intake;
+    CRServo intake;
     DcMotor rightLift;
     DcMotor leftLift;
 
@@ -56,7 +57,7 @@ public class McFishFillet extends LinearOpMode {
                 intakePivot.setPosition(intakePivot.getPosition() - speedAmount);
             }
             else if (which == ServoTypes.INTAKE) {
-                intake.setPosition(intake.getPosition() - speedAmount);
+                //intake.setPosition(intake.getPosition() - speedAmount);
             }
             else if (which == ServoTypes.LIFT) {
                 rightLift.setPower(0.1);
@@ -80,7 +81,7 @@ public class McFishFillet extends LinearOpMode {
                 intakePivot.setPosition(intakePivot.getPosition() + speedAmount);
             }
             else if (which == ServoTypes.INTAKE) {
-                intake.setPosition(intake.getPosition() + speedAmount);
+                //intake.setPosition(intake.getPosition() + speedAmount);
             }
             else if (which == ServoTypes.LIFT) {
                 rightLift.setPower(-0.1);
@@ -131,7 +132,7 @@ public class McFishFillet extends LinearOpMode {
         telemetry.addData("outtakeRight (B) = ", outtakeRight.getPosition());
         telemetry.addData("slideLeft (X) = ", slideLeft.getPosition());
         telemetry.addData("intakePivot (Dpad R)= ", intakePivot.getPosition());
-        telemetry.addData("intake (Dpad L)= ", intake.getPosition());
+        //telemetry.addData("intake (Dpad L)= ", intake.getPosition());
     }
 
     @Override
@@ -146,7 +147,7 @@ public class McFishFillet extends LinearOpMode {
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
         lid = hardwareMap.get(Servo.class, "lid");
-        intake = hardwareMap.get(Servo.class, "intake");
+        intake = hardwareMap.get(CRServo.class, "intake");
         intakePivot = hardwareMap.get(Servo.class, "intakePivot");
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
