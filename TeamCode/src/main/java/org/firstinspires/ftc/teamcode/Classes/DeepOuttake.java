@@ -50,7 +50,7 @@ public class DeepOuttake {
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
         lid.setDirection(Servo.Direction.REVERSE);
-        rightLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
