@@ -105,13 +105,15 @@ public class DeepOpMode extends LinearOpMode {
         Servo lid = hardwareMap.get(Servo.class, "lid");
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
+        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         CRServo intake = hardwareMap.get(CRServo.class, "intake");
+
 
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
         lid.setDirection(Servo.Direction.REVERSE);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
