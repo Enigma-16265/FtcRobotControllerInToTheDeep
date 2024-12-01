@@ -31,7 +31,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
@@ -103,10 +105,13 @@ public class DeepOpMode extends LinearOpMode {
         Servo lid = hardwareMap.get(Servo.class, "lid");
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
+        CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
         lid.setDirection(Servo.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
