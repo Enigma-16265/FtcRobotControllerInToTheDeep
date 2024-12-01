@@ -24,13 +24,15 @@ public class DeepOuttake {
     private final Servo lid; // open and close the outtake box
 
     private final Gamepad gamepad;
+    private final HardwareMap hardwareMap;
 
     double recordedTime = 0; // last time steps was run
     private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
 
     enum outtakeSteps {
         WRIST,
-        RELEASE
+        RELEASE,
+        RETURN
     }
 
     // constructor
@@ -46,6 +48,7 @@ public class DeepOuttake {
 
         // set instance variable gamepad
         this.gamepad = gamepad;
+        this.hardwareMap = hardwareMap;
     }
 
     // this is the method that should be run by other classes
@@ -91,6 +94,12 @@ public class DeepOuttake {
         }
         else if (step == outtakeSteps.RELEASE) {
             lid.setPosition(0.6);
+            step = outtakeSteps.RETURN;
+        }
+        else if (step == outtakeSteps.RETURN) {
+            SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
+            SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
+            SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
             step = outtakeSteps.WRIST;
         }
     }

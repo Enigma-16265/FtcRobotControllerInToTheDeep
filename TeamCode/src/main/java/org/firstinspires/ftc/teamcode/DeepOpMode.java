@@ -90,12 +90,12 @@ public class DeepOpMode extends LinearOpMode {
     }
 
     private void whatServoAt() {
-        telemetry.addData("slideLeft    = ", hardwareMap.get(Servo.class, "slideLeft").getPosition());
+        telemetry.addData("slideLeft    = ", hardwareMap.get(Servo.class,"slideLeft").getPosition());
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
         telemetry.addData("outtakeLeft  = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
         telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
-        telemetry.addData("intakePivot  = ",hardwareMap.get(Servo.class,"intakePivot").getPosition());
+        telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
     }
 
