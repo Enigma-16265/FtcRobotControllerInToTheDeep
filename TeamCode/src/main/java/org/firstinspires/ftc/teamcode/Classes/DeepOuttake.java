@@ -30,6 +30,7 @@ public class DeepOuttake {
     private outtakeSteps step = outtakeSteps.WRIST; // current step in sequence
 
     enum outtakeSteps {
+        CLOSE,
         WRIST,
         RELEASE,
         RETURN
@@ -83,11 +84,16 @@ public class DeepOuttake {
             outtakeLeft.setPosition(outtakeLeft.getPosition()-0.1);
         }
 
+
     }
 
     // runs the next step in the outtake sequence
     private void nextOuttakeStep() {
-        if (step == outtakeSteps.WRIST) {
+        if (step == outtakeSteps.CLOSE) {
+            SmartServo.setSmartPos(hardwareMap,"lid", 0.35);
+            step = outtakeSteps.WRIST;
+        }
+        else if (step == outtakeSteps.WRIST) {
             outtakeRight.setPosition(0.5);
             outtakeLeft.setPosition(0.5);
             step = outtakeSteps.RELEASE;
@@ -100,7 +106,7 @@ public class DeepOuttake {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
             SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
-            step = outtakeSteps.WRIST;
+            step = outtakeSteps.CLOSE;
         }
     }
 }
