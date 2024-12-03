@@ -383,7 +383,7 @@ public class IntakeClass {
         intakeHandling();
     }
     public boolean isWristDown() {
-        if (intakePivot.getPosition() <= 0.6) return true;
+        if (intakePivot.getPosition() >= 0.4) return true;
         else{
             return false;
         }

@@ -82,7 +82,7 @@ public class DeepOpMode extends LinearOpMode {
             outtakeCode.outtake();
             intakeCode.runIntake();
             if (intakeCode.isWristDown() && !wheelCode.areWheelsMoving()){
-                SmartServo.setSmartPos(hardwareMap, "intakePivot", 0.93);
+                SmartServo.setSmartPos(hardwareMap, "intakePivot", 0.6);
             }
 
             // Send telemetry message to signify robot running
