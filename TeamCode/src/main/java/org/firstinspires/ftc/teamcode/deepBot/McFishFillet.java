@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
@@ -156,6 +157,7 @@ public class McFishFillet extends LinearOpMode {
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
         lid.setDirection(Servo.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
         SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
