@@ -45,7 +45,7 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 
 /*
  * This code calls other classes and runs their code
- * It runs the wheel drive code and the intake code, so the robot can
+ * It runs the wheel drive code and the intake/outtake code, so the robot can
  * move around and stuff
  *
  * If you make new code for the deep robot, add it to this!
