@@ -369,9 +369,9 @@ public class IntakeClass {
 
     private void extendoHandler() {
         //slideLeft.setPosition(gamepad2.right_stick_y/10 + slideLeft.getPosition() + extendoOffset);
-        SmartServo.setSmartPos(hardwareMap,"slideLeft",(-1*gamepad2.right_stick_y/60 + slideLeft.getPosition()));
+        SmartServo.setSmartPos(hardwareMap,"slideLeft",(-1*gamepad2.right_stick_y/40 + slideLeft.getPosition()));
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
-        SmartServo.setSmartPos(hardwareMap,"slideRight",-1*gamepad2.right_stick_y/60 + slideRight.getPosition());
+        SmartServo.setSmartPos(hardwareMap,"slideRight",-1*gamepad2.right_stick_y/40 + slideRight.getPosition());
     }
 
     public void runIntake() {
