@@ -36,10 +36,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Classes.DeepOuttake;
-import org.firstinspires.ftc.teamcode.Classes.DeepDriveCode;
-import org.firstinspires.ftc.teamcode.Classes.IntakeClass;
-import org.firstinspires.ftc.teamcode.Classes.SmartServo;
+import org.firstinspires.ftc.teamcode.deepBot.Classes.DeepOuttake;
+import org.firstinspires.ftc.teamcode.deepBot.Classes.DeepDriveCode;
+import org.firstinspires.ftc.teamcode.deepBot.Classes.IntakeClass;
+import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 
 /*

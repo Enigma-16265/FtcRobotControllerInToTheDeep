@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Mantas.FunStuffs;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControlsMantas;
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.subtleServoMoveThread;
 
 public class HappyDance {
@@ -11,12 +11,12 @@ public class HappyDance {
     // create instance of RandomMovementControls
     private final HardwareMap hardwareMap;
     private final Gamepad gamePad;
-    RandomMovementControls spinAroundFunction;
+    RandomMovementControlsMantas spinAroundFunction;
     SoundThing soundPlayer;
 
     // constructor
     public HappyDance (HardwareMap hardwareMap, Gamepad gamePad) {
-        spinAroundFunction = new RandomMovementControls (hardwareMap, gamePad);
+        spinAroundFunction = new RandomMovementControlsMantas (hardwareMap, gamePad);
         soundPlayer = new SoundThing(hardwareMap);
 
         //hardware map and gamepad

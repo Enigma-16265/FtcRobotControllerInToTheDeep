@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Classes;
+package org.firstinspires.ftc.teamcode.deepBot.Classes;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
