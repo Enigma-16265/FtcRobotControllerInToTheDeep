@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Classes.SmartServo;
+import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
 
 @TeleOp
 public class McFishFillet extends LinearOpMode {

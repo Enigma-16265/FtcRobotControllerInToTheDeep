@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Classes;
+package org.firstinspires.ftc.teamcode.deepBot.Classes;
 
 import androidx.annotation.NonNull;
 
@@ -382,7 +382,12 @@ public class IntakeClass {
         wristRotation();
         intakeHandling();
     }
-
+    public boolean isWristDown() {
+        if (intakePivot.getPosition() <= 0.5) return true;
+        else{
+            return false;
+        }
+    }
 
 
 
