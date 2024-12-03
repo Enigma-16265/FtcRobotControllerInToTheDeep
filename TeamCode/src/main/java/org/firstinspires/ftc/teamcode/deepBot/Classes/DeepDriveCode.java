@@ -48,4 +48,12 @@ public class DeepDriveCode extends DriveCodeAbstract {
         rightBackDrive.setPower(rightBack * speed);
 
     }
+
+    public boolean areWheelsMoving(){
+        if (leftFrontDrive.getPower() == 0 && rightFrontDrive.getPower() == 0){
+            return false;
+        }else {
+            return true;
+        }
+    }
 }

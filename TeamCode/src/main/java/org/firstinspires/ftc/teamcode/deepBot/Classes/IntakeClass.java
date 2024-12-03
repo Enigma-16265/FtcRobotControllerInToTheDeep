@@ -382,7 +382,12 @@ public class IntakeClass {
         wristRotation();
         intakeHandling();
     }
-
+    public boolean isWristDown() {
+        if (intakePivot.getPosition() <= 0.5) return true;
+        else{
+            return false;
+        }
+    }
 
 
 

@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.deepBot.Classes.DeepOuttake;
@@ -50,7 +51,7 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
  * If you make new code for the deep robot, add it to this!
  */
 
-@TeleOp(name="Robot: Deep Teleop", group="Robot")
+@TeleOp(name="Deep Teleop", group="Robot")
 //@Disabled
 public class DeepOpMode extends LinearOpMode {
 
@@ -59,7 +60,7 @@ public class DeepOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Prepare Drive Code
-        DriveCodeAbstract wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
+        DeepDriveCode wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
@@ -80,6 +81,9 @@ public class DeepOpMode extends LinearOpMode {
             wheelCode.runWheels();
             outtakeCode.outtake();
             intakeCode.runIntake();
+            if (intakeCode.isWristDown() && wheelCode.areWheelsMoving()){
+                SmartServo.setSmartPos(hardwareMap, "intakePivot", 0.6);
+            }
 
             // Send telemetry message to signify robot running
             whatServoAt();
