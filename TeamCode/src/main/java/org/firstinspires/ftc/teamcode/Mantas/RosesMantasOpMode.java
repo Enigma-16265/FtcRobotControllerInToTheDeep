@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
-import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControls;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControlsMantas;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 import org.firstinspires.ftc.teamcode.Mantas.FunStuffs.HappyDance;
@@ -54,7 +54,7 @@ public class RosesMantasOpMode extends LinearOpMode {
 
         // Define and initialize wheels and declare wheelCode
         DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
-        RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
+        RandomMovementControlsMantas spinCode = new RandomMovementControlsMantas(hardwareMap, gamepad1);
         HappyDance dance = new HappyDance(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode

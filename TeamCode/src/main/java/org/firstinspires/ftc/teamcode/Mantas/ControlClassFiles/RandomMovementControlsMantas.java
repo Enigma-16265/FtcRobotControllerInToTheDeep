@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * and possibly other stuff later
  */
 
-public class RandomMovementControls {
+public class RandomMovementControlsMantas {
 
     //objects
     private final DcMotor rightFrontWheel;
@@ -25,7 +25,7 @@ public class RandomMovementControls {
     private int cycle_number = 10;
 
     // constructor
-    public RandomMovementControls (HardwareMap hardwareMap, Gamepad gamePad) {
+    public RandomMovementControlsMantas (HardwareMap hardwareMap, Gamepad gamePad) {
         //sets all the wheels to what they are in the hardware map
         rightFrontWheel = hardwareMap.get(DcMotor.class, "rightFront");
         leftFrontWheel = hardwareMap.get(DcMotor.class, "leftFront");
