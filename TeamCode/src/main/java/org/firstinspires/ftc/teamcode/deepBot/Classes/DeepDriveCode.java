@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Classes;
+package org.firstinspires.ftc.teamcode.deepBot.Classes;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -47,5 +47,13 @@ public class DeepDriveCode extends DriveCodeAbstract {
         rightFrontDrive.setPower(rightFront * speed);
         rightBackDrive.setPower(rightBack * speed);
 
+    }
+
+    public boolean areWheelsMoving(){
+        if (leftFrontDrive.getPower() == 0 && rightFrontDrive.getPower() == 0){
+            return false;
+        }else {
+            return true;
+        }
     }
 }
