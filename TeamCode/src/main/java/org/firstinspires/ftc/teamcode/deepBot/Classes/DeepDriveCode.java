@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 public class DeepDriveCode extends DriveCodeAbstract {
 
     //not objects
-    private double speed = 1;
     private double last_time_a_pressed;
     private boolean currently_spinning = false;
     private int cycle_number = 10;
