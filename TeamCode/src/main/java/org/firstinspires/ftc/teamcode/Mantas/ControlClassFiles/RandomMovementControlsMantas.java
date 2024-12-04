@@ -25,7 +25,7 @@ public class RandomMovementControlsMantas {
     private boolean currently_spinning = false;
     private boolean currently_doing_a_lap = false;
     private int cycle_number_spin = 10;
-    private int cycle_number_lap = 27;
+    private int cycle_number_lap = 1;
 
     // constructor
     public RandomMovementControlsMantas (HardwareMap hardwareMap, Gamepad gamePad) {
@@ -103,7 +103,7 @@ public class RandomMovementControlsMantas {
 
                 //reset variables so previous code can be repeated
                 currently_doing_a_lap = false;
-                cycle_number_lap = 10;
+                cycle_number_lap = 1;
             }
         }
     }
