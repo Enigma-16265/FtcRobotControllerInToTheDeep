@@ -1,5 +1,7 @@
 //imports
 package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -109,6 +111,12 @@ public class RandomMovementControlsMantas {
                 leftBackWheel.setPower(0.05);
                 rightFrontWheel.setPower(-0.05);
                 rightBackWheel.setPower(-0.05);
+
+                try {
+                    sleep(10);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
                 leftBackWheel.setPower(-0.1);
                 rightBackWheel.setPower(0.1);

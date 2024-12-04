@@ -147,7 +147,7 @@ public class IntakeClass {
             intake.setPower(1);
         }
         if (intakeToggle == false && spitToggle == true) {
-            intake.setPower(-1);
+            intake.setPower(-0.5);
         }
         if (intakeToggle == false && spitToggle == false) {
             intake.setPower(0);
@@ -339,7 +339,7 @@ public class IntakeClass {
 
             SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0 + extendoOffset);
             SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
-            SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+            SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.3278);
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
             SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
@@ -372,6 +372,12 @@ public class IntakeClass {
         SmartServo.setSmartPos(hardwareMap,"slideLeft",(-1*gamepad2.right_stick_y/40 + slideLeft.getPosition()));
         //slideRight.setPosition(gamepad2.right_stick_y/10 + slideRight.getPosition());
         SmartServo.setSmartPos(hardwareMap,"slideRight",-1*gamepad2.right_stick_y/40 + slideRight.getPosition());
+    }
+
+    private void closeLid() {
+        if (gamepad2.x) {
+            SmartServo.setSmartPos(hardwareMap, "lid", 0.1);
+        }
     }
 
     public void runIntake() {
