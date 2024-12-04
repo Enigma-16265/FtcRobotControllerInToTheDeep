@@ -76,10 +76,11 @@ public class RosesMantasOpMode extends LinearOpMode {
             // run various control code
             wheelCode.runWheels();
 
-            if (gamepad1.b) {
-                armCode.grab();
-            }
+           // if (gamepad1.b) {
+            //    armCode.grab();
+           // }
            spinCode.spinAroundFunction();
+           spinCode.makeTheRobotDoALap();
            dance.doHappyDance();
 
             // Send telemetry message to signify robot running
