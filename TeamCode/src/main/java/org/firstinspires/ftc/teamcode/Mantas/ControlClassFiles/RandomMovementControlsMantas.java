@@ -105,10 +105,10 @@ public class RandomMovementControlsMantas {
                 currently_doing_a_lap = false;
                 cycle_number_lap = 14;
 
-                leftFrontWheel.setPower(0.1);
-                leftBackWheel.setPower(0.1);
-                rightFrontWheel.setPower(-0.1);
-                rightBackWheel.setPower(-0.1);
+                leftFrontWheel.setPower(0.05);
+                leftBackWheel.setPower(0.05);
+                rightFrontWheel.setPower(-0.05);
+                rightBackWheel.setPower(-0.05);
             }
         }
     }
