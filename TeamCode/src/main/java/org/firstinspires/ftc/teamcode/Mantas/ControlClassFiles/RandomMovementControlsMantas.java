@@ -109,6 +109,9 @@ public class RandomMovementControlsMantas {
                 leftBackWheel.setPower(0.05);
                 rightFrontWheel.setPower(-0.05);
                 rightBackWheel.setPower(-0.05);
+
+                leftBackWheel.setPower(-0.1);
+                rightBackWheel.setPower(0.1);
             }
         }
     }
