@@ -32,6 +32,7 @@ public class DeepOuttake {
     // control variables
     boolean lidToggle = false;
     boolean yWasPressed = false;
+    boolean xWasPressed = false;
 
     double recordedTime = 0; // last time steps was run
     private outtakeSteps step = outtakeSteps.CLOSE; // current step in sequence
@@ -74,6 +75,9 @@ public class DeepOuttake {
                 SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
             }
         }
+        if (gamepad.x && (xWasPressed == false)) {
+            SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
+        }
 
         // if you press a it does the next step
         if (gamepad.a && (currentTimeMillis() > recordedTime + 1000)) {
@@ -105,7 +109,7 @@ public class DeepOuttake {
         }
 
         yWasPressed = gamepad.y;
-
+        xWasPressed = gamepad.x;
     }
 
     // runs the next step in the outtake sequence
