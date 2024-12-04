@@ -24,7 +24,8 @@ public class RandomMovementControlsMantas {
     private double last_time_b_pressed;
     private boolean currently_spinning = false;
     private boolean currently_doing_a_lap = false;
-    private int cycle_number = 10;
+    private int cycle_number_spin = 10;
+    private int cycle_number_lap = 27;
 
     // constructor
     public RandomMovementControlsMantas (HardwareMap hardwareMap, Gamepad gamePad) {
@@ -46,7 +47,7 @@ public class RandomMovementControlsMantas {
 
     public void startSpin () {
         currently_spinning = true;
-        cycle_number += 20;
+        cycle_number_spin += 20;
     }
 
     // the function for spinning the robot 180 degrees
@@ -62,7 +63,7 @@ public class RandomMovementControlsMantas {
         if (currently_spinning) {
 
             //minus 1 to cycle_number
-            cycle_number--;
+            cycle_number_spin--;
 
             //spin the robot 18 degrees
             leftFrontWheel.setPower(speed);
@@ -71,11 +72,11 @@ public class RandomMovementControlsMantas {
             rightBackWheel.setPower(-speed);
 
             //stop spinning if the robot has spun 180 degrees
-            if (cycle_number == 0) {
+            if (cycle_number_spin == 0) {
 
                 //reset variables so previous code can be repeated
                 currently_spinning = false;
-                cycle_number = 12;
+                cycle_number_spin = 10;
             }
         }
     }
@@ -90,14 +91,21 @@ public class RandomMovementControlsMantas {
 
         if (currently_doing_a_lap) {
 
+            cycle_number_lap--;
+
             //move the robot forward
             leftFrontWheel.setPower(speed);
             leftBackWheel.setPower(speed);
             rightFrontWheel.setPower(speed);
             rightBackWheel.setPower(speed);
 
+            if (cycle_number_lap == 0) {
+
                 //reset variables so previous code can be repeated
-                currently_doing_a_lap = false;
+                currently_spinning = false;
+                cycle_number_lap = 27;
             }
         }
     }
+}
+    //27
