@@ -54,13 +54,13 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
     }
 
-    public boolean areWheelsMoving(){
+    /*public boolean areWheelsMoving(){
         if (leftFrontDrive.getPower() == 0 && rightFrontDrive.getPower() == 0){
             return false;
         }else {
             return true;
         }
-    }
+    }*/
     // the function for spinning the robot 180 degrees
     public void spinAroundFunction () {
 
