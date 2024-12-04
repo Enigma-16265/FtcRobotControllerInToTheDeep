@@ -21,7 +21,9 @@ public class RandomMovementControlsMantas {
     /** @noinspection FieldMayBeFinal, FieldCanBeLocal */ //not objects
     private double speed = 1;
     private double last_time_a_pressed;
+    private double last_time_b_pressed;
     private boolean currently_spinning = false;
+    private boolean currently_doing_a_lap = false;
     private int cycle_number = 10;
 
     // constructor
@@ -77,5 +79,25 @@ public class RandomMovementControlsMantas {
             }
         }
     }
-}
+    public void makeTheRobotDoALap() {
 
+        //if a was pressed do not let spinAroundFunction run for another second
+        if (gamePad.b && last_time_b_pressed + 1000 < System.currentTimeMillis()) {
+            last_time_b_pressed = System.currentTimeMillis();
+            currently_doing_a_lap = true;
+        }
+
+
+        if (currently_doing_a_lap) {
+
+            //move the robot forward
+            leftFrontWheel.setPower(speed);
+            leftBackWheel.setPower(speed);
+            rightFrontWheel.setPower(speed);
+            rightBackWheel.setPower(speed);
+
+                //reset variables so previous code can be repeated
+                currently_doing_a_lap = false;
+            }
+        }
+    }

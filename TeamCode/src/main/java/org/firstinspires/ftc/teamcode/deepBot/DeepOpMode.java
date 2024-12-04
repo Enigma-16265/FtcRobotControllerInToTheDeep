@@ -79,6 +79,7 @@ public class DeepOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             wheelCode.runWheels();
+            wheelCode.spinAroundFunction();
             outtakeCode.outtake();
             intakeCode.runIntake();
             /*if (intakeCode.isWristDown() && !wheelCode.areWheelsMoving()){
