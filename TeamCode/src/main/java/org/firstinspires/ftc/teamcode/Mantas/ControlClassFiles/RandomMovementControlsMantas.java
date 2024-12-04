@@ -104,6 +104,11 @@ public class RandomMovementControlsMantas {
                 //reset variables so previous code can be repeated
                 currently_doing_a_lap = false;
                 cycle_number_lap = 14;
+
+                leftFrontWheel.setPower(speed);
+                leftBackWheel.setPower(speed);
+                rightFrontWheel.setPower(-speed);
+                rightBackWheel.setPower(-speed);
             }
         }
     }
