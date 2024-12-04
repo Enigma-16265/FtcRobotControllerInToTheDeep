@@ -103,7 +103,7 @@ public class RandomMovementControlsMantas {
 
                 //reset variables so previous code can be repeated
                 currently_spinning = false;
-                cycle_number_lap = 27;
+                cycle_number_lap = 10;
             }
         }
     }
