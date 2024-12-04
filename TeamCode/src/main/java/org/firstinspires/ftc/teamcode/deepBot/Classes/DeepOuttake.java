@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 /*
@@ -21,6 +22,8 @@ public class DeepOuttake {
     // all servos are controlled through smart servo anyway
     private final DcMotor rightLift;
     private final DcMotor leftLift;
+    private final Servo outtakeRight;
+    private final Servo outtakeLeft;
 
     // instance variables
     private final Gamepad gamepad;
@@ -45,6 +48,8 @@ public class DeepOuttake {
         // initialize servos
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+        outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
 
         // reverse necessary motor
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -89,7 +94,7 @@ public class DeepOuttake {
             rightLift.setPower(0);
             leftLift.setPower(0);
         }
-/*
+
         if (gamepad.dpad_left) {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()+0.1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()+0.1);
@@ -97,7 +102,7 @@ public class DeepOuttake {
         else if (gamepad.dpad_right) {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()-0.1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()-0.1);
-        }*/
+        }
 
         yWasPressed = gamepad.y;
 
