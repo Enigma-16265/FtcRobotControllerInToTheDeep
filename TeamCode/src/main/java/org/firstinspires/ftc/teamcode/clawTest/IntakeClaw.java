@@ -11,7 +11,7 @@ public class IntakeClaw extends ColorLocator_Loralei {
         super.Setup();
         while (opModeIsActive() || opModeInInit()){
             super.colorFinder();
-            if (super.angle >= 0) {
+            if (super.angle >= 1) {
             telemetry.addLine("Angle >= 0");
             }
         }

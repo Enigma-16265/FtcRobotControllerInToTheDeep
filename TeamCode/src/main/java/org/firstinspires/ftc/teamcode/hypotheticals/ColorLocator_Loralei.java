@@ -187,8 +187,8 @@ public class ColorLocator_Loralei extends LinearOpMode
                     (int) boxFit.center.y,
                     (int) boxFit.angle));
             angle = boxFit.angle;*/
+            telemetry.addLine(String.valueOf(boxFit.angle));
         }
-
         telemetry.update();
         sleep(50);
     }
