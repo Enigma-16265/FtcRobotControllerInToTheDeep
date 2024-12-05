@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.clawTest;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.ColorLocator_Loralei;
+import org.firstinspires.ftc.teamcode.hypotheticals.ColorLocator_Loralei;
 @Autonomous(name = "Concept: Test", group = "Concept")
 public class IntakeClaw extends ColorLocator_Loralei {
 
