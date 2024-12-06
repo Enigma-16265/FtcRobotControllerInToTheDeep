@@ -112,11 +112,11 @@ public class RandomMovementControlsMantas {
                 rightFrontWheel.setPower(-0.05);
                 rightBackWheel.setPower(-0.05);
 
-                try {
-                    sleep(10);
+              /*  try {
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
-                }
+                }*/
 
                 leftBackWheel.setPower(-0.1);
                 rightBackWheel.setPower(0.1);
