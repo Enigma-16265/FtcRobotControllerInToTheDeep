@@ -76,7 +76,7 @@ public class DeepOuttake {
             }
         }
         if (gamepad.x && (xWasPressed == false)) {
-            SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
+            SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
         }
 
         // if you press a it does the next step

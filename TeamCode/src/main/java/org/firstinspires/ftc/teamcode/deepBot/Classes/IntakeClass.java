@@ -147,7 +147,7 @@ public class IntakeClass {
             intake.setPower(1);
         }
         if (intakeToggle == false && spitToggle == true) {
-            intake.setPower(-0.5);
+            intake.setPower(-0.8);
         }
         if (intakeToggle == false && spitToggle == false) {
             intake.setPower(0);
