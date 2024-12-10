@@ -32,8 +32,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.deepBot.Classes.DeepOuttake;
+import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
 
 
 @Autonomous(name="JankAuto", group="Robot")
@@ -46,6 +49,8 @@ public class JankAuto extends LinearOpMode {
     private DcMotor leftFront;
     private DcMotor rightBack;
     private DcMotor leftBack;
+    private DcMotor leftLift;
+    private DcMotor rightLift;
 
     private ElapsedTime     runtime = new ElapsedTime();
 
@@ -101,10 +106,43 @@ public class JankAuto extends LinearOpMode {
         rightFront.setPower(0);
         sleep(howlong);
     }
+    private void dumpSequence() {
+        // close lid, move to next step
+        SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        sleep(1000);
+
+        leftLift.setPower(1);
+        rightLift.setPower(1);
+        sleep(3000);
+
+        // turn wrist, move to next step
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
+        sleep(1000);
+
+        // open lid, move to next step
+        SmartServo.setSmartPos(hardwareMap,"lid",0);
+        sleep(1500);
+
+        // return to transfer position
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0);
+        SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        sleep(2000);
+
+        leftLift.setPower(-0.3);
+        rightLift.setPower(-0.3);
+        sleep(2000);
+
+        leftLift.setPower(0);
+        rightLift.setPower(0);
+        sleep(1000);
+    }
 
     @Override
     public void runOpMode() {
-
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         // Initialize the drive system variables.
         //leftDrive  = hardwareMap.get(DcMotor.class, "rightFront");
         //rightDrive = hardwareMap.get(DcMotor.class, "leftFront");
@@ -120,6 +158,11 @@ public class JankAuto extends LinearOpMode {
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -145,12 +188,13 @@ public class JankAuto extends LinearOpMode {
         forward();
         sleep(150);
         left();
-        sleep(2500);
+        sleep(2200);
         brake();
         sleep(1000);
         rotateLeft();
-        sleep(500);
+        sleep(400);
         brake();
+        dumpSequence();
         /*
         // Step 2:  Spin right for 1.3 seconds
         leftDrive.setPower(TURN_SPEED);
