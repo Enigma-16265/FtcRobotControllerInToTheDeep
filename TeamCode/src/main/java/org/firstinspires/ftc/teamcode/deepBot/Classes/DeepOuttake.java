@@ -76,7 +76,7 @@ public class DeepOuttake {
             }
         }
         if (gamepad.x && (xWasPressed == false)) {
-            SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
+            SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
         }
 
         // if you press a it does the next step
@@ -138,5 +138,25 @@ public class DeepOuttake {
             SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
             step = outtakeSteps.CLOSE;
         }
+    }
+
+    public void runSequence() throws InterruptedException {
+        // close lid, move to next step
+        SmartServo.setSmartPos(hardwareMap,"lid", 0);
+        wait(500);
+
+        // turn wrist, move to next step
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
+        wait(500);
+
+        // open lid, move to next step
+        SmartServo.setSmartPos(hardwareMap,"lid",0.6);
+        wait(1000);
+
+        // return to transfer position
+        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0);
+        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0);
+        SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
     }
 }
