@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.deepBot.Classes;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
@@ -51,7 +52,6 @@ public class DeepDriveCode extends DriveCodeAbstract {
         leftBackDrive.setPower(leftBack * speed);
         rightFrontDrive.setPower(rightFront * speed);
         rightBackDrive.setPower(rightBack * speed);
-
     }
 
     /*public boolean areWheelsMoving(){
