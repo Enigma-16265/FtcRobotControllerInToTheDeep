@@ -20,7 +20,7 @@ public class RandomMovementControlsMantas {
     private final DcMotor leftBackWheel;
     private final Gamepad gamePad;
 
-    /** @noinspection FieldMayBeFinal, FieldCanBeLocal */ //not objects
+    //not objects
     private double speed = 1;
     private double last_time_a_pressed;
     private double last_time_b_pressed;
@@ -112,14 +112,14 @@ public class RandomMovementControlsMantas {
                 rightFrontWheel.setPower(-0.05);
                 rightBackWheel.setPower(-0.05);
 
-              /*  try {
+               /* try {
                     sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
-                }*/
+                }
 
                 leftBackWheel.setPower(-0.1);
-                rightBackWheel.setPower(0.1);
+                rightBackWheel.setPower(0.1);*/
             }
         }
     }
