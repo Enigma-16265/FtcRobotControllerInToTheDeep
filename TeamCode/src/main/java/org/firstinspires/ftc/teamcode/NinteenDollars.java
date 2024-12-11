@@ -39,8 +39,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
 
 
-@Autonomous(name="JankAuto", group="Robot")
-public class JankAuto extends LinearOpMode {
+@Autonomous(name="JankierAuto", group="Robot")
+public class NinteenDollars extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor         leftDrive   = null;
@@ -76,11 +76,17 @@ public class JankAuto extends LinearOpMode {
         leftBack.setPower(0.5);
         rightFront.setPower(0.5);
     }
+    private void fastForward() {
+        leftFront.setPower(1);
+        rightBack.setPower(1);
+        leftBack.setPower(1);
+        rightFront.setPower(1);
+    }
     private void backward() {
-        leftFront.setPower(-0.5);
-        rightBack.setPower(-0.5);
-        leftBack.setPower(-0.5);
-        rightFront.setPower(-0.5);
+        leftFront.setPower(-0.2);
+        rightBack.setPower(-0.2);
+        leftBack.setPower(-0.2);
+        rightFront.setPower(-0.2);
     }
     private void rotateLeft() {
         leftFront.setPower(0.5);
@@ -107,43 +113,36 @@ public class JankAuto extends LinearOpMode {
         rightFront.setPower(0);
         sleep(howlong);
     }
-    private void dump() {
+    private void specimen() {
+        SmartServo.setSmartPos(hardwareMap,"lid",0.2);
+        sleep(1003);
 
+        leftLift.setPower(0.5);
+        rightLift.setPower(0.5);
+        sleep(1500);
 
-        rightLift.setPower(1);
-        leftLift.setPower(1);
-        sleep(4000);
-
-        rightLift.setPower(0.2);
         leftLift.setPower(0.2);
-
-        // close lid, move to next step
-        SmartServo.setSmartPos(hardwareMap,"lid", 0);
-        sleep(2000);
-
-        // turn wrist, move to next step
-        SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
-        SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
-        sleep(2300);
-
-        // open lid, move to next step
-        SmartServo.setSmartPos(hardwareMap,"lid",0.6);
-        sleep(3000);
+        rightLift.setPower(0.2);
+        sleep(100);
 
 
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.8);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.8);
+        sleep(5000);
 
-        // return to transfer position
-        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.2);
-        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.2);
-        SmartServo.setSmartPos(hardwareMap,"lid", 0);
-        sleep(2000);
-
-        rightLift.setPower(-0.1);
         leftLift.setPower(-0.1);
-        sleep(1000);
+        rightLift.setPower(-0.1);
+        sleep(600);
 
-        rightLift.setPower(0);
-        leftLift.setPower(0);
+        fastForward();
+        sleep(200);
+
+        brake();
+        sleep(1500);
+
+        leftLift.setPower(-0.2);
+        rightLift.setPower(-0.2);
+        sleep(1000);
     }
 
     @Override
@@ -196,21 +195,17 @@ public class JankAuto extends LinearOpMode {
 
         telemetry.addData("Status", "Running.");
         telemetry.update();
-        sleep(1000);
-        forward();
-        sleep(250);
-        left();
-        sleep(2000);
-        brake();
-        sleep(1000);
-        rotateLeft();
-        sleep(350);
-        brake();
         sleep(500);
         backward();
-        sleep(150);
+        sleep(4500);
         brake();
-        dump();
+        sleep(500);
+        forward();
+        sleep(50);
+        brake();
+        sleep(200);
+        specimen();
+        sleep(500);
 
         /*
         // Step 2:  Spin right for 1.3 seconds
