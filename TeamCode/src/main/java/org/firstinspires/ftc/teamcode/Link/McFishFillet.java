@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.deepBot;
+package org.firstinspires.ftc.teamcode.Link;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
+import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 
 @TeleOp
 public class McFishFillet extends LinearOpMode {
