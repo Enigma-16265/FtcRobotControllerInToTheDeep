@@ -52,7 +52,6 @@ public class DeepDriveCode extends DriveCodeAbstract {
         leftBackDrive.setPower(leftBack * speed);
         rightFrontDrive.setPower(rightFront * speed);
         rightBackDrive.setPower(rightBack * speed);
-
     }
 
     /*public boolean areWheelsMoving(){
