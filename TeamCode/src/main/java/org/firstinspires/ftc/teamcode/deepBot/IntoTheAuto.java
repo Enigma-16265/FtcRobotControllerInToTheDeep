@@ -1,15 +1,33 @@
-package com.example.meepmeepnew;
+package org.firstinspires.ftc.teamcode.deepBot;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.noahbres.meepmeep.MeepMeep;
-import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
-import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-public class MeepMeepNew {
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.TankDrive;
+import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
+
+public final class IntoTheAuto extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+        /*
+        Pose2d beginPose = new Pose2d(0, 0, 0);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
 
 
-    public static void main(String[] args) {
+            waitForStart();
+
+            Actions.runBlocking(
+                drive.actionBuilder(beginPose)
+                        .splineTo(new Vector2d(30, 30), Math.PI / 2)
+                        .splineTo(new Vector2d(0, 60), Math.PI)
+                        .build());
+        }
+
+         */
 
         String autoSide = "left";
 
@@ -19,16 +37,13 @@ public class MeepMeepNew {
 
         Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
 
-        MeepMeep meepMeep = new MeepMeep(800);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .build();
 
 
         if (autoSide == "left" && autoType == "sample") {
-            myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+            Actions.runBlocking(
+                    drive.actionBuilder(beginPose)
                     .setTangent(135)
                     .splineToLinearHeading(leftBasket, Math.toRadians(235))
                     //.addDisplacementMarker(() -> {
@@ -57,7 +72,8 @@ public class MeepMeepNew {
                     .build());
         }
         if (autoSide == "left" && autoType == "specimen") {
-            myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+            Actions.runBlocking(
+                    drive.actionBuilder(beginPose)
                     .setTangent(Math.toRadians(90))
                     .splineToConstantHeading(new Vector2d(0, -36), Math.PI/2)
                     .lineToY(-46)
@@ -82,7 +98,8 @@ public class MeepMeepNew {
                     .build());
         }
         if (autoSide == "right" && autoType == "sample") {
-            myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+            Actions.runBlocking(
+                    drive.actionBuilder(beginPose)
                     .setTangent(135)
                     .splineToLinearHeading(leftBasket, Math.toRadians(235))
                     .setTangent(0)
@@ -112,7 +129,8 @@ public class MeepMeepNew {
                     .build());
         }
         if (autoSide == "right" && autoType == "sample") {
-            myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+            Actions.runBlocking(
+                    drive.actionBuilder(beginPose)
                     .splineToConstantHeading(new Vector2d(0, -36), Math.toRadians(90))
                     .setTangent(0)
                     .splineToLinearHeading(new Pose2d(37, -24, Math.toRadians(0)), Math.PI / 2)
@@ -141,10 +159,9 @@ public class MeepMeepNew {
                     .build());
         }
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
-                .setDarkMode(true)
-                .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
-                .start();
+
+        else {
+            throw new RuntimeException();
+        }
     }
 }
