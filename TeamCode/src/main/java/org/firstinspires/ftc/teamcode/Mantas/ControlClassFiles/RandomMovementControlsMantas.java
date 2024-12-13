@@ -23,14 +23,11 @@ public class RandomMovementControlsMantas {
     //not objects
     private double speed = 1;
     private double last_time_a_pressed;
-    private double last_time_b_pressed;
     private boolean currently_spinning = false;
-    private boolean currently_doing_a_lap = false;
     private int cycle_number_spin = 10;
-    private int cycle_number_lap = 14;
 
     // constructor
-    public RandomMovementControlsMantas (HardwareMap hardwareMap, Gamepad gamePad) {
+    public RandomMovementControlsMantas(HardwareMap hardwareMap, Gamepad gamePad) {
         //sets all the wheels to what they are in the hardware map
         rightFrontWheel = hardwareMap.get(DcMotor.class, "rightFront");
         leftFrontWheel = hardwareMap.get(DcMotor.class, "leftFront");
@@ -47,13 +44,13 @@ public class RandomMovementControlsMantas {
 
     }
 
-    public void startSpin () {
+    public void startSpin() {
         currently_spinning = true;
         cycle_number_spin += 20;
     }
 
     // the function for spinning the robot 180 degrees
-    public void spinAroundFunction () {
+    public void spinAroundFunction() {
 
         //if a was pressed do not let spinAroundFunction run for another second
         if (gamePad.a && last_time_a_pressed + 1000 < System.currentTimeMillis()) {
@@ -63,6 +60,11 @@ public class RandomMovementControlsMantas {
 
 
         if (currently_spinning) {
+
+            leftFrontWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftBackWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightFrontWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightBackWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             //minus 1 to cycle_number
             cycle_number_spin--;
@@ -82,46 +84,4 @@ public class RandomMovementControlsMantas {
             }
         }
     }
-    public void makeTheRobotDoALap() {
-
-        //if a was pressed do not let spinAroundFunction run for another second
-        if (gamePad.b && last_time_b_pressed + 1000 < System.currentTimeMillis()) {
-            last_time_b_pressed = System.currentTimeMillis();
-            currently_doing_a_lap = true;
-        }
-
-
-        if (currently_doing_a_lap) {
-
-            cycle_number_lap--;
-
-            //move the robot forward
-            leftFrontWheel.setPower(speed);
-            leftBackWheel.setPower(speed);
-            rightFrontWheel.setPower(speed);
-            rightBackWheel.setPower(speed);
-
-            if (cycle_number_lap == 0) {
-
-                //reset variables so previous code can be repeated
-                currently_doing_a_lap = false;
-                cycle_number_lap = 14;
-
-                leftFrontWheel.setPower(0.05);
-                leftBackWheel.setPower(0.05);
-                rightFrontWheel.setPower(-0.05);
-                rightBackWheel.setPower(-0.05);
-
-               /* try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                leftBackWheel.setPower(-0.1);
-                rightBackWheel.setPower(0.1);*/
-            }
-        }
-    }
 }
-//27

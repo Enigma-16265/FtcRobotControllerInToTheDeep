@@ -27,21 +27,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.deepBot;
+package org.firstinspires.ftc.teamcode.Link;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.deepBot.Classes.DeepOuttake;
-import org.firstinspires.ftc.teamcode.deepBot.Classes.DeepDriveCode;
-import org.firstinspires.ftc.teamcode.deepBot.Classes.IntakeClass;
-import org.firstinspires.ftc.teamcode.deepBot.Classes.SmartServo;
-import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
+import org.firstinspires.ftc.teamcode.Link.Classes.DeepOuttake;
+import org.firstinspires.ftc.teamcode.Link.Classes.DeepDriveCode;
+import org.firstinspires.ftc.teamcode.Link.Classes.IntakeClass;
+import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 
 /*
  * This code calls other classes and runs their code

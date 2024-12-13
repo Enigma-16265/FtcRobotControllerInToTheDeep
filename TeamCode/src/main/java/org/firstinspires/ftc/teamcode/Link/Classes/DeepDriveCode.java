@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.deepBot.Classes;
+package org.firstinspires.ftc.teamcode.Link.Classes;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -15,7 +15,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
     //not objects
     private double last_time_a_pressed;
     private boolean currently_spinning = false;
-    private int cycle_number = 10;
+    private int cycle_number = 20;
 
     // constructor initializes the wheels and does some stuff with direction of wheels
     public DeepDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
@@ -73,6 +73,11 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
         if (currently_spinning) {
 
+            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
             //minus 1 to cycle_number
             cycle_number--;
 
@@ -87,7 +92,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
                 //reset variables so previous code can be repeated
                 currently_spinning = false;
-                cycle_number = 12;
+                cycle_number = 20;
             }
         }
     }

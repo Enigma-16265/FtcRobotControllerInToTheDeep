@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.deepBot.Classes;
+package org.firstinspires.ftc.teamcode.Link.Classes;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
