@@ -241,6 +241,11 @@ public class IntakeClass {
 
     // control the sequence for transferring from intake to outtake
     private void transferSequence() {
+        if (gamepad2.x) {
+            transferRequested = true;
+        }
+
+
         // check to see if currently transferring
         if (transferRequested || transferInProgress) {
             transferRequested = false;
