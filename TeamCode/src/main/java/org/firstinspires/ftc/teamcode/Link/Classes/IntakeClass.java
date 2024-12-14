@@ -10,16 +10,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
+/** @noinspection PointlessBooleanExpression*/
 public class IntakeClass {
 
     // variables
-    enum transferingStates {
+    enum transferringStates {
         IDLE,
         MOVING_LIFT,
         RETRACTING_WRIST,
         OPENING_LID,
         MOVING_EXTENDO,
-        TRANSFERING,
+        TRANSFERRING,
         CLOSING_LID
     }
 
@@ -65,7 +66,7 @@ public class IntakeClass {
     public static double extendoOffset = 0.05;
 
 
-    transferingStates transferState = transferingStates.IDLE;
+    transferringStates transferState = transferringStates.IDLE;
 
 
     // constructor
@@ -171,10 +172,10 @@ public class IntakeClass {
 
     // control rotation of the wrist
     private void wristRotation() {
-        if (gamepad2.right_bumper == true && gamepad2.left_bumper == false) {
+        if (gamepad2.right_bumper && gamepad2.left_bumper == false) {
             SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()+wrist_rotation_speed);
         }
-        else if (gamepad2.left_bumper == true && gamepad2.right_bumper == false) {
+        else if (gamepad2.left_bumper && gamepad2.right_bumper == false) {
             SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()-wrist_rotation_speed);
         }
     }
@@ -195,7 +196,7 @@ public class IntakeClass {
             gamepad2_y_release_OAD = true;
         }
         //Y press detection
-        if (gamepad2.y == true && gamepad2_y_LU == false) {
+        if (gamepad2.y && gamepad2_y_LU == false) {
             gamepad2_y_OAD = true;
             gamepad2_y_release_OAD = false;
         }
@@ -241,76 +242,76 @@ public class IntakeClass {
     // control the sequence for transferring from intake to outtake
     private void transferSequence() {
         // check to see if currently transferring
-        if (transferRequested == true || transferInProgress == true) {
+        if (transferRequested || transferInProgress) {
             transferRequested = false;
 
             // if transfer is idle (what its set to at the start)
-            if (transferState == transferingStates.IDLE) {
+            if (transferState == transferringStates.IDLE) {
                 transferInProgress = true;
-                transferState = transferingStates.MOVING_LIFT;
+                transferState = transferringStates.MOVING_LIFT;
             }
             // if transfer is moving lift
-            if (transferState == transferingStates.MOVING_LIFT) {
+            if (transferState == transferringStates.MOVING_LIFT) {
                 transferTime = Runtime.seconds();
                 //TODO: Add lift control
 
                 // wait until lift is down
                 if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferingStates.RETRACTING_WRIST;
+                    transferState = transferringStates.RETRACTING_WRIST;
                 }
             }
             // if transfer is retracting wrist
-            if (transferState == transferingStates.RETRACTING_WRIST) {
+            if (transferState == transferringStates.RETRACTING_WRIST) {
                 transferTime = Runtime.seconds();
 
                 SmartServo.setSmartPos(hardwareMap,"intakePivot",0.5);
 
                 // wait
                 if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferingStates.OPENING_LID;
+                    transferState = transferringStates.OPENING_LID;
                 }
             }
             // if transfer is opening lid
-            if (transferState == transferingStates.OPENING_LID) {
+            if (transferState == transferringStates.OPENING_LID) {
                 SmartServo.setSmartPos(hardwareMap, "lid", 0.6);
 
                 transferTime = Runtime.seconds();
 
                 // wait
                 if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferingStates.MOVING_EXTENDO;
+                    transferState = transferringStates.MOVING_EXTENDO;
                 }
             }
             // if transfer is moving extendo in
-            if (transferState == transferingStates.MOVING_EXTENDO) {
+            if (transferState == transferringStates.MOVING_EXTENDO) {
                 transferTime = Runtime.seconds();
 
                 SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
                 SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0 + extendoOffset);
                 // wait
                 if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferingStates.TRANSFERING;
+                    transferState = transferringStates.TRANSFERRING;
                 }
             }
             // if transfer is moving sample to outtake
-            if (transferState == transferingStates.TRANSFERING) {
+            if (transferState == transferringStates.TRANSFERRING) {
                 transferTime = Runtime.seconds();
                 //Set CRSERVO Power to 1
                 if (Runtime.seconds() - transferTime >= 3) {
                     //Set CRServo Power to 0
-                    transferState = transferingStates.CLOSING_LID;
+                    transferState = transferringStates.CLOSING_LID;
                 }
             }
             // if transfer is closing lid
-            if (transferState == transferingStates.CLOSING_LID) {
+            if (transferState == transferringStates.CLOSING_LID) {
                 transferTime = Runtime.seconds();
 
                 if (Runtime.seconds() - transferTime >= 0.5) {
-                    transferState = transferingStates.TRANSFERING;
+                    transferState = transferringStates.TRANSFERRING;
                 }
                 // set back to idle
                 transferInProgress = false;
-                transferState = transferingStates.IDLE;
+                transferState = transferringStates.IDLE;
             }
         } // end of if stmt asking if currently transferring
 
@@ -318,7 +319,7 @@ public class IntakeClass {
 
 
     // sets all servos and motors to default pos
-    // should button press be asked in runIntake so its more accessible? doesnt really matter much
+    // should button press be asked in runIntake so its more accessible? doesn't really matter much
     private void returnToDefaultPos() {
         if (gamepad2.b && bWasPressed == false) {
             hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
@@ -351,7 +352,7 @@ public class IntakeClass {
         }
     }
 
-    // run all necesary functions for intake. This should be called in opMode
+    // run all necessary functions for intake. This should be called in opMode
     public void runIntake() {
         returnToDefaultPos();
         extendoHandler();
@@ -363,10 +364,7 @@ public class IntakeClass {
 
     // returns whether or not the wrist is down obv
     public boolean isWristDown() {
-        if (intakePivot.getPosition() >= 0.4) return true;
-        else{
-            return false;
-        }
+        return intakePivot.getPosition() >= 0.4;
     }
 
 
