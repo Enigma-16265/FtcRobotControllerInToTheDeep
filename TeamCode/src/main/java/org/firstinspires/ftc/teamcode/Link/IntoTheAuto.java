@@ -1,256 +1,292 @@
 package org.firstinspires.ftc.teamcode.Link;
 
+
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
 import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
 
-@Autonomous(name = "IntoTheAuto")
+enum InitStep {
+    START,
+    SIDE,
+    TYPE,
+    DONE
+}
+
+
+@Config
+@Autonomous(name = "Into the Auto", group = "16265-Auto")
 public final class IntoTheAuto extends LinearOpMode {
+    private void function() {
 
-    //private DcMotor leftDrive   = null;
-    //private DcMotor         rightDrive  = null;
-    private DcMotor rightLift;
-    private DcMotor leftLift;
-    private DcMotor rightFront;
-    private DcMotor leftFront;
-    private DcMotor rightBack;
-    private DcMotor leftBack;
-    private Servo lid;
-
-    private ElapsedTime runtime = new ElapsedTime();
-
-    private void dump() {
-
-
-        rightLift.setPower(1);
-        leftLift.setPower(1);
-        sleep(4000);
-
-        rightLift.setPower(0.2);
-        leftLift.setPower(0.2);
-
-        // close lid, move to next step
-        SmartServo.setSmartPos(hardwareMap,"lid", 0);
-        sleep(2000);
-
-        // turn wrist, move to next step
-        SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
-        SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
-        sleep(2300);
-
-        // open lid, move to next step
-        SmartServo.setSmartPos(hardwareMap,"lid",0.6);
-        sleep(3000);
-
-
-
-        // return to transfer position
-        SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.2);
-        SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.2);
-        SmartServo.setSmartPos(hardwareMap,"lid", 0);
-        sleep(2000);
-
-        rightLift.setPower(-0.1);
-        leftLift.setPower(-0.1);
-        sleep(1000);
-
-        rightLift.setPower(0);
-        leftLift.setPower(0);
     }
-
     @Override
     public void runOpMode() throws InterruptedException {
 
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        lid = hardwareMap.get(Servo.class, "lid");
+        int Auto = 1;
+        String autoStart = new String("null");
+        String autoSide = new String("null");
+        String autoType = new String("null");
+        boolean canProceed = false;
 
 
-        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        Pose2d leftBasket = new Pose2d(-52, -52, 315);
 
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        Pose2d beginPose = new Pose2d(0, 0, Math.PI / 2);
 
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightBack.setDirection(DcMotor.Direction.FORWARD);
-        lid.setDirection(Servo.Direction.REVERSE);
-
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
-        telemetry.update();
-
-
-        /*
-        Pose2d beginPose = new Pose2d(0, 0, 0);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
 
+            InitStep initState = InitStep.START;
 
+
+            telemetry.addData("Initializing ENIGMA Autonomous: IntoTheAuto", "");
+            telemetry.addData("---------------------------------------","");
+            telemetry.addData("Select Staring Side using X and B:","");
+            telemetry.addData("    Left   ", "(X)");
+            telemetry.addData("    Right ", "(B)");
+
+            while(!isStopRequested()) {
+                if (initState == InitStep.START) {
+                    if (gamepad1.x == true) {
+                        autoStart = "left";
+                        beginPose = new Pose2d(-35, -61.5, Math.PI / 2);
+                        canProceed = true;
+                    }
+                    if (gamepad1.b == true) {
+                        autoStart = "right";
+                        beginPose = new Pose2d(35, -61.5, Math.toRadians(90));
+                        canProceed = true;
+                        //Set Starting Pos
+                    }
+                }
+
+                if (gamepad1.x == false && gamepad1.b == false && initState == InitStep.START && canProceed == true) {
+                    canProceed = false;
+                    initState = InitStep.SIDE;
+                    telemetry.clearAll();
+                    telemetry.addData("Initializing ENIGMA Autonomous: IntoTheAuto", "");
+                    telemetry.addData("---------------------------------------","");
+                    telemetry.addData("Starting side: ", autoStart.toString(), "\n");
+                    telemetry.addData("Select Grabbing Side using X and B:","");
+                    telemetry.addData("    Left   ", "(X)");
+                    telemetry.addData("    Right ", "(B)");
+                }
+
+                if (initState == InitStep.SIDE) {
+                    if (gamepad1.x == true) {
+                        canProceed = true;
+                        autoSide = "left";
+                    }
+                    if (gamepad1.b == true) {
+                        canProceed = true;
+                        autoSide = "right";
+                    }
+                }
+
+                if (gamepad1.x == false && gamepad1.b == false && initState == InitStep.SIDE && canProceed == true) {
+                    canProceed = false;
+                    initState = InitStep.TYPE;
+                    telemetry.clearAll();
+                    telemetry.addData("Initializing ENIGMA Autonomous: IntoTheAuto", "");
+                    telemetry.addData("---------------------------------------","");
+                    telemetry.addData("Select Initialized Type using Y and A:","");
+                    telemetry.addData("    Specimen   ", "(Y)");
+                    telemetry.addData("    Sample ", "(A)");
+                }
+
+                if (initState == InitStep.TYPE) {
+                    if (gamepad1.y == true) {
+                        autoType = "specimen";
+                        canProceed = true;
+                    }
+                    if (gamepad1.a == true) {
+                        autoType = "sample";
+                        canProceed = true;
+
+                    }
+                }
+
+                if (gamepad1.y == false && gamepad1.a == false && initState == InitStep.TYPE && canProceed == true) {
+                    telemetry.clearAll();
+                    telemetry.addData("Initialized ENIGMA Autonomous: IntoTheAuto", "");
+                    telemetry.addData("---------------------------------------","");
+                    telemetry.addData("Good luck and have fun. GP!","");
+                    telemetry.addData("                 .77:                   \n" +
+                            "             .^JPP?75PJ~.               \n" +
+                            "          :75PY~.     ~7:  .            \n" +
+                            "      .~YP57:   :?PPJ^    ^5G5!.        \n" +
+                            "     .BG^   .!YPY!..!YP57:   ^GB^       \n" +
+                            "     :BP  !PP?:        :7PG7  JB^       \n" +
+                            "     .PY  5B:            .BG  JB^       \n" +
+                            "          YB:       .!Y555G5  JB^       \n" +
+                            "          YB:                 JB^       \n" +
+                            "          YB7.          .^.   YB^       \n" +
+                            "          .^JPP7:    :75PY^   5B~       \n" +
+                            "              :75PYYG57:  .~YPY!.       \n" +
+                            "                 .~^   :?5PJ^.          \n" +
+                            "                   .!YPY!.              \n" +
+                            "                 7PP7:                  \n" +
+                            "                 YB.                    \n" +
+                            "                  .                     \n" +
+                            "                 YJ                     \n" +
+                            "                 .~                     ", "");
+                    initState = InitStep.DONE;
+                }
+
+                telemetry.update();
+
+                if (initState == InitStep.DONE) {
+                    break;
+                }
+                sleep(1);
+            }
+
+            MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             waitForStart();
 
-            Actions.runBlocking(
-                drive.actionBuilder(beginPose)
-                        .splineTo(new Vector2d(30, 30), Math.PI / 2)
-                        .splineTo(new Vector2d(0, 60), Math.PI)
-                        .build());
-        }
+            //Left
+            if (autoSide == "left" && autoType == "sample") {
+                telemetry.addData("BBEANSBEANSBEANSBENASEBANEBANSBEANSBEANSBEANSBEANS","");
+                telemetry.update();
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(135)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                //.addDisplacementMarker(() -> {
+                                //  // This marker runs after the first splineTo()
 
-         */
+                                // Run your action in here!
+                                //})
+                                .setTangent(90)
+                                .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(-44)
+                                .lineToX(-42)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(-42, -24, Math.toRadians(180)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(-52)
+                                .lineToX(-50)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(-46, -24, Math.toRadians(180)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(-60)
+                                .lineToX(-58)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .build());
+            }
+            //Left Specimen
+            if (autoSide == "left" && autoType == "specimen") {
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(Math.toRadians(90))
+                                .splineToConstantHeading(new Vector2d(0, -36), Math.PI/2)
+                                .lineToY(-46)
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(-44)
+                                .lineToX(-42)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(-42, -24, Math.toRadians(180)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(-52)
+                                .lineToX(-50)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(-46, -24, Math.toRadians(180)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(-60)
+                                .lineToX(-58)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .build());
+            }
 
-        String autoSide = "left";
+            //Grab Right
+            if (autoSide == "right" && autoType == "sample") {
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(135)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(37, -24, Math.toRadians(0)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(44)
+                                .lineToX(42)
+                                .setTangent(90)
+                                .lineToY(-30)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(42, -24, Math.toRadians(0)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(52)
+                                .lineToX(50)
+                                .setTangent(90)
+                                .lineToY(-30)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(46, -24, Math.toRadians(0)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(60)
+                                .lineToX(58)
+                                .setTangent(90)
+                                .lineToY(-30)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .build());
+            }
 
-        String autoType = "sample";
+            //Grab Right Specimen
+            if (autoSide == "right" && autoType == "specimen") {
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .splineToConstantHeading(new Vector2d(0, -36), Math.toRadians(90))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(37, -24, Math.toRadians(0)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(44)
+                                .lineToX(42)
+                                .setTangent(90)
+                                .lineToY(-30)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(42, -24, Math.toRadians(0)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(52)
+                                .lineToX(50)
+                                .setTangent(90)
+                                .lineToY(-30)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .setTangent(0)
+                                .splineToLinearHeading(new Pose2d(46, -24, Math.toRadians(0)), Math.PI / 2)
+                                .setTangent(Math.PI / 1)
+                                .lineToX(60)
+                                .lineToX(58)
+                                .setTangent(90)
+                                .lineToY(-30)
+                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                                .build());
 
-        Pose2d beginPose = new Pose2d(-35,-62, Math.toRadians(90));
+            }
+            Actions.runBlocking(new SequentialAction(
+                    drive.actionBuilder(beginPose).lineToX(1).build()
 
-        Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
-
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-
-        // Wait for the game to start (driver presses START)
-        waitForStart();
-
-        if (autoSide == "left" && autoType == "sample") {
-            Actions.runBlocking(
-                    drive.actionBuilder(beginPose)
-                    .setTangent(135)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    //.addDisplacementMarker(() -> {
-                    //  // This marker runs after the first splineTo()
-
-                    // Run your action in here!
-                    //})
-                    .setTangent(90)
-                    .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(-44)
-                    .lineToX(-42)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(-42, -24, Math.toRadians(180)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(-52)
-                    .lineToX(-50)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(-46, -24, Math.toRadians(180)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(-60)
-                    .lineToX(-58)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .build());
-        }
-        if (autoSide == "left" && autoType == "specimen") {
-            Actions.runBlocking(
-                    drive.actionBuilder(beginPose)
-                    .setTangent(Math.toRadians(90))
-                    .splineToConstantHeading(new Vector2d(0, -36), Math.PI/2)
-                    .lineToY(-46)
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(-44)
-                    .lineToX(-42)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(-42, -24, Math.toRadians(180)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(-52)
-                    .lineToX(-50)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(-46, -24, Math.toRadians(180)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(-60)
-                    .lineToX(-58)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .build());
-        }
-        if (autoSide == "right" && autoType == "sample") {
-            Actions.runBlocking(
-                    drive.actionBuilder(beginPose)
-                    .setTangent(135)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(39, -24, Math.toRadians(0)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(44)
-                    .lineToX(42)
-                    .setTangent(90)
-                    .lineToY(-30)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(44, -24, Math.toRadians(0)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(52)
-                    .lineToX(50)
-                    .setTangent(90)
-                    .lineToY(-30)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(48, -24, Math.toRadians(0)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(60)
-                    .lineToX(58)
-                    .setTangent(90)
-                    .lineToY(-30)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .build());
-        }
-        if (autoSide == "right" && autoType == "sample") {
-            Actions.runBlocking(
-                    drive.actionBuilder(beginPose)
-                    .splineToConstantHeading(new Vector2d(0, -36), Math.toRadians(90))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(37, -24, Math.toRadians(0)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(44)
-                    .lineToX(42)
-                    .setTangent(90)
-                    .lineToY(-30)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(42, -24, Math.toRadians(0)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(52)
-                    .lineToX(50)
-                    .setTangent(90)
-                    .lineToY(-30)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(46, -24, Math.toRadians(0)), Math.PI / 2)
-                    .setTangent(Math.PI / 1)
-                    .lineToX(60)
-                    .lineToX(58)
-                    .setTangent(90)
-                    .lineToY(-30)
-                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                    .build());
-        }
+            ));
 
 
-        else {
+
+
+
+
+        } else {
             throw new RuntimeException();
         }
     }
