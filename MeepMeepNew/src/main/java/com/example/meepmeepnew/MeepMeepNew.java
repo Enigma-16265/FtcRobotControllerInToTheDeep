@@ -140,6 +140,33 @@ public class MeepMeepNew {
                     .splineToLinearHeading(leftBasket, Math.toRadians(235))
                     .build());
         }
+        myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+                .setTangent(135)
+                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                //.addDisplacementMarker(() -> {
+                //  // This marker runs after the first splineTo()
+
+                // Run your action in here!
+                //})
+                .setTangent(90)
+                .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
+                .setTangent(Math.PI / 1)
+                .lineToX(-44)
+                .lineToX(-42)
+                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(-42, -24, Math.toRadians(180)), Math.PI / 2)
+                .setTangent(Math.PI / 1)
+                .lineToX(-52)
+                .lineToX(-50)
+                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                .setTangent(0)
+                .splineToLinearHeading(new Pose2d(-46, -24, Math.toRadians(180)), Math.PI / 2)
+                .setTangent(Math.PI / 1)
+                .lineToX(-60)
+                .lineToX(-58)
+                .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
