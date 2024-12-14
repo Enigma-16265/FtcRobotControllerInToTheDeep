@@ -15,7 +15,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
     //not objects
     private double last_time_a_pressed;
     private boolean currently_spinning = false;
-    private int cycle_number = 20;
+    private int cycle_number = 13;
 
     // constructor initializes the wheels and does some stuff with direction of wheels
     public DeepDriveCode(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
@@ -92,7 +92,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
                 //reset variables so previous code can be repeated
                 currently_spinning = false;
-                cycle_number = 20;
+                cycle_number = 13;
             }
         }
     }
