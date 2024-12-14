@@ -60,7 +60,7 @@ public class DeepOpMode extends LinearOpMode {
         // Prepare Drive Code
         DeepDriveCode wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
-        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
+        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad2);
 
         initialize();
 
@@ -94,6 +94,7 @@ public class DeepOpMode extends LinearOpMode {
         }
     }
 
+    // puts position of all servos on screen
     private void whatServoAt() {
         telemetry.addData("slideLeft    = ", hardwareMap.get(Servo.class,"slideLeft").getPosition());
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
