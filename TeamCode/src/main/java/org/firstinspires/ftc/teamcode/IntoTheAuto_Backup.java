@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Link;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -11,12 +11,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
-import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
 
 @Autonomous(name = "IntoTheAuto")
-public final class IntoTheAuto extends LinearOpMode {
+public final class IntoTheAuto_Backup extends LinearOpMode {
 
     //private DcMotor leftDrive   = null;
     //private DcMotor         rightDrive  = null;
