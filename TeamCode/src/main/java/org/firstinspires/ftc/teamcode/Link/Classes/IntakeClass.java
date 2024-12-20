@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.Link.Classes;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 /** @noinspection PointlessBooleanExpression*/
@@ -23,23 +28,35 @@ public class IntakeClass {
         TRANSFERRING,
         CLOSING_LID
     }
+    enum colorSensorReturns {
+        NOT_IN_INTAKE,
+        RED,
+        BLUE,
+        YELLOW,
+        OTHER
+    }
 
     private final Gamepad gamepad2;
     private final HardwareMap hardwareMap;
 
 
-    // hardware variables
-    Servo intakePivot;
-    Servo slideLeft;
-    Servo slideRight;
+    ElapsedTime Runtime = new ElapsedTime();
+
     Servo outtakeLeft;
     Servo outtakeRight;
-    Servo lid;
-    CRServo intake;
-    DcMotor dcmotor;
-    Servo specimenServo;
+    Servo slideLeft;
+    Servo slideRight;
+    DcMotor leftLift;
+    DcMotor rightLift;
+    //CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
-    ElapsedTime Runtime = new ElapsedTime();
+    CRServo intakeLeft;
+    CRServo intakeRight;
+    Servo wristLeft;
+    Servo wristRight;
+    Servo claw;
+
+    RevColorSensorV3 colorSensor;
 
     // lots of usage variables
     double triggerThreshold = 0.4;
@@ -59,26 +76,42 @@ public class IntakeClass {
     public boolean transferRequested = false;
     public boolean transferInProgress = false;
 
+    private double redDetection = 0.0;
+    private double greenDetection = 0.0;
+    private double blueDetection = 0.0;
+
     double transferTime = 0;
 
     double wrist_rotation_speed = 0.05;
 
     public static double extendoOffset = 0.05;
+    private double intakeWristThreshold = 0.4;
+
+    String team = "red";
 
 
     transferringStates transferState = transferringStates.IDLE;
+    colorSensorReturns CSReturn = colorSensorReturns.NOT_IN_INTAKE;
 
 
     // constructor
     public IntakeClass(@NonNull HardwareMap hardwareMap, Gamepad gamepad2) {
         // instantiate variables
-        slideLeft = hardwareMap.get(Servo.class, "slideLeft");
-        slideRight = hardwareMap.get(Servo.class, "slideRight");
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
-        lid = hardwareMap.get(Servo.class, "lid");
-        intake = hardwareMap.get(CRServo.class, "intake");
-        intakePivot = hardwareMap.get(Servo.class, "intakePivot");
+        slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        slideRight = hardwareMap.get(Servo.class, "slideRight");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        //CRServo intake = hardwareMap.get(CRServo.class, "intake");
+
+        intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+        wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+        wristRight = hardwareMap.get(Servo.class,"wristLeft");
+        claw = hardwareMap.get(Servo.class, "claw");
+
+        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
         /*
         outtakeRight.setDirection(Servo.Direction.REVERSE);
         slideLeft.setDirection(Servo.Direction.REVERSE);
@@ -125,18 +158,35 @@ public class IntakeClass {
 
         //Set Power based on logic
         if (intakeToggle == true && spitToggle == false) {
-            intake.setPower(1);
+            intakeLeft.setPower(1);
+            intakeRight.setPower(1);
         }
         if (intakeToggle == false && spitToggle == true) {
-            intake.setPower(-0.8);
+            intakeLeft.setPower(-0.8);
+            intakeRight.setPower(0.8);
         }
         if (intakeToggle == false && spitToggle == false) {
-            intake.setPower(0);
+            intakeLeft.setPower(0);
+            intakeRight.setPower(0);
+
+            if (team == "red") {
+                //If robot has sample
+                if (colorDetection() == colorSensorReturns.BLUE && colorSensor.getDistance(DistanceUnit.INCH) < 3) {
+                    intakeRight.setPower(-1);
+                }
+            }
+            if (team == "blue") {
+                //If robot has sample
+                if (colorDetection() == colorSensorReturns.RED && colorSensor.getDistance(DistanceUnit.INCH) < 3) {
+                    intakeRight.setPower(-1);
+                }
+            }
         }
 
         //Safety
         if (spitToggle == true && intakeToggle == true) {
-            intake.setPower(1);
+            intakeLeft.setPower(1);
+            intakeRight.setPower(1);
         }
 
 
@@ -167,16 +217,43 @@ public class IntakeClass {
 
      */
 
+    private Enum<colorSensorReturns> colorDetection() {
+        if (wristLeft.getPosition() > intakeWristThreshold && wristRight.getPosition() > intakeWristThreshold) {
+            redDetection = 0.0; //Add the actual value
+            greenDetection = 0.0; //Add the actual value
+            blueDetection = 0.0; //Add the actual value
+
+            if (redDetection > (greenDetection + blueDetection)) {
+                CSReturn = colorSensorReturns.RED;
+            }
+            if (((redDetection + greenDetection) - blueDetection) > 128) {
+                CSReturn = colorSensorReturns.YELLOW;
+            }
+            if (blueDetection > (redDetection + greenDetection)) {
+                CSReturn = colorSensorReturns.BLUE;
+            }
+            else {
+                CSReturn = colorSensorReturns.OTHER;
+            }
+        }
+        else {
+            CSReturn = colorSensorReturns.NOT_IN_INTAKE;
+        }
+        return CSReturn;
+    }
+
 
 
 
     // control rotation of the wrist
     private void wristRotation() {
         if (gamepad2.right_bumper && gamepad2.left_bumper == false) {
-            SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()+wrist_rotation_speed);
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", wristLeft.getPosition()+wrist_rotation_speed);
+            SmartServo.setSmartPos(hardwareMap,"wristRight", wristRight.getPosition()+wrist_rotation_speed);
         }
         else if (gamepad2.left_bumper && gamepad2.right_bumper == false) {
-            SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()-wrist_rotation_speed);
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", wristLeft.getPosition()-wrist_rotation_speed);
+            SmartServo.setSmartPos(hardwareMap,"wristRight", wristRight.getPosition()-wrist_rotation_speed);
         }
     }
 
@@ -367,7 +444,7 @@ public class IntakeClass {
 
     // returns whether or not the wrist is down obv
     public boolean isWristDown() {
-        return intakePivot.getPosition() >= 0.4;
+        return wristLeft.getPosition() >= 0.4;
     }
 
 

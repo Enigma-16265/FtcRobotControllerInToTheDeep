@@ -106,18 +106,26 @@ public class DeepOpMode extends LinearOpMode {
     }
 
     private void initialize() {
-        Servo lid = hardwareMap.get(Servo.class, "lid");
+        //Servo lid = hardwareMap.get(Servo.class, "lid");
+        Servo outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+        Servo outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-        CRServo intake = hardwareMap.get(CRServo.class, "intake");
+        //CRServo intake = hardwareMap.get(CRServo.class, "intake");
+
+        CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        CRServo rightLeft = hardwareMap.get(CRServo.class, "rightLeft");
+        Servo wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+        Servo wristRight = hardwareMap.get(Servo.class,"wristLeft");
+        Servo claw = hardwareMap.get(Servo.class, "claw");
 
 
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
-        lid.setDirection(Servo.Direction.REVERSE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        //lid.setDirection(Servo.Direction.REVERSE);
+        //intake.setDirection(DcMotorSimple.Direction.REVERSE);
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
