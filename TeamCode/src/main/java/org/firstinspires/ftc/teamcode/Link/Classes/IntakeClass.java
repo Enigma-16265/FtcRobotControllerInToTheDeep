@@ -219,9 +219,9 @@ public class IntakeClass {
 
     private Enum<colorSensorReturns> colorDetection() {
         if (wristLeft.getPosition() > intakeWristThreshold && wristRight.getPosition() > intakeWristThreshold) {
-            redDetection = 0.0; //Add the actual value
-            greenDetection = 0.0; //Add the actual value
-            blueDetection = 0.0; //Add the actual value
+            redDetection = colorSensor.red(); //Add the actual value
+            greenDetection = colorSensor.green(); //Add the actual value
+            blueDetection = colorSensor.blue(); //Add the actual value
 
             if (redDetection > (greenDetection + blueDetection)) {
                 CSReturn = colorSensorReturns.RED;
