@@ -53,6 +53,7 @@ public class DeepOuttake {
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
 
+
         // reverse necessary motor
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -70,11 +71,11 @@ public class DeepOuttake {
             if (lidToggle == false) {
                 previousDropSignal = true;
                 lidToggle = true;
-                SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+                //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
             }
             if (lidToggle == true && yWasPressed == false && previousDropSignal == true) {
                 lidToggle = false;
-                SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
+                //SmartServo.setSmartPos(hardwareMap,"lid", 0.1);
             }
             previousDropSignal = false;
         }
@@ -116,33 +117,33 @@ public class DeepOuttake {
     private void nextOuttakeStep() {
         if (step == outtakeSteps.CLOSE) {
             // close lid, move to next step
-            SmartServo.setSmartPos(hardwareMap,"lid", 0);
+            //SmartServo.setSmartPos(hardwareMap,"lid", 0);
             step = outtakeSteps.WRIST;
         }
         else if (step == outtakeSteps.WRIST) {
             // make sure lid is closed, turn wrist, move to next step
-            SmartServo.setSmartPos(hardwareMap,"lid", 0);
+            //SmartServo.setSmartPos(hardwareMap,"lid", 0);
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",1);
             step = outtakeSteps.RELEASE;
         }
         else if (step == outtakeSteps.RELEASE) {
             // open lid, move to next step
-            SmartServo.setSmartPos(hardwareMap,"lid",0.6);
+            //SmartServo.setSmartPos(hardwareMap,"lid",0.6);
             step = outtakeSteps.RETURN;
         }
         else if (step == outtakeSteps.RETURN) {
             // return to transfer position
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0);
-            SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+            //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
             step = outtakeSteps.CLOSE;
         }
     }
 
     public void runSequence() throws InterruptedException {
         // close lid, move to next step
-        SmartServo.setSmartPos(hardwareMap,"lid", 0);
+        //SmartServo.setSmartPos(hardwareMap,"lid", 0);
         wait(500);
 
         // turn wrist, move to next step
@@ -151,12 +152,12 @@ public class DeepOuttake {
         wait(500);
 
         // open lid, move to next step
-        SmartServo.setSmartPos(hardwareMap,"lid",0.6);
+        //SmartServo.setSmartPos(hardwareMap,"lid",0.6);
         wait(1000);
 
         // return to transfer position
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0);
-        SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
     }
 }

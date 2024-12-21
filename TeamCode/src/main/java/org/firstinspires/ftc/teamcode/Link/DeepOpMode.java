@@ -49,9 +49,35 @@ import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
  * If you make new code for the deep robot, add it to this!
  */
 
+
+
+
+/* CLAW:
+ * open = 0.35
+ * closed = 0.75
+ *
+ * INTAKE:
+ * wrist = 0
+ *
+ * TRANSFER:
+ * wrist = 0.57
+ * outtake = 0.07
+ * claw = 0.9
+ *
+ * SAMPLE:
+ * outtake = 0.7
+ *
+ * SPECIMEN:
+ * wrist = 0.57
+ * outtake = 0.1678
+ * claw = 0.75
+ *
+ */
+
 @TeleOp(name="Deep Teleop", group="Robot")
 //@Disabled
-public class DeepOpMode extends LinearOpMode {
+public class
+DeepOpMode extends LinearOpMode {
 
 
     @Override
@@ -100,8 +126,8 @@ public class DeepOpMode extends LinearOpMode {
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
         telemetry.addData("outtakeLeft  = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
-        telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
-        telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
+        //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
+        //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
     }
 
@@ -116,17 +142,20 @@ public class DeepOpMode extends LinearOpMode {
         //CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
         CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
-        CRServo rightLeft = hardwareMap.get(CRServo.class, "rightLeft");
+        CRServo intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
         Servo wristLeft = hardwareMap.get(Servo.class,"wristLeft");
         Servo wristRight = hardwareMap.get(Servo.class,"wristLeft");
         Servo claw = hardwareMap.get(Servo.class, "claw");
 
 
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
-        //lid.setDirection(Servo.Direction.REVERSE);
-        //intake.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.REVERSE);
+        intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -140,6 +169,6 @@ public class DeepOpMode extends LinearOpMode {
         //SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.3278);
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
-        SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
     }
 }
