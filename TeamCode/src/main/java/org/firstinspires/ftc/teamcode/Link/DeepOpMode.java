@@ -74,7 +74,7 @@ import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
  *
  */
 
-@TeleOp(name="Deep Teleop", group="Robot")
+@TeleOp(name="! Deep Teleop", group="Robot")
 //@Disabled
 public class
 DeepOpMode extends LinearOpMode {
@@ -86,7 +86,7 @@ DeepOpMode extends LinearOpMode {
         // Prepare Drive Code
         DeepDriveCode wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
-        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad2);
+        IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
         initialize();
 
