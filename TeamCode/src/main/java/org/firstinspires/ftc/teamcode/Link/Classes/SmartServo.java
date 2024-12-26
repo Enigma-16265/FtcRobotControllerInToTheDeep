@@ -26,13 +26,14 @@ public class SmartServo {
         if(!isInitialized) {
             isInitialized = true;
 
-            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.05, 0.55));
-            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.0, 0.5));
-            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0.1483, 0.85)); //Arm btw
-            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0.1483, 0.85)); //Init .51
-            constraintsForEachServo.put("lid", new SingleServoConstraints(0.28, 0.63));
-            constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.75)); //.75
-            constraintsForEachServo.put("intakePivot", new SingleServoConstraints(0.3278, 0.73));
+            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.0, 0.3506));
+            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.0, 0.3506));
+            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0, 0.9478)); //Arm btw
+            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0, 0.9478)); //Init .51
+            constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.075)); //.75
+            constraintsForEachServo.put("wristLeft", new SingleServoConstraints(0, 0.75));
+            constraintsForEachServo.put("wristRight", new SingleServoConstraints(0, 0.75));
+            constraintsForEachServo.put("claw", new SingleServoConstraints(0.35, 0.75));
         }
     }
 

@@ -16,9 +16,11 @@ public class McFishFillet extends LinearOpMode {
     Servo slideRight;
     Servo outtakeLeft;
     Servo outtakeRight;
-    Servo lid;
-    Servo intakePivot;
-    CRServo intake;
+    Servo claw;
+    CRServo intakeLeft;
+    CRServo intakeRight;
+    Servo wristLeft;
+    Servo wristRight;
     DcMotor rightLift;
     DcMotor leftLift;
 
@@ -44,7 +46,7 @@ public class McFishFillet extends LinearOpMode {
     private void masterTuner() {
         if (gamepad1.left_bumper) {
             if (which == ServoTypes.LID) {
-                lid.setPosition(lid.getPosition() - speedAmount);
+                claw.setPosition(claw.getPosition() - speedAmount);
             }
             else if (which == ServoTypes.SLIDE) {
                 slideRight.setPosition(slideRight.getPosition() - speedAmount);
@@ -55,7 +57,8 @@ public class McFishFillet extends LinearOpMode {
                 outtakeRight.setPosition(outtakeRight.getPosition() - speedAmount);
             }
             else if (which == ServoTypes.INTAKEPIVOT) {
-                intakePivot.setPosition(intakePivot.getPosition() - speedAmount);
+                wristLeft.setPosition(wristLeft.getPosition() - speedAmount);
+                wristRight.setPosition(wristRight.getPosition() - speedAmount);
             }
             else if (which == ServoTypes.INTAKE) {
                 //intake.setPosition(intake.getPosition() - speedAmount);
@@ -68,7 +71,7 @@ public class McFishFillet extends LinearOpMode {
         }
         else if (gamepad1.right_bumper) {
             if (which == ServoTypes.LID) {
-                lid.setPosition(lid.getPosition() + speedAmount);
+                claw.setPosition(claw.getPosition() + speedAmount);
             }
             else if (which == ServoTypes.SLIDE) {
                 slideRight.setPosition(slideRight.getPosition() + speedAmount);
@@ -79,7 +82,8 @@ public class McFishFillet extends LinearOpMode {
                 outtakeRight.setPosition(outtakeRight.getPosition() + speedAmount);
             }
             else if (which == ServoTypes.INTAKEPIVOT) {
-                intakePivot.setPosition(intakePivot.getPosition() + speedAmount);
+                wristLeft.setPosition(wristLeft.getPosition() + speedAmount);
+                wristRight.setPosition(wristRight.getPosition() + speedAmount);
             }
             else if (which == ServoTypes.INTAKE) {
                 //intake.setPosition(intake.getPosition() + speedAmount);
@@ -119,6 +123,20 @@ public class McFishFillet extends LinearOpMode {
             which = ServoTypes.INTAKEPIVOT;
         }
     }
+    private void scuffedIntake() {
+        if (gamepad2.left_stick_button) {
+            intakeLeft.setPower(1);
+            intakeRight.setPower(1);
+        }
+        if (gamepad2.right_stick_button) {
+            intakeRight.setPower(-1);
+            intakeLeft.setPower(-1);
+        }
+        if (!gamepad2.right_stick_button && !gamepad2.left_stick_button || gamepad2.right_stick_button && gamepad2.left_stick_button) {
+            intakeLeft.setPower(0);
+            intakeRight.setPower(0);
+        }
+    }
 
     //TODO: Step 7, your done! This was written by Goober on 11/5/23 slouching in a chair at 10:35 in the morning.
     // And as I'm writing this I wonder if anybody will actually use this. Problably not,
@@ -127,12 +145,13 @@ public class McFishFillet extends LinearOpMode {
 
     //TODO: Step 6 replace all of the xyz.getPosition()0; with your servos and replace "xyz" with what that servo is
     private void whatServoAt() {
-        telemetry.addData("lid (Y) = ", lid.getPosition());
+        telemetry.addData("claw (Y) = ", claw.getPosition());
         telemetry.addData("slideRight (X) = ", slideRight.getPosition());
         telemetry.addData("outtakeLeft (B) = ", outtakeLeft.getPosition());
         telemetry.addData("outtakeRight (B) = ", outtakeRight.getPosition());
         telemetry.addData("slideLeft (X) = ", slideLeft.getPosition());
-        telemetry.addData("intakePivot (Dpad R)= ", intakePivot.getPosition());
+        telemetry.addData("wrist (Dpad R)= ", wristLeft.getPosition());
+        telemetry.addData("alvin and the chipmuks", 0);
         //telemetry.addData("intake (Dpad L)= ", intake.getPosition());
     }
 
@@ -147,24 +166,32 @@ public class McFishFillet extends LinearOpMode {
         slideRight = hardwareMap.get(Servo.class, "slideRight");
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
-        lid = hardwareMap.get(Servo.class, "lid");
-        intake = hardwareMap.get(CRServo.class, "intake");
-        intakePivot = hardwareMap.get(Servo.class, "intakePivot");
+        claw = hardwareMap.get(Servo.class, "claw");
+        //intake = hardwareMap.get(CRServo.class, "intake");
+        wristLeft = hardwareMap.get(Servo.class, "wristLeft");
+        wristRight = hardwareMap.get(Servo.class, "wristRight");
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+
+        intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
 
         //sets direction to reverse
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
-        lid.setDirection(Servo.Direction.REVERSE);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.REVERSE);
+        intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //
+        //
+        // intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0);
         SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
-        SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.44);
+        SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.44);
+        SmartServo.setSmartPos(hardwareMap,"wristRight", 0.44);
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
-        SmartServo.setSmartPos(hardwareMap,"lid", 0.0);
+        SmartServo.setSmartPos(hardwareMap,"claw", 0.0);
 
 
         telemetry.update();
@@ -177,6 +204,7 @@ public class McFishFillet extends LinearOpMode {
             whatServoAt();
             //telemetry.addData("Selected", which.toString());
             //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");
+            scuffedIntake();
             telemetry.update();
             sleep(100);
             idle();
