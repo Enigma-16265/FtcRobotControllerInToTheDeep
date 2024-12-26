@@ -10,7 +10,7 @@ import org.opencv.core.RotatedRect;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "Concept: Test", group = "Concept")
+@Autonomous(name = "Concept: Test", group = "Teleop")
 public class IntakeClaw extends ColorLocator_LoraleiButEditedToWorkForIntakeClaw {
     RosesMcMuffinClass movement = new RosesMcMuffinClass(hardwareMap, gamepad1);
 

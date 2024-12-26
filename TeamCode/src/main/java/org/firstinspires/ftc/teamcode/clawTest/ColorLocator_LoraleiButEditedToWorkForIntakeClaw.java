@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.clawTest;
 import android.annotation.SuppressLint;
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,7 +17,7 @@ import org.opencv.core.RotatedRect;
 
 import java.util.Arrays;
 import java.util.List;
-
+@Autonomous(name = "LocatorTest", group = "Teleop")
 public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMode {
     public VisionPortal portal;
     public Point[] myBoxCorners = new Point[4];
