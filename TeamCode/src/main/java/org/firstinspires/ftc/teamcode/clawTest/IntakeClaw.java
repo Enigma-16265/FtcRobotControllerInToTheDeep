@@ -23,5 +23,6 @@ public class IntakeClaw extends ColorLocator_LoraleiButEditedToWorkForIntakeClaw
         double disthypot = Math.pow(xdist,2) + Math.pow(ydist,2);
         double angle = Math.acos((ydist)/(Math.sqrt(disthypot)));
         //whatever servo you're using .setPosition(angle + expirimental modifier)
+
     }
 }
