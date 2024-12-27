@@ -21,6 +21,8 @@ import java.util.List;
 public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMode {
     public VisionPortal portal;
     public Point[] myBoxCorners = new Point[4];
+    public double centerX;
+    public double centerY;
     public ColorBlobLocatorProcessor colorLocator;
     public void Setup(){
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
@@ -138,6 +140,8 @@ public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMo
             // clockwise from top left corner.
             boxFit.points(myBoxCorners);
             telemetry.addLine(Arrays.toString(myBoxCorners));
+            centerX = boxFit.center.x;
+            centerY = boxFit.center.y;
         }
         telemetry.update();
         sleep(50);
