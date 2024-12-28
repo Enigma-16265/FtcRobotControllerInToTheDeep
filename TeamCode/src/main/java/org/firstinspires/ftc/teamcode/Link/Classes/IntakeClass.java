@@ -2,12 +2,16 @@ package org.firstinspires.ftc.teamcode.Link.Classes;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 /** @noinspection PointlessBooleanExpression*/
@@ -16,30 +20,46 @@ public class IntakeClass {
     // variables
     enum transferringStates {
         IDLE,
-        MOVING_LIFT,
-        RETRACTING_WRIST,
-        OPENING_LID,
-        MOVING_EXTENDO,
-        TRANSFERRING,
-        CLOSING_LID
+        OPENING_AND_MOVING_SERVOS,
+        RETRACTING_EXTENDO,
+        CLOSING_CLAW,
+        MAIN_TRANSFER,
+        FINISH
+    }
+    enum colorSensorReturns {
+        NOT_IN_INTAKE,
+        RED,
+        BLUE,
+        YELLOW,
+        OTHER
+    }
+    enum clawStates {
+        OPEN,
+        CLOSE
     }
 
     private final Gamepad gamepad2;
+    private final Gamepad gamepad1;
     private final HardwareMap hardwareMap;
 
 
-    // hardware variables
-    Servo intakePivot;
-    Servo slideLeft;
-    Servo slideRight;
+    ElapsedTime Runtime = new ElapsedTime();
+
     Servo outtakeLeft;
     Servo outtakeRight;
-    Servo lid;
-    CRServo intake;
-    DcMotor dcmotor;
-    Servo specimenServo;
+    Servo slideLeft;
+    Servo slideRight;
+    DcMotor leftLift;
+    DcMotor rightLift;
+    //CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
-    ElapsedTime Runtime = new ElapsedTime();
+    CRServo intakeLeft;
+    CRServo intakeRight;
+    Servo wristLeft;
+    Servo wristRight;
+    Servo claw;
+
+    RevColorSensorV3 colorSensor;
 
     // lots of usage variables
     double triggerThreshold = 0.4;
@@ -55,30 +75,55 @@ public class IntakeClass {
     boolean gamepad2_b_OAD = false;
     boolean gamepad2_b_LU = false;
     boolean gamepad2_b_release_OAD = false;
+    boolean gamepad2_a_LU = false;
 
     public boolean transferRequested = false;
     public boolean transferInProgress = false;
 
-    double transferTime = 0;
+    private double redDetection = 0.0;
+    private double greenDetection = 0.0;
+    private double blueDetection = 0.0;
+
+    int transferTime = 0;
 
     double wrist_rotation_speed = 0.05;
 
     public static double extendoOffset = 0.05;
+    private double intakeWristThreshold = 0.4;
+
+
+    String team = "red";
 
 
     transferringStates transferState = transferringStates.IDLE;
+    colorSensorReturns CSReturn = colorSensorReturns.NOT_IN_INTAKE;
+    clawStates clawState = clawStates.OPEN;
 
 
     // constructor
-    public IntakeClass(@NonNull HardwareMap hardwareMap, Gamepad gamepad2) {
+    public IntakeClass(@NonNull HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         // instantiate variables
-        slideLeft = hardwareMap.get(Servo.class, "slideLeft");
-        slideRight = hardwareMap.get(Servo.class, "slideRight");
         outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
-        lid = hardwareMap.get(Servo.class, "lid");
-        intake = hardwareMap.get(CRServo.class, "intake");
-        intakePivot = hardwareMap.get(Servo.class, "intakePivot");
+        slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        slideRight = hardwareMap.get(Servo.class, "slideRight");
+        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        //CRServo intake = hardwareMap.get(CRServo.class, "intake");
+
+        intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+        wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+        wristRight = hardwareMap.get(Servo.class,"wristLeft");
+        claw = hardwareMap.get(Servo.class, "claw");
+
+
+        slideLeft.setDirection(Servo.Direction.REVERSE);
+        slideRight.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.REVERSE);
+        intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
         /*
         outtakeRight.setDirection(Servo.Direction.REVERSE);
         slideLeft.setDirection(Servo.Direction.REVERSE);
@@ -88,6 +133,7 @@ public class IntakeClass {
         //dcmotor.setTargetPosition(1);
         this.hardwareMap = hardwareMap;
         this.gamepad2 = gamepad2;
+        this.gamepad1 = gamepad1;
     }
 
     // handle intake functions
@@ -125,18 +171,37 @@ public class IntakeClass {
 
         //Set Power based on logic
         if (intakeToggle == true && spitToggle == false) {
-            intake.setPower(1);
+            intakeLeft.setPower(1);
+            intakeRight.setPower(1);
         }
         if (intakeToggle == false && spitToggle == true) {
-            intake.setPower(-0.8);
+            intakeLeft.setPower(-0.8);
+            intakeRight.setPower(-0.8);
         }
         if (intakeToggle == false && spitToggle == false) {
-            intake.setPower(0);
+            intakeLeft.setPower(0);
+            intakeRight.setPower(0);
+
+            if (team.equals("red")) {
+                //If robot has sample
+                if (colorDetection() == colorSensorReturns.BLUE) {
+                    intakeRight.setPower(-1);
+                    intakeLeft.setPower(-1);
+                }
+            }
+            if (team.equals("blue")) {
+                //If robot has sample
+                if (colorDetection() == colorSensorReturns.RED) {
+                    intakeRight.setPower(-1);
+                    intakeLeft.setPower(-1);
+                }
+            }
         }
 
         //Safety
         if (spitToggle == true && intakeToggle == true) {
-            intake.setPower(1);
+            intakeLeft.setPower(1);
+            intakeRight.setPower(1);
         }
 
 
@@ -167,16 +232,63 @@ public class IntakeClass {
 
      */
 
+    private Enum<colorSensorReturns> colorDetection() {
+        if (wristLeft.getPosition() > intakeWristThreshold && wristRight.getPosition() > intakeWristThreshold) {
+            redDetection = colorSensor.red(); //Add the actual value
+            greenDetection = colorSensor.green(); //Add the actual value
+            blueDetection = colorSensor.blue(); //Add the actual value
+
+            if (redDetection > (greenDetection + blueDetection)) {
+                CSReturn = colorSensorReturns.RED;
+            }
+            if (((redDetection + greenDetection) - blueDetection) > 128) {
+                CSReturn = colorSensorReturns.YELLOW;
+            }
+            if (blueDetection > (redDetection + greenDetection)) {
+                CSReturn = colorSensorReturns.BLUE;
+            }
+            else {
+                CSReturn = colorSensorReturns.OTHER;
+            }
+        }
+        else {
+            CSReturn = colorSensorReturns.NOT_IN_INTAKE;
+        }
+        return CSReturn;
+    }
+
+    private void specimenPosHandler() {
+        if (gamepad1.left_bumper) {
+            specimenIntakePos();
+        }
+        if (gamepad1.right_bumper) {
+            specimenOuttakePos();
+        }
+    }
+
+    private void specimenIntakePos() {
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.95);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.95);
+    }
+    private void specimenOuttakePos() {
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1678);
+        SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
+        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
+    }
+
 
 
 
     // control rotation of the wrist
     private void wristRotation() {
-        if (gamepad2.right_bumper && gamepad2.left_bumper == false) {
-            SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()+wrist_rotation_speed);
+        if (gamepad2.left_bumper && gamepad2.right_bumper == false) {
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
+            SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
         }
-        else if (gamepad2.left_bumper && gamepad2.right_bumper == false) {
-            SmartServo.setSmartPos(hardwareMap,"intakePivot", intakePivot.getPosition()-wrist_rotation_speed);
+        else if (gamepad2.right_bumper && gamepad2.left_bumper == false) {
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0);
+            SmartServo.setSmartPos(hardwareMap,"wristRight", 0);
         }
     }
 
@@ -241,78 +353,69 @@ public class IntakeClass {
 
     // control the sequence for transferring from intake to outtake
     private void transferSequence() {
-
-
-
-        // check to see if currently transferring
+        if (gamepad2.b && !transferRequested) {
+            transferRequested = true;
+        }
         if (transferRequested || transferInProgress) {
             transferRequested = false;
-
-            // if transfer is idle (what its set to at the start)
+            transferInProgress = true;
+            /*
+            IDLE,
+        OPENING_AND_MOVING_SERVOS,
+        RETRACTING_EXTENDO,
+        CLOSING_CLAW,
+        MAIN_TRANSFER,
+        FINISH
+             */
             if (transferState == transferringStates.IDLE) {
-                transferInProgress = true;
-                transferState = transferringStates.MOVING_LIFT;
+                transferState = transferringStates.OPENING_AND_MOVING_SERVOS;
             }
-            // if transfer is moving lift
-            if (transferState == transferringStates.MOVING_LIFT) {
-                transferTime = Runtime.seconds();
-                //TODO: Add lift control
+            if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
-                // wait until lift is down
-                if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferringStates.RETRACTING_WRIST;
+                openClaw();
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.06);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.06);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
+
+                transferState = transferringStates.RETRACTING_EXTENDO;
+                transferTime = 0;
+            }
+            if (transferState == transferringStates.RETRACTING_EXTENDO) {
+                if (transferTime >= 12) {
+                    SmartServo.setSmartPos(hardwareMap,"slideLeft", 0 + extendoOffset);
+                    SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
+                    transferState = transferringStates.CLOSING_CLAW;
+                    transferTime = 0;
+                }
+                else {
+                    transferTime += 1;
                 }
             }
-            // if transfer is retracting wrist
-            if (transferState == transferringStates.RETRACTING_WRIST) {
-                transferTime = Runtime.seconds();
-
-                SmartServo.setSmartPos(hardwareMap,"intakePivot",0.5);
-
-                // wait
-                if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferringStates.OPENING_LID;
+            if (transferState == transferringStates.CLOSING_CLAW) {
+                if (transferTime >= 10) {
+                    closeClaw();
+                    transferState = transferringStates.MAIN_TRANSFER;
+                    transferTime = 0;
+                }
+                else {
+                    transferTime += 1;
                 }
             }
-            // if transfer is opening lid
-            if (transferState == transferringStates.OPENING_LID) {
-                SmartServo.setSmartPos(hardwareMap, "lid", 0.6);
-
-                transferTime = Runtime.seconds();
-
-                // wait
-                if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferringStates.MOVING_EXTENDO;
+            if (transferState == transferringStates.MAIN_TRANSFER) {
+                if (transferTime >= 20) {
+                    intakeLeft.setPower(-1);
+                    intakeRight.setPower(-1);
+                    SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.7);
+                    SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.7);
+                    transferState = transferringStates.FINISH;
+                    transferTime = 0;
+                }
+                else {
+                    transferTime += 1;
                 }
             }
-            // if transfer is moving extendo in
-            if (transferState == transferringStates.MOVING_EXTENDO) {
-                transferTime = Runtime.seconds();
-
-                SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
-                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0 + extendoOffset);
-                // wait
-                if (Runtime.seconds() - transferTime >= 1) {
-                    transferState = transferringStates.TRANSFERRING;
-                }
-            }
-            // if transfer is moving sample to outtake
-            if (transferState == transferringStates.TRANSFERRING) {
-                transferTime = Runtime.seconds();
-                //Set CRSERVO Power to 1
-                if (Runtime.seconds() - transferTime >= 3) {
-                    //Set CRServo Power to 0
-                    transferState = transferringStates.CLOSING_LID;
-                }
-            }
-            // if transfer is closing lid
-            if (transferState == transferringStates.CLOSING_LID) {
-                transferTime = Runtime.seconds();
-
-                if (Runtime.seconds() - transferTime >= 0.5) {
-                    transferState = transferringStates.TRANSFERRING;
-                }
-                // set back to idle
+            if (transferState == transferringStates.FINISH) {
                 transferInProgress = false;
                 transferState = transferringStates.IDLE;
             }
@@ -330,10 +433,10 @@ public class IntakeClass {
 
             SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.0 + extendoOffset);
             SmartServo.setSmartPos(hardwareMap,"slideRight", 0.0);
-            SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.3278);
+            //SmartServo.setSmartPos(hardwareMap,"intakePivot", 0.3278);
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
-            SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+            //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
         }
         bWasPressed = gamepad2.b;
     }
@@ -349,32 +452,59 @@ public class IntakeClass {
     }
 
     // should this be called in runIntake? is anything else using x?
-    private void closeLid() {
-        if (gamepad2.x) {
-            SmartServo.setSmartPos(hardwareMap, "lid", 0.1);
+    private void toggleClaw() {
+        clawStates currectClawState = clawState;
+        if (currectClawState == clawStates.OPEN && gamepad2_y_LU == false && gamepad2.y) {
+            closeClaw();
+        }
+        if (currectClawState == clawStates.CLOSE && gamepad2_y_LU == false && gamepad2.y) {
+            openClaw();
         }
     }
 
-    // run all necessary functions for intake. This should be called in opMode
-    public void runIntake() {
-        returnToDefaultPos();
-        extendoHandler();
-        transferSequence();
-        oneAndDone();
-        wristRotation();
-        intakeHandling();
+    private void closeClaw() {
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.35);
+        clawState = clawStates.CLOSE;
     }
+    private void openClaw() {
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.75);
+        clawState = clawStates.OPEN;
+    }
+
+
+
+
 
     // returns whether or not the wrist is down obv
     public boolean isWristDown() {
-        return intakePivot.getPosition() >= 0.4;
+        return wristLeft.getPosition() >= 0.4;
     }
 
-
+    private void armPos() {
+        if (gamepad2.a && !gamepad2_a_LU) {
+            SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.06);
+            SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.06);
+        }
+    }
 
     private void oneAndDoneUpdate() {
         //Last Instance Update
         gamepad2_y_LU = gamepad2.y;
         gamepad2_b_LU = gamepad2.b;
+        gamepad2_a_LU = gamepad2.a;
+    }
+
+    // run all necessary functions for intake. This should be called in opMode
+    public void runIntake() {
+        //returnToDefaultPos();
+        extendoHandler();
+        transferSequence();
+        wristRotation();
+        intakeHandling();
+        specimenPosHandler();
+        toggleClaw();
+        armPos();
+
+        oneAndDone();
     }
 }
