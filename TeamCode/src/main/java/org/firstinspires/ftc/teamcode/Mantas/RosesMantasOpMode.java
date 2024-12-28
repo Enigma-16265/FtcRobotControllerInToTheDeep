@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControlsMantas;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.liftPositions;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 import org.firstinspires.ftc.teamcode.Mantas.FunStuffs.HappyDance;
@@ -55,10 +56,11 @@ public class RosesMantasOpMode extends LinearOpMode {
         // Define and initialize wheels and declare wheelCode
         DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
         RandomMovementControlsMantas spinCode = new RandomMovementControlsMantas(hardwareMap, gamepad1);
-        HappyDance dance = new HappyDance(hardwareMap, gamepad1);
+        //HappyDance dance = new HappyDance(hardwareMap, gamepad1);
+        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
-        GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
+        //GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
 
@@ -80,7 +82,8 @@ public class RosesMantasOpMode extends LinearOpMode {
             //    armCode.grab();
            // }
            spinCode.spinAroundFunction();
-           dance.doHappyDance();
+           //dance.doHappyDance();
+           liftcode.makeLiftsWork();
 
             // Send telemetry message to signify robot running
             whatServoAt();
