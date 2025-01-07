@@ -28,8 +28,8 @@ public class SmartServo {
 
             constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.0, 0.3506));
             constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.0, 0.3506));
-            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0, 0.9478)); //Arm btw
-            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0, 0.9478)); //Init .51
+            constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0, 1)); //Arm btw
+            constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0, 1)); //Init .51
             constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.075)); //.75
             constraintsForEachServo.put("wristLeft", new SingleServoConstraints(0, 0.75));
             constraintsForEachServo.put("wristRight", new SingleServoConstraints(0, 0.75));
