@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.Link.Classes.DeepOuttake;
 import org.firstinspires.ftc.teamcode.Link.Classes.DeepDriveCode;
 import org.firstinspires.ftc.teamcode.Link.Classes.IntakeClass;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 
 /*
  * This code calls other classes and runs their code
@@ -126,6 +127,7 @@ DeepOpMode extends LinearOpMode {
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
         telemetry.addData("outtakeLeft  = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
+        telemetry.addData("driverMotorPower", hardwareMap.get(DcMotor.class, "rightFront").getPower());
         //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);

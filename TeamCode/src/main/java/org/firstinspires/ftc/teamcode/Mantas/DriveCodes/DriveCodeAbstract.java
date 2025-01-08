@@ -14,7 +14,7 @@ public abstract class DriveCodeAbstract {
     public final DcMotor rightFrontDrive;
     public final DcMotor rightBackDrive;
 
-    public final double speed = 0.75;
+    public double speed = 0.75;
 
     public DriveCodeAbstract(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
 
