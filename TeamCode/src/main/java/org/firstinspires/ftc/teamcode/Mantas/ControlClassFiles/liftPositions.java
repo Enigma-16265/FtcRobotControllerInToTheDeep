@@ -3,13 +3,10 @@ package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
 import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-/*
- * turning the robot 180 degrees
- * and possibly other stuff later
- */
 
 public class liftPositions {
 
@@ -21,75 +18,144 @@ public class liftPositions {
     //not objects
     private double last_time_x_pressed;
     private double last_time_y_pressed;
-    enum liftStages{
+    private double last_time_dPadRight_pressed;
+    private double pauseTimeMillis;
+
+    enum liftStages {
         isFullyUp,
+        isInMiddle,
         isFullyDown,
         inactive
     }
-    private liftStages currently_lifting = liftStages.isFullyDown;
 
+    private liftStages currently_lifting = liftStages.isFullyDown;
     // constructor
     public liftPositions(HardwareMap hardwareMap, Gamepad gamePad) {
         //sets all the wheels to what they are in the hardware map
         rightLift = hardwareMap.get(DcMotor.class, "rightHang");
         leftLift = hardwareMap.get(DcMotor.class, "leftHang");
 
-        //says if each wheel should be backwards according to the hardware map or forwards
-        rightLift.setDirection(DcMotor.Direction.FORWARD);
-        leftLift.setDirection(DcMotor.Direction.FORWARD);
-
         this.gamePad = gamePad;
 
     }
 
-    // the function for spinning the robot 180 degrees
     public void makeLiftsWork() {
 
-        //if a was pressed do not let spinAroundFunction run for another second
-        if (gamePad.x && last_time_x_pressed + 1000 < System.currentTimeMillis() && currently_lifting != liftStages.isFullyUp) {
+        if (gamePad.x && last_time_x_pressed + 1000 < System.currentTimeMillis()) {
             last_time_x_pressed = System.currentTimeMillis();
+            rightLift.setDirection(DcMotor.Direction.FORWARD);
+            leftLift.setDirection(DcMotor.Direction.FORWARD);
+            pauseTimeMillis = System.currentTimeMillis();
 
-            rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            if (currently_lifting == liftStages.isFullyDown) {
 
-            //spin the robot 18 degrees
-            rightLift.setPower(1);
-            leftLift.setPower(1);
+                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            try {
-                sleep(2300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                    rightLift.setPower(1);
+                    leftLift.setPower(1);
+                }
+
+                rightLift.setPower(0);
+                leftLift.setPower(0);
+
+                currently_lifting = liftStages.isFullyUp;
             }
 
-            rightLift.setPower(0);
-            leftLift.setPower(0);
+            if (currently_lifting == liftStages.isInMiddle) {
 
-            //reset variables so previous code can be repeated
-            currently_lifting = liftStages.isFullyUp;
+                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                    rightLift.setPower(1);
+                    leftLift.setPower(1);
+                }
+
+                rightLift.setPower(0);
+                leftLift.setPower(0);
+
+                currently_lifting = liftStages.isFullyUp;
+            }
         }
 
-        if (gamePad.y && last_time_y_pressed + 1000 < System.currentTimeMillis() && currently_lifting != liftStages.isFullyDown) {
-            last_time_y_pressed = System.currentTimeMillis();
+        if (gamePad.dpad_right && last_time_dPadRight_pressed + 1000 < System.currentTimeMillis()) {
+            last_time_dPadRight_pressed = System.currentTimeMillis();
+            rightLift.setDirection(DcMotor.Direction.FORWARD);
+            leftLift.setDirection(DcMotor.Direction.FORWARD);
+            pauseTimeMillis = System.currentTimeMillis();
 
-            rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            if (currently_lifting == liftStages.isFullyDown) {
 
-            //spin the robot 18 degrees
-            rightLift.setPower(-1);
-            leftLift.setPower(-1);
+                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            try {
-                sleep(2300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
+                    rightLift.setPower(1);
+                    leftLift.setPower(1);
+                }
+
+                rightLift.setPower(0);
+                leftLift.setPower(0);
+
+                currently_lifting = liftStages.isInMiddle;
             }
 
-            rightLift.setPower(0);
-            leftLift.setPower(0);
+            if (currently_lifting == liftStages.isFullyUp) {
 
-            //reset variables so previous code can be repeated
-            currently_lifting = liftStages.isFullyDown;
+                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
+                    rightLift.setPower(-1);
+                    leftLift.setPower(-1);
+                }
+
+                rightLift.setPower(0);
+                leftLift.setPower(0);
+
+                currently_lifting = liftStages.isInMiddle;
+            }
+        }
+
+            if (gamePad.y && last_time_y_pressed + 1000 < System.currentTimeMillis()) {
+                last_time_y_pressed = System.currentTimeMillis();
+                rightLift.setDirection(DcMotor.Direction.REVERSE);
+                leftLift.setDirection(DcMotor.Direction.REVERSE);
+                pauseTimeMillis = System.currentTimeMillis();
+
+                if (currently_lifting == liftStages.isFullyUp) {
+
+                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                    while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                        rightLift.setPower(1);
+                        leftLift.setPower(1);
+                    }
+
+                    rightLift.setPower(0);
+                    leftLift.setPower(0);
+
+                    currently_lifting = liftStages.isFullyDown;
+                }
+
+                if (currently_lifting == liftStages.isInMiddle) {
+
+                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                    while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                        rightLift.setPower(1);
+                        leftLift.setPower(1);
+                    }
+
+                    rightLift.setPower(0);
+                    leftLift.setPower(0);
+
+                    currently_lifting = liftStages.isFullyDown;
+                }
+            }
         }
     }
-}

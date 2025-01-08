@@ -53,7 +53,7 @@ public class RandomMovementControlsMantas {
     public void spinAroundFunction() {
 
         //if a was pressed do not let spinAroundFunction run for another second
-        if (gamePad.a && last_time_a_pressed + 1000 < System.currentTimeMillis()) {
+        if (gamePad.a && ((last_time_a_pressed + 1000) < System.currentTimeMillis())) {
             last_time_a_pressed = System.currentTimeMillis();
             currently_spinning = true;
         }
