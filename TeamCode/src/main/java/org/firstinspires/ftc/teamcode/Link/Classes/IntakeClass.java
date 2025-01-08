@@ -121,7 +121,10 @@ public class IntakeClass {
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
         claw.setDirection(Servo.Direction.REVERSE);
+
+        //SAME WAY IS BOTH OR NONE
         intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
         /*
@@ -267,8 +270,8 @@ public class IntakeClass {
     }
 
     private void specimenIntakePos() {
-        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.95);
-        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.95);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 1);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 1);
     }
     private void specimenOuttakePos() {
         SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
@@ -373,10 +376,10 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.06);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.06);
-                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
-                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.13);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.13);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.6);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.6);
 
                 transferState = transferringStates.RETRACTING_EXTENDO;
                 transferTime = 0;
@@ -403,9 +406,11 @@ public class IntakeClass {
                 }
             }
             if (transferState == transferringStates.MAIN_TRANSFER) {
-                if (transferTime >= 20) {
+                if (transferTime == 17) {
                     intakeLeft.setPower(-1);
                     intakeRight.setPower(-1);
+                }
+                if (transferTime >= 20) {
                     SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.7);
                     SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.7);
                     transferState = transferringStates.FINISH;
@@ -416,6 +421,8 @@ public class IntakeClass {
                 }
             }
             if (transferState == transferringStates.FINISH) {
+                intakeLeft.setPower(0);
+                intakeRight.setPower(0);
                 transferInProgress = false;
                 transferState = transferringStates.IDLE;
             }
@@ -437,18 +444,20 @@ public class IntakeClass {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
             //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+
+            
         }
         bWasPressed = gamepad2.b;
     }
 
-
+//mfbrm
 
     // control extendo
     private void extendoHandler() {
-        double leftPos  = -1*gamepad2.right_stick_y/40 + slideLeft.getPosition();
-        double rightPos = -1*gamepad2.right_stick_y/40 + slideRight.getPosition();
-        SmartServo.setSmartPos(hardwareMap,"slideLeft",leftPos);
-        SmartServo.setSmartPos(hardwareMap,"slideRight",rightPos);
+        double leftPos  = -1*gamepad2.right_stick_y/20 + slideLeft.getPosition();
+        double rightPos = -1*gamepad2.right_stick_y/20 + slideRight.getPosition();
+        SmartServo.setSmartPos(hardwareMap,"slideLeft",leftPos - 0.01);
+        SmartServo.setSmartPos(hardwareMap,"slideRight",rightPos - 0.01);
     }
 
     // should this be called in runIntake? is anything else using x?
