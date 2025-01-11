@@ -44,7 +44,7 @@ public class HappyDance {
     public void doHappyDance() {
 
         if (gamePad.x && lastXClicked + 1000 < System.currentTimeMillis()) {
-            spinAroundFunction.startSpin();
+            //spinAroundFunction.startSpin();
             moveLift();
             lastXClicked = System.currentTimeMillis();
             moveClaw();

@@ -74,7 +74,7 @@ public final class IntoTheAuto extends LinearOpMode {
             return new SpecimenOuttakePos();
         }
     }
-    Arm arm = new Arm(hardwareMap);
+
 
     public class Claw {
         private Servo claw;
@@ -105,7 +105,7 @@ public final class IntoTheAuto extends LinearOpMode {
             return new OpenClaw();
         }
     }
-    Claw claw = new Claw(hardwareMap);
+
 
     public class Lift {
         private DcMotor leftLift;
@@ -153,7 +153,7 @@ public final class IntoTheAuto extends LinearOpMode {
             return new LiftDown();
         }
     }
-    Lift lift = new Lift(hardwareMap);
+
 
 
 
@@ -164,6 +164,10 @@ public final class IntoTheAuto extends LinearOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
+        Lift lift = new Lift(hardwareMap);
+        Claw claw = new Claw(hardwareMap);
+        Arm arm = new Arm(hardwareMap);
+        //DO NOT MOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHH
 
         int Auto = 1;
         String autoStart = new String("null");
@@ -252,8 +256,8 @@ public final class IntoTheAuto extends LinearOpMode {
             claw.closeClaw();
             //SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
             //SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
-            SmartServo.setSmartPos(hardwareMap, "wristRight", 0.0);
-            SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.0);
+            //SmartServo.setSmartPos(hardwareMap, "wristRight", 0.0);
+            //SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.0);
 
             waitForStart();
 
