@@ -23,6 +23,7 @@ public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMo
     public Point[] myBoxCorners;
     public double centerX = 0;
     public double centerY = 0;
+    public boolean seeBlueBlobs = false;
     public ColorBlobLocatorProcessor colorLocator;
     public void Setup(){
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
@@ -96,6 +97,7 @@ public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMo
 
     }
     public void colorFinder(){
+        seeBlueBlobs = false;
         telemetry.addData("preview on/off", "... Camera Stream\n");
 
         // Read the current list
@@ -121,7 +123,7 @@ public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMo
          *   A blob's Aspect ratio is the ratio of boxFit long side to short side.
          *   A perfect Square has an aspect ratio of 1.  All others are > 1
          */
-        ColorBlobLocatorProcessor.Util.filterByArea(2500, 20000, blobs);  // filter out very small blobs.
+        ColorBlobLocatorProcessor.Util.filterByArea(20, 300000000, blobs);  // filter out very small blobs.
         /*
          * The list of Blobs can be sorted using the same Blob attributes as listed above.
          * No more than one sort call should be made.  Sorting can use ascending or descending order.
@@ -133,10 +135,11 @@ public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMo
         telemetry.addLine(" Area Density Aspect  Center");
 
         // Display the size (area) and center location for each Blob.
-        centerX = 0;
-        centerY = 0;
+        centerX = 16265;
+        centerY = 16265;
         for(ColorBlobLocatorProcessor.Blob b : blobs)
         {
+            seeBlueBlobs = true;
             RotatedRect boxFit = b.getBoxFit();
             // Display boxFit.points(), an array of the box's four (X, Y) corner points,
             // clockwise from top left corner.
