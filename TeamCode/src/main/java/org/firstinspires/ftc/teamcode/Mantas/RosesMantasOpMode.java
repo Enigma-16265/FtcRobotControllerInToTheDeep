@@ -38,6 +38,7 @@ import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementCon
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.liftPositions;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
+import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.LorelaisDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.FunStuffs.HappyDance;
 
 /*
@@ -54,7 +55,7 @@ public class RosesMantasOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Define and initialize wheels and declare wheelCode
-        DriveCodeAbstract wheelCode = new DavysDriveCode(hardwareMap, gamepad1);
+        DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap,gamepad1);
         RandomMovementControlsMantas spinCode = new RandomMovementControlsMantas(hardwareMap, gamepad1);
         //HappyDance dance = new HappyDance(hardwareMap, gamepad1);
         liftPositions liftcode = new liftPositions(hardwareMap, gamepad1);
