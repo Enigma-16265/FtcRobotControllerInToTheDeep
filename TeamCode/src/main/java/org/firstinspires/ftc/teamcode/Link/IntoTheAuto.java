@@ -19,9 +19,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
@@ -63,8 +65,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class SpecimenOuttakePos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1678);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.2);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.2);
                 SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
                 SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
                 return false;
@@ -81,6 +83,7 @@ public final class IntoTheAuto extends LinearOpMode {
 
         public Claw(HardwareMap hardwareMap) {
             claw = hardwareMap.get(Servo.class, "claw");
+            claw.setDirection(Servo.Direction.REVERSE);
         }
 
         public class CloseClaw implements Action {
@@ -98,6 +101,8 @@ public final class IntoTheAuto extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 SmartServo.setSmartPos(hardwareMap, "claw", 0.75);
+                telemetry.addData("BEANS", 0);
+                telemetry.update();
                 return false;
             }
         }
@@ -114,7 +119,7 @@ public final class IntoTheAuto extends LinearOpMode {
         public Lift(HardwareMap hardwareMap) {
             leftLift = hardwareMap.get(DcMotor.class, "leftLift");
             rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-            //TODO reverse :3
+            leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         public class SetLiftIdle implements Action {
@@ -132,8 +137,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class LiftUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                rightLift.setPower(1);
-                leftLift.setPower(1);
+                rightLift.setPower(.5);
+                leftLift.setPower(.5);
                 return false;
             }
         }
@@ -169,7 +174,6 @@ public final class IntoTheAuto extends LinearOpMode {
         Arm arm = new Arm(hardwareMap);
         //DO NOT MOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHH
 
-        int Auto = 1;
         String autoStart = new String("null");
         String autoSide = new String("null");
         String autoType = new String("null");
@@ -179,13 +183,27 @@ public final class IntoTheAuto extends LinearOpMode {
 
 
         Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
-        Pose2d specimenPose = new Pose2d(0, -38, Math.toRadians(90));
-        Pose2d humanPlayerPose = new Pose2d(48, -54, Math.toRadians(90));
+        Pose2d specimenPose = new Pose2d(0, -31, Math.toRadians(90));
+        Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
+        Pose2d yoinkPose = new Pose2d(48, -56, Math.toRadians(90));
 
-        Pose2d coloredSample1 = new Pose2d(37, -18, Math.toRadians(90));
+        Pose2d transitionPose = new Pose2d(48, -38, Math.toRadians(90));
+        Pose2d coloredSample1 = new Pose2d(60, -8, Math.toRadians(90));
         //Pose2d coloredSample1 = new Pose2d(48, -8, Math.toRadians(90));
-        Pose2d coloredSample2 = new Pose2d(58, -8, Math.toRadians(90));
-        Pose2d coloredSample3 = new Pose2d(64, -8, Math.toRadians(90));
+        Pose2d coloredSample2 = new Pose2d(72, -8, Math.toRadians(90));
+        Pose2d coloredSample3 = new Pose2d(78, -8, Math.toRadians(90));
+
+        Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
+        Servo wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+        Servo wristRight = hardwareMap.get(Servo.class,"wristLeft");
+        Servo outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+        Servo outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
+        Servo clawServo = hardwareMap.get(Servo.class, "claw");
+
+        slideLeft.setDirection(Servo.Direction.REVERSE);
+        slideRight.setDirection(Servo.Direction.REVERSE);
+        clawServo.setDirection(Servo.Direction.REVERSE);
 
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
 
@@ -206,8 +224,8 @@ public final class IntoTheAuto extends LinearOpMode {
                         canProceed = true;
                     }
                     if (gamepad1.b == true) {
-                        beginPose = new Pose2d(12,-62, Math.toRadians(90));
-                        autoType = "specimen";
+                        beginPose = new Pose2d(14,-62, Math.toRadians(90));
+                        autoType = "porting";
                         canProceed = true;
                         //Set Starting Pos
                     }
@@ -219,6 +237,8 @@ public final class IntoTheAuto extends LinearOpMode {
                     telemetry.addData("Initialized ENIGMA Autonomous: IntoTheAuto", "");
                     telemetry.addData("---------------------------------------","");
                     telemetry.addData("Good luck and have fun. GP!","");
+                    telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
+
                     telemetry.addData("                 .77:                   \n" +
                             "             .^JPP?75PJ~.               \n" +
                             "          :75PY~.     ~7:  .            \n" +
@@ -238,6 +258,8 @@ public final class IntoTheAuto extends LinearOpMode {
                             "                  .                     \n" +
                             "                 YJ                     \n" +
                             "                 .~                     ", "");
+
+
                     initState = InitStep.DONE;
                 }
 
@@ -251,13 +273,21 @@ public final class IntoTheAuto extends LinearOpMode {
 
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
-            sleep(500);
 
-            claw.closeClaw();
-            //SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
-            //SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
-            //SmartServo.setSmartPos(hardwareMap, "wristRight", 0.0);
-            //SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.0);
+
+
+
+
+            SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
+            SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.52);
+            SmartServo.setSmartPos(hardwareMap,"wristRight", 0.52);
+            SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
+            SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1678);
+
+            sleep(3500);
+
+            clawServo.setPosition(0.35);
 
             waitForStart();
 
@@ -294,16 +324,22 @@ public final class IntoTheAuto extends LinearOpMode {
                                 .build());
             }
             TrajectoryActionBuilder score1 = drive.actionBuilder(beginPose)
-                    .splineToLinearHeading(specimenPose, Math.toRadians(270));
+                    .splineToLinearHeading(specimenPose, Math.toRadians(90));
 
             TrajectoryActionBuilder moveSamples = drive.actionBuilder(specimenPose)
-                    .lineToY(-47)
+                    .lineToY(-44)
+                    .splineToLinearHeading(transitionPose, Math.toRadians(90))
                     .splineToLinearHeading(coloredSample1, Math.toRadians(123))
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
                     .splineToLinearHeading(coloredSample2, Math.toRadians(270))
-                    .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                    .splineToLinearHeading(coloredSample3, Math.toRadians(270))
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180));
+            /*
+                    .splineToLinearHeading(coloredSample3, Math.toRadians(270))
+                    .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
+                    TODO: add if we somehow optimize to a 5 spec
+             */
+
+
 
             TrajectoryActionBuilder score2 = drive.actionBuilder(humanPlayerPose)
                     .splineToLinearHeading(specimenPose, Math.toRadians(90));
@@ -323,19 +359,21 @@ public final class IntoTheAuto extends LinearOpMode {
 
             SleepAction sleepAction = new SleepAction(400);
 
+            Action score1built = score1.build();
+            Action moveSamplesBuilt = moveSamples.build();
+            Action score2built = score2.build();
+            Action score3built = score3.build();
+            Action score4built = score4.build();
+            Action score5built = score5.build();
+            Action yoink = score2.build(); //TODO: THIS DO THIS PLEASE REMEBER TO DO THIS OMG
 
 
             //Specimen
             if (autoType.equals("specimen")) {
-                Action score1built = score1.build();
-                Action moveSamplesBuilt = moveSamples.build();
-                Action score2built = score2.build();
-                Action score3built = score3.build();
-                Action score4built = score4.build();
-                Action score5built = score5.build();
 
                 Actions.runBlocking(
                         new SequentialAction(
+                                arm.specimenOuttakePos(),
                                 score1built,
                                 lift.liftUp(),
                                 new SleepAction(1000),
@@ -384,6 +422,58 @@ public final class IntoTheAuto extends LinearOpMode {
                                 lift.liftUp()
                         )
                 );
+                }
+            if (autoType.equals("specimen1")) {
+                telemetry.addData("can we change this to know where we're at", 0);
+                telemetry.update();
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(90)
+                                .splineToLinearHeading(specimenPose, Math.toRadians(90))
+                                .build());
+            }
+            if (autoType.equals("porting")) {
+                telemetry.addData("DSADY*SSAGDYUSAPORTINGGDYUSAGYUDA", 0);
+                telemetry.update();
+                Actions.runBlocking(
+                        new SequentialAction(
+                                // score1built,
+                                new ParallelAction(
+                                        new SequentialAction(
+                                            score1built,
+                                            new SleepAction(1)
+                                        ),
+                                        new SequentialAction(
+                                                lift.liftUp(),
+                                                new SleepAction(.3),
+                                                lift.liftIdle()
+                                        )
+                                ),
+                                lift.liftUp(),
+                                new SleepAction(0.9),
+                                claw.openClaw(),
+                                new SleepAction(0.2),
+                                new ParallelAction(
+                                    moveSamplesBuilt,
+                                    new SequentialAction(
+                                        lift.liftDown(),
+                                        new SleepAction(1.2),
+                                        lift.liftIdle()
+                                    )
+                                ),
+                                new SleepAction(1),
+                                arm.armSpecimenIntake(),
+                                new SleepAction(1),
+                                score2built
+
+
+                                //lift.liftDown(),
+                                //new SleepAction(0.45),
+                                //lift.liftIdle()
+                        )
+                );
+            }
+
                 /*
                 Actions.runBlocking(
                         drive.actionBuilder(beginPose)
@@ -416,7 +506,6 @@ public final class IntoTheAuto extends LinearOpMode {
 
                  */
 
-            }
             /*
             Actions.runBlocking(new SequentialAction(
 
@@ -436,4 +525,4 @@ public final class IntoTheAuto extends LinearOpMode {
             throw new RuntimeException();
         }
     }
-}
+    }

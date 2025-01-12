@@ -472,11 +472,11 @@ public class IntakeClass {
     }
 
     private void closeClaw() {
-        SmartServo.setSmartPos(hardwareMap, "claw", 0.35);
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.4);
         clawState = clawStates.CLOSE;
     }
     private void openClaw() {
-        SmartServo.setSmartPos(hardwareMap, "claw", 0.75);
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.7);
         clawState = clawStates.OPEN;
     }
 
