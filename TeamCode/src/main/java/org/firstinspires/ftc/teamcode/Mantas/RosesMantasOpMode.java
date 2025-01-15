@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.Mantas;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
@@ -58,13 +59,17 @@ public class RosesMantasOpMode extends LinearOpMode {
         DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap,gamepad1);
         RandomMovementControlsMantas spinCode = new RandomMovementControlsMantas(hardwareMap, gamepad1);
         //HappyDance dance = new HappyDance(hardwareMap, gamepad1);
-        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1);
+        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1, telemetry);
 
         // Define and initialize ALL installed servos and declare armCode
         //GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
+        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftHang");
+        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightHang");
 
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");
@@ -75,6 +80,9 @@ public class RosesMantasOpMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+            rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // run various control code
             wheelCode.runWheels();
@@ -96,12 +104,14 @@ public class RosesMantasOpMode extends LinearOpMode {
     }
 
     private void whatServoAt() {
+        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftHang");
+        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightHang");
         telemetry.addData("Shoulder = ", hardwareMap.get(Servo.class, "shoulder").getPosition());
         telemetry.addData("Elbow = ", hardwareMap.get(Servo.class,"elbow").getPosition());
         telemetry.addData("Left Finger = ", hardwareMap.get(Servo.class,"lFinger").getPosition());
         telemetry.addData("Right Finger = ", hardwareMap.get(Servo.class,"rFinger").getPosition());
         telemetry.addData("Wrist = ", hardwareMap.get(Servo.class,"wrist").getPosition());
-        telemetry.addData("Lift Left = ",hardwareMap.get(Servo.class,"leftLift").getPosition());
-        telemetry.addData("Lift Right = ",hardwareMap.get(Servo.class,"rightLift").getPosition());
+        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+        telemetry.addData("leftLift", leftLift.getCurrentPosition());
     }
 }

@@ -89,6 +89,9 @@ DeepOpMode extends LinearOpMode {
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
 
+        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+
         initialize();
 
         //Send telemetry message to signify robot waiting;
@@ -102,6 +105,9 @@ DeepOpMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+            rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             wheelCode.runWheels();
             wheelCode.spinAroundFunction();
@@ -123,6 +129,8 @@ DeepOpMode extends LinearOpMode {
 
     // puts position of all servos on screen
     private void whatServoAt() {
+        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         telemetry.addData("slideLeft    = ", hardwareMap.get(Servo.class,"slideLeft").getPosition());
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
         telemetry.addData("outtakeLeft  = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
@@ -131,6 +139,8 @@ DeepOpMode extends LinearOpMode {
         //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
+        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+        telemetry.addData("leftLift", leftLift.getCurrentPosition());
     }
 
     private void initialize() {
@@ -172,5 +182,7 @@ DeepOpMode extends LinearOpMode {
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
         //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

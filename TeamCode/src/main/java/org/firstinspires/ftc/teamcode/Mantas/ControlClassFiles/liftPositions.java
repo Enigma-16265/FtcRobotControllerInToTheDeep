@@ -1,11 +1,11 @@
 //imports
 package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
-import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 public class liftPositions {
@@ -14,6 +14,7 @@ public class liftPositions {
     private final DcMotor rightLift;
     private final DcMotor leftLift;
     private final Gamepad gamePad;
+    private final Telemetry telemetry;
 
     //not objects
     private double last_time_x_pressed;
@@ -29,13 +30,16 @@ public class liftPositions {
     }
 
     private liftStages currently_lifting = liftStages.isFullyDown;
+
     // constructor
-    public liftPositions(HardwareMap hardwareMap, Gamepad gamePad) {
+    public liftPositions(HardwareMap hardwareMap, Gamepad gamePad, Telemetry telemetry) {
         //sets all the wheels to what they are in the hardware map
         rightLift = hardwareMap.get(DcMotor.class, "rightHang");
         leftLift = hardwareMap.get(DcMotor.class, "leftHang");
 
         this.gamePad = gamePad;
+
+        this.telemetry = telemetry;
 
     }
 
@@ -52,72 +56,83 @@ public class liftPositions {
                 rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-                while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                while (pauseTimeMillis + 2700 > System.currentTimeMillis() && rightLift.getCurrentPosition() < 2000) {
+                    telemetry.addData("rightLift", rightLift.getCurrentPosition());
+                    telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                    telemetry.update();
                     rightLift.setPower(1);
                     leftLift.setPower(1);
                 }
+                    rightLift.setPower(0);
+                    leftLift.setPower(0);
 
-                rightLift.setPower(0);
-                leftLift.setPower(0);
-
-                currently_lifting = liftStages.isFullyUp;
+                    currently_lifting = liftStages.isFullyUp;
             }
 
-            if (currently_lifting == liftStages.isInMiddle) {
+                if (currently_lifting == liftStages.isInMiddle) {
 
-                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-                while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                    rightLift.setPower(1);
-                    leftLift.setPower(1);
+                    while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                        telemetry.update();
+                        rightLift.setPower(1);
+                        leftLift.setPower(1);
+                    }
+
+                    rightLift.setPower(0);
+                    leftLift.setPower(0);
+
+                    currently_lifting = liftStages.isFullyUp;
+                }
+            }
+
+            if (gamePad.dpad_right && last_time_dPadRight_pressed + 1000 < System.currentTimeMillis()) {
+                last_time_dPadRight_pressed = System.currentTimeMillis();
+                rightLift.setDirection(DcMotor.Direction.FORWARD);
+                leftLift.setDirection(DcMotor.Direction.FORWARD);
+                pauseTimeMillis = System.currentTimeMillis();
+
+                if (currently_lifting == liftStages.isFullyDown) {
+
+                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                    while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
+                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                        telemetry.update();
+                        rightLift.setPower(1);
+                        leftLift.setPower(1);
+                    }
+
+                    rightLift.setPower(0);
+                    leftLift.setPower(0);
+
+                    currently_lifting = liftStages.isInMiddle;
                 }
 
-                rightLift.setPower(0);
-                leftLift.setPower(0);
+                if (currently_lifting == liftStages.isFullyUp) {
 
-                currently_lifting = liftStages.isFullyUp;
-            }
-        }
+                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        if (gamePad.dpad_right && last_time_dPadRight_pressed + 1000 < System.currentTimeMillis()) {
-            last_time_dPadRight_pressed = System.currentTimeMillis();
-            rightLift.setDirection(DcMotor.Direction.FORWARD);
-            leftLift.setDirection(DcMotor.Direction.FORWARD);
-            pauseTimeMillis = System.currentTimeMillis();
+                    while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
+                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                        telemetry.update();
+                        rightLift.setPower(-1);
+                        leftLift.setPower(-1);
+                    }
 
-            if (currently_lifting == liftStages.isFullyDown) {
+                    rightLift.setPower(0);
+                    leftLift.setPower(0);
 
-                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
-                    rightLift.setPower(1);
-                    leftLift.setPower(1);
+                    currently_lifting = liftStages.isInMiddle;
                 }
-
-                rightLift.setPower(0);
-                leftLift.setPower(0);
-
-                currently_lifting = liftStages.isInMiddle;
             }
-
-            if (currently_lifting == liftStages.isFullyUp) {
-
-                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
-                    rightLift.setPower(-1);
-                    leftLift.setPower(-1);
-                }
-
-                rightLift.setPower(0);
-                leftLift.setPower(0);
-
-                currently_lifting = liftStages.isInMiddle;
-            }
-        }
 
             if (gamePad.y && last_time_y_pressed + 1000 < System.currentTimeMillis()) {
                 last_time_y_pressed = System.currentTimeMillis();
@@ -131,6 +146,9 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                        telemetry.update();
                         rightLift.setPower(1);
                         leftLift.setPower(1);
                     }
@@ -147,6 +165,9 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
+                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                        telemetry.update();
                         rightLift.setPower(1);
                         leftLift.setPower(1);
                     }
