@@ -106,8 +106,8 @@ DeepOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+           //rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             wheelCode.runWheels();
             wheelCode.spinAroundFunction();
@@ -139,8 +139,6 @@ DeepOpMode extends LinearOpMode {
         //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
-        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-        telemetry.addData("leftLift", leftLift.getCurrentPosition());
     }
 
     private void initialize() {
@@ -182,7 +180,5 @@ DeepOpMode extends LinearOpMode {
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
         //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
-        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

@@ -27,6 +27,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
+import org.opencv.core.Mat;
 
 enum InitStep {
     START,
@@ -53,8 +54,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class SpecimenIntakePos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.95);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.95);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 1);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 1);
                 return false;
             }
         }
@@ -137,8 +138,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class LiftUp implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                rightLift.setPower(.5);
-                leftLift.setPower(.5);
+                rightLift.setPower(1);
+                leftLift.setPower(1);
                 return false;
             }
         }
@@ -149,8 +150,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class LiftDown implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                leftLift.setPower(-0.2);
-                rightLift.setPower(-0.2);
+                leftLift.setPower(-0.32);
+                rightLift.setPower(-0.32);
                 return false;
             }
         }
@@ -184,14 +185,20 @@ public final class IntoTheAuto extends LinearOpMode {
 
         Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
         Pose2d specimenPose = new Pose2d(0, -31, Math.toRadians(90));
+        Pose2d specimenPoseLeft = new Pose2d(-4, -31, Math.toRadians(90));
+        Pose2d specimenPoseRight = new Pose2d(1.25, -29.75, Math.toRadians(90));
         Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
-        Pose2d yoinkPose = new Pose2d(48, -56, Math.toRadians(90));
+
+        Pose2d yoinkPose = new Pose2d(48, -52.75, Math.toRadians(90));
+        Pose2d yoinkPose2 = new Pose2d(48, -53.5, Math.toRadians(90));
 
         Pose2d transitionPose = new Pose2d(48, -38, Math.toRadians(90));
-        Pose2d coloredSample1 = new Pose2d(60, -8, Math.toRadians(90));
+        Pose2d coloredSample1 = new Pose2d(51, -8, Math.toRadians(90));
         //Pose2d coloredSample1 = new Pose2d(48, -8, Math.toRadians(90));
-        Pose2d coloredSample2 = new Pose2d(72, -8, Math.toRadians(90));
-        Pose2d coloredSample3 = new Pose2d(78, -8, Math.toRadians(90));
+        Pose2d coloredSample2 = new Pose2d(54, -8, Math.toRadians(90));
+        Pose2d coloredSample3 = new Pose2d(72, -8, Math.toRadians(90));
+
+        Pose2d cycle2Actor = new Pose2d(48, -40, Math.toRadians(90));
 
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
@@ -237,7 +244,6 @@ public final class IntoTheAuto extends LinearOpMode {
                     telemetry.addData("Initialized ENIGMA Autonomous: IntoTheAuto", "");
                     telemetry.addData("---------------------------------------","");
                     telemetry.addData("Good luck and have fun. GP!","");
-                    telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
 
                     telemetry.addData("                 .77:                   \n" +
                             "             .^JPP?75PJ~.               \n" +
@@ -329,11 +335,15 @@ public final class IntoTheAuto extends LinearOpMode {
             TrajectoryActionBuilder moveSamples = drive.actionBuilder(specimenPose)
                     .lineToY(-44)
                     .splineToLinearHeading(transitionPose, Math.toRadians(90))
-                    .splineToLinearHeading(coloredSample1, Math.toRadians(123))
+                    /*
+                    .splineToLinearHeading(coloredSample1, Math.toRadians(270))
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
+
+                     */
                     .splineToLinearHeading(coloredSample2, Math.toRadians(270))
+                    .splineToLinearHeading(cycle2Actor, Math.toRadians(90))
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180));
-            /*
+                    /*
                     .splineToLinearHeading(coloredSample3, Math.toRadians(270))
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
                     TODO: add if we somehow optimize to a 5 spec
@@ -341,13 +351,21 @@ public final class IntoTheAuto extends LinearOpMode {
 
 
 
-            TrajectoryActionBuilder score2 = drive.actionBuilder(humanPlayerPose)
+            TrajectoryActionBuilder specimenFromHumanPlayerAction = drive.actionBuilder(yoinkPose)
                     .splineToLinearHeading(specimenPose, Math.toRadians(90));
 
-            TrajectoryActionBuilder score3 = drive.actionBuilder(specimenPose)
+            TrajectoryActionBuilder specimenFromHumanPlayerLeftAction = drive.actionBuilder(yoinkPose)
+                    .splineToLinearHeading(specimenPoseLeft, Math.toRadians(90));
+
+            TrajectoryActionBuilder specimenFromHumanPlayerRightAction = drive.actionBuilder(yoinkPose2)
+                    .splineToLinearHeading(specimenPoseRight, Math.toRadians(90));
+
+            TrajectoryActionBuilder humanPlayerFromSpecimenAction = drive.actionBuilder(specimenPose)
                     .lineToY(-40)
-                    .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                    .splineToLinearHeading(specimenPose, Math.toRadians(90));
+                    .splineToLinearHeading(humanPlayerPose, Math.toRadians(90));
+                    //.splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
+                    //.splineToLinearHeading(specimenPose, Math.toRadians(90));
+            /*
             TrajectoryActionBuilder score4 = drive.actionBuilder(specimenPose)
                     .lineToY(-40)
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
@@ -357,72 +375,194 @@ public final class IntoTheAuto extends LinearOpMode {
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
                     .splineToLinearHeading(specimenPose, Math.toRadians(90));
 
+             */
+            TrajectoryActionBuilder yoink = drive.actionBuilder(humanPlayerPose).
+                    splineToLinearHeading(yoinkPose, Math.toRadians(90));
+            TrajectoryActionBuilder yoink3rd = drive.actionBuilder(humanPlayerPose).
+                    splineToLinearHeading(yoinkPose2, Math.toRadians(90));
+
             SleepAction sleepAction = new SleepAction(400);
 
             Action score1built = score1.build();
             Action moveSamplesBuilt = moveSamples.build();
+
+            Action specimenFromHumanPlayer = specimenFromHumanPlayerAction.build();
+            Action humanPlayerFromSpecimen = humanPlayerFromSpecimenAction.build();
+            Action specimenFromHumanPlayerLeft = specimenFromHumanPlayerLeftAction.build();
+            Action specimenFromHumanPlayerRight = specimenFromHumanPlayerRightAction.build();
+            Action yoink3rdBuilt = yoink3rd.build();
+
+            /*
             Action score2built = score2.build();
             Action score3built = score3.build();
             Action score4built = score4.build();
             Action score5built = score5.build();
-            Action yoink = score2.build(); //TODO: THIS DO THIS PLEASE REMEBER TO DO THIS OMG
 
+             */
+            Action yoinkBuilt = yoink.build();
 
-            //Specimen
-            if (autoType.equals("specimen")) {
-
+            if (autoType.equals("porting")) { //This is the one
+                telemetry.addData("yeehaw", 0);
+                telemetry.update();
                 Actions.runBlocking(
                         new SequentialAction(
+                                //TRACK lift up for a wee bit in the beginning to not clip bar, while driving
+                                new ParallelAction(
+                                        new SequentialAction(
+                                            score1built,
+                                            new SleepAction(1)
+                                        ),
+                                        new SequentialAction(
+                                                lift.liftUp(),
+                                                new SleepAction(.2),
+                                                lift.liftIdle()
+                                        )
+                                ),
+
+                                //TRACK Score preload
+                                lift.liftUp(),
+                                new SleepAction(0.7),
+                                lift.liftIdle(),
+                                claw.openClaw(),
+                                new SleepAction(0.4),
+
+
+                                //TRACK Go move samples to the human player zone while putting lifts down
+                                new ParallelAction(
+                                    moveSamplesBuilt,
+                                    //Going to move samples
+                                    new SequentialAction(
+                                        lift.liftDown(),
+                                        new SleepAction(2.75),
+                                        lift.liftIdle()
+                                    )
+                                ),
+                                new SleepAction(0.4),
+
+                                //TRACK Picks up specimen #2
+                                arm.armSpecimenIntake(),
+                                new SleepAction(0.7),
+                                yoinkBuilt,
+                                new SleepAction(0.2),
+                                claw.closeClaw(),
+                                new SleepAction(1),
                                 arm.specimenOuttakePos(),
-                                score1built,
+                                new SleepAction(1.5),
+
+                                //TRACK goes to specimen bar and scores 2
+                                specimenFromHumanPlayerLeft,
+                                new SleepAction(0.3),
                                 lift.liftUp(),
-                                new SleepAction(1000),
+                                new SleepAction(0.6),
+                                lift.liftIdle(),
+                                claw.openClaw(),
+                                new SleepAction(0.2),
+
+                                //TRACK drives to human player while putting lifts down
                                 new ParallelAction(
-                                        moveSamplesBuilt,
                                         new SequentialAction(
                                                 lift.liftDown(),
-                                                new SleepAction(500),
+                                                new SleepAction(3),
                                                 lift.liftIdle()
-                                        )
+                                        ),
+                                        humanPlayerFromSpecimen
                                 ),
-                                score2built,
+                                new SleepAction(0.2),
+
+                                //TRACK picks up specimen #3
+                                arm.armSpecimenIntake(),
+                                new SleepAction(0.7),
+                                yoink3rdBuilt,
+                                new SleepAction(0.4),
+                                claw.closeClaw(),
+                                new SleepAction(1),
+                                arm.specimenOuttakePos(),
+                                new SleepAction(1),
+                                specimenFromHumanPlayerRight,
                                 lift.liftUp(),
-                                new SleepAction(1000),
+                                new SleepAction(0.7),
+                                lift.liftIdle(),
+                                claw.openClaw(),
+                                new SleepAction(0.2),
+
+                                //track puts lift down
+                                lift.liftDown(),
+                                new SleepAction(3),
+                                lift.liftIdle()
+
+
+
+
+
+
+
+                                /*
+
+
+                                //TRACK goes and picks up specimen
+                                yoinkBuilt,
+                                new SleepAction(0.2),
+                                claw.closeClaw(),
+                                new SleepAction(1),
+                                arm.specimenOuttakePos(),
+                                new SleepAction(1.5),
+
+                                //TRACK goes to specimen bar and scores
+                                specimenFromHumanPlayer,
+                                new SleepAction(0.3),
+                                lift.liftUp(),
+                                new SleepAction(0.7),
+                                lift.liftIdle(),
+                                claw.openClaw(),
+                                new SleepAction(0.2),
+
+                                //TRACK drives to human player while putting lifts down
                                 new ParallelAction(
-                                        score3built,
                                         new SequentialAction(
                                                 lift.liftDown(),
-                                                new SleepAction(500),
+                                                new SleepAction(3),
                                                 lift.liftIdle()
-                                        )
+                                        ),
+                                        humanPlayerFromSpecimen
                                 ),
-                                score3built,
+                                new SleepAction(0.2)//,
+
+                                /*
+
+                                //TRACK picks up specimen
+                                arm.armSpecimenIntake(),
+                                new SleepAction(0.2),
+                                yoinkBuilt,
+                                new SleepAction(0.2),
+                                claw.closeClaw(),
+                                new SleepAction(1),
+                                arm.specimenOuttakePos(),
+                                new SleepAction(1.5),
+
+
+                                //TRACK goes to specimen pose and scores
+                                specimenFromHumanPlayer,
                                 lift.liftUp(),
-                                new SleepAction(1000),
+                                new SleepAction(0.7),
+                                lift.liftIdle(),
+                                claw.openClaw(),
+
+                                //TRACK lowers lift
+                                new SleepAction(0.2),
                                 new ParallelAction(
-                                        score4built,
                                         new SequentialAction(
                                                 lift.liftDown(),
-                                                new SleepAction(500),
+                                                new SleepAction(3.0),
                                                 lift.liftIdle()
                                         )
-                                ),
-                                score4built,
-                                lift.liftUp(),
-                                new SleepAction(1000),
-                                new ParallelAction(
-                                        score5built,
-                                        new SequentialAction(
-                                                lift.liftDown(),
-                                                new SleepAction(500),
-                                                lift.liftIdle()
-                                        )
-                                ),
-                                score2built,
-                                lift.liftUp()
+                                )
+
+                                 */
+
                         )
                 );
-                }
+            }
+
             if (autoType.equals("specimen1")) {
                 telemetry.addData("can we change this to know where we're at", 0);
                 telemetry.update();
@@ -431,47 +571,6 @@ public final class IntoTheAuto extends LinearOpMode {
                                 .setTangent(90)
                                 .splineToLinearHeading(specimenPose, Math.toRadians(90))
                                 .build());
-            }
-            if (autoType.equals("porting")) {
-                telemetry.addData("DSADY*SSAGDYUSAPORTINGGDYUSAGYUDA", 0);
-                telemetry.update();
-                Actions.runBlocking(
-                        new SequentialAction(
-                                // score1built,
-                                new ParallelAction(
-                                        new SequentialAction(
-                                            score1built,
-                                            new SleepAction(1)
-                                        ),
-                                        new SequentialAction(
-                                                lift.liftUp(),
-                                                new SleepAction(.3),
-                                                lift.liftIdle()
-                                        )
-                                ),
-                                lift.liftUp(),
-                                new SleepAction(0.9),
-                                claw.openClaw(),
-                                new SleepAction(0.2),
-                                new ParallelAction(
-                                    moveSamplesBuilt,
-                                    new SequentialAction(
-                                        lift.liftDown(),
-                                        new SleepAction(1.2),
-                                        lift.liftIdle()
-                                    )
-                                ),
-                                new SleepAction(1),
-                                arm.armSpecimenIntake(),
-                                new SleepAction(1),
-                                score2built
-
-
-                                //lift.liftDown(),
-                                //new SleepAction(0.45),
-                                //lift.liftIdle()
-                        )
-                );
             }
 
                 /*
@@ -514,11 +613,6 @@ public final class IntoTheAuto extends LinearOpMode {
             ));
 
              */
-
-
-
-
-
 
 
         } else {

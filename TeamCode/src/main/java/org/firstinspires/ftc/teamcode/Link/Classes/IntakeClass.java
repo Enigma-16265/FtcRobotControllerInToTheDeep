@@ -143,20 +143,20 @@ public class IntakeClass {
     private void intakeHandling() {
         //Toggle intake on/off
         if (intakeWasPressed == false) {
-            if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
+            if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger < triggerThreshold) {
                 intakeToggle = true;
             }
-            if (gamepad2.right_trigger < triggerThreshold) {
+            if (gamepad2.left_trigger < triggerThreshold) {
                 intakeToggle = false;
             }
         }
 
         //Toggle spit on/off
         if (spitWasPressed == false) {
-            if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger < triggerThreshold) {
+            if (gamepad2.right_trigger > triggerThreshold && gamepad2.left_trigger < triggerThreshold) {
                 spitToggle = true;
             }
-            if (gamepad2.left_trigger < triggerThreshold) {
+            if (gamepad2.right_trigger < triggerThreshold) {
                 spitToggle = false;
             }
         }
@@ -376,10 +376,10 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.13);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.13);
-                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.6);
-                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.6);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.125314159);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.125314159);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
 
                 transferState = transferringStates.RETRACTING_EXTENDO;
                 transferTime = 0;
