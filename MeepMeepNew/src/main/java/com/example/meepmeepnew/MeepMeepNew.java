@@ -35,11 +35,11 @@ public class MeepMeepNew {
 
     public static void main(String[] args) {
 
-        String autoType = "optimized";
+        String autoType = "sampleNew";
 
         Pose2d beginPose = new Pose2d(14,-62, Math.toRadians(90));
 
-        Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
+        Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(45));
         Pose2d specimenPose = new Pose2d(0, -31, Math.toRadians(90));
         Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
 
@@ -70,6 +70,7 @@ public class MeepMeepNew {
                     //})
                     .setTangent(90)
                     .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
+
                     .setTangent(Math.PI / 1)
                     .lineToX(-44)
                     .lineToX(-42)
@@ -86,6 +87,38 @@ public class MeepMeepNew {
                     .lineToX(-60)
                     .lineToX(-58)
                     .splineToLinearHeading(leftBasket, Math.toRadians(235))
+
+                    .build());
+        }
+        if (autoType == "sampleNew") {
+            myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                    //.addDisplacementMarker(() -> {
+                    //  // This marker runs after the first splineTo()
+
+                    // Run your action in here!
+                    //})
+                    .splineToLinearHeading(new Pose2d(-48, -36, Math.toRadians(90)), Math.toRadians(90))
+                    .lineToY(-32)
+                    /*
+                    .setTangent(Math.PI / 1)
+                    .lineToX(-44)
+                    .lineToX(-42)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                    .setTangent(0)
+                    .splineToLinearHeading(new Pose2d(-51, -28, Math.toRadians(90)), Math.PI / 2)
+                    .setTangent(Math.PI / 1)
+                    .lineToX(-52)
+                    .lineToX(-50)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                    .setTangent(0)
+                    .splineToLinearHeading(new Pose2d(-55, -28, Math.toRadians(90)), Math.PI / 2)
+                    .setTangent(Math.PI / 1)
+                    .lineToX(-60)
+                    .lineToX(-58)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(235))
+                     */
+
                     .build());
         }
         if (autoType == "specimen") {
