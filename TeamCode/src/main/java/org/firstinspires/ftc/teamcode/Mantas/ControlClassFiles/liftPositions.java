@@ -45,20 +45,31 @@ public class liftPositions {
 
     public void makeLiftsWork() {
 
-        if (gamePad.x && last_time_x_pressed + 1000 < System.currentTimeMillis()) {
+        if (gamePad.b) {
+            rightLift.setPower(1);
+            leftLift.setPower(1);
+            telemetry.addLine("um");
+            telemetry.update();
+        }
+
+        telemetry.addLine("no");
+        telemetry.update();
+        if (gamePad.x) {
+           telemetry.addLine("yes");
+           telemetry.update();
             last_time_x_pressed = System.currentTimeMillis();
             rightLift.setDirection(DcMotor.Direction.FORWARD);
             leftLift.setDirection(DcMotor.Direction.FORWARD);
             pauseTimeMillis = System.currentTimeMillis();
 
             if (currently_lifting == liftStages.isFullyDown) {
-
+                telemetry.addLine("thing");
+                telemetry.update();
                 rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
                 leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-                while (pauseTimeMillis + 2700 > System.currentTimeMillis() && rightLift.getCurrentPosition() < 2000) {
-                    telemetry.addData("rightLift", rightLift.getCurrentPosition());
-                    telemetry.addData("leftLift", leftLift.getCurrentPosition());
+                while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
+                    telemetry.addLine("stuff");
                     telemetry.update();
                     rightLift.setPower(1);
                     leftLift.setPower(1);
@@ -75,9 +86,6 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
-                        telemetry.update();
                         rightLift.setPower(1);
                         leftLift.setPower(1);
                     }
@@ -101,9 +109,6 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
-                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
-                        telemetry.update();
                         rightLift.setPower(1);
                         leftLift.setPower(1);
                     }
@@ -120,9 +125,6 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
-                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
-                        telemetry.update();
                         rightLift.setPower(-1);
                         leftLift.setPower(-1);
                     }
@@ -146,9 +148,6 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
-                        telemetry.update();
                         rightLift.setPower(1);
                         leftLift.setPower(1);
                     }
@@ -165,9 +164,6 @@ public class liftPositions {
                     leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
                     while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-                        telemetry.addData("leftLift", leftLift.getCurrentPosition());
-                        telemetry.update();
                         rightLift.setPower(1);
                         leftLift.setPower(1);
                     }

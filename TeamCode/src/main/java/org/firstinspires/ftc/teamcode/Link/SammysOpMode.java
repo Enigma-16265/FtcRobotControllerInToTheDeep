@@ -75,10 +75,10 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
  *
  */
 
-@TeleOp(name="! Deep Teleop", group="Robot")
+@TeleOp(name="! Sammy'sTeleop", group="Robot")
 //@Disabled
 public class
-DeepOpMode extends LinearOpMode {
+SammysOpMode extends LinearOpMode {
 
 
     @Override
@@ -106,8 +106,7 @@ DeepOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            //rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             wheelCode.runWheels();
             wheelCode.spinAroundFunction();
@@ -130,15 +129,16 @@ DeepOpMode extends LinearOpMode {
     // puts position of all servos on screen
     private void whatServoAt() {
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
-        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         telemetry.addData("slideLeft    = ", hardwareMap.get(Servo.class,"slideLeft").getPosition());
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
         telemetry.addData("outtakeLeft  = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
         telemetry.addData("driverMotorPower", hardwareMap.get(DcMotor.class, "rightFront").getPower());
+        telemetry.addData("leftLift", hardwareMap.get(DcMotor.class, "leftLift").getCurrentPosition());
         //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
+
     }
 
     private void initialize() {
@@ -170,7 +170,6 @@ DeepOpMode extends LinearOpMode {
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        hardwareMap.get(DcMotor.class, "rightLift").setPower(0);
         hardwareMap.get(DcMotor.class, "leftLift").setPower(0);
 
 
@@ -180,5 +179,6 @@ DeepOpMode extends LinearOpMode {
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
         //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

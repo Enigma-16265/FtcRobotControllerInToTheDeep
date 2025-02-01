@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.GrabCode;
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.RandomMovementControlsMantas;
 import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.liftPositions;
+import org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles.liftPositions2;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DavysDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.LorelaisDriveCode;
@@ -58,11 +59,9 @@ public class RosesMantasOpMode extends LinearOpMode {
         // Define and initialize wheels and declare wheelCode
         DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap,gamepad1);
         RandomMovementControlsMantas spinCode = new RandomMovementControlsMantas(hardwareMap, gamepad1);
-        //HappyDance dance = new HappyDance(hardwareMap, gamepad1);
-        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1, telemetry);
+        liftPositions2 liftcode = new liftPositions2(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
-        //GrabCode armCode = new GrabCode(hardwareMap, gamepad1);
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftHang");
@@ -73,7 +72,7 @@ public class RosesMantasOpMode extends LinearOpMode {
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");
-        telemetry.update();
+        //telemetry.update();
 
         // Wait for the game to start (driver presses START)
         waitForStart();
@@ -81,17 +80,10 @@ public class RosesMantasOpMode extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
             // run various control code
             wheelCode.runWheels();
 
-           // if (gamepad1.b) {
-            //    armCode.grab();
-           // }
            spinCode.spinAroundFunction();
-           //dance.doHappyDance();
            liftcode.makeLiftsWork();
 
             // Send telemetry message to signify robot running
@@ -111,7 +103,6 @@ public class RosesMantasOpMode extends LinearOpMode {
         telemetry.addData("Left Finger = ", hardwareMap.get(Servo.class,"lFinger").getPosition());
         telemetry.addData("Right Finger = ", hardwareMap.get(Servo.class,"rFinger").getPosition());
         telemetry.addData("Wrist = ", hardwareMap.get(Servo.class,"wrist").getPosition());
-        telemetry.addData("rightLift", rightLift.getCurrentPosition());
-        telemetry.addData("leftLift", leftLift.getCurrentPosition());
+        telemetry.addData("rightLift", hardwareMap.get(DcMotor.class, "rightHang").getCurrentPosition());
     }
 }

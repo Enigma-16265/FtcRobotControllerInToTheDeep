@@ -94,6 +94,7 @@ public class DeepOuttake {
         else if (gamepad.dpad_down) {
             rightLift.setPower(-0.49);
             leftLift.setPower(-0.49);
+            // lowBuket221 highBuket914  upForSpec389 downForSpec210
         }
         else {
             rightLift.setPower(0);
