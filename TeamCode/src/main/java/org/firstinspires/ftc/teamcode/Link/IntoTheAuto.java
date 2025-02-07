@@ -17,6 +17,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -24,6 +25,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Link.Classes.IntakeClass;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
@@ -38,6 +40,10 @@ enum InitStep {
 @Config
 @Autonomous(name = "Into the Auto", group = "16265-Auto")
 public final class IntoTheAuto extends LinearOpMode {
+
+    public IntakeClass.clawStates clawState = IntakeClass.clawStates.OPEN;
+    private double extendoOffset = 0.05;
+
     public class Arm {
         private Servo outtakeLeft;
         private Servo outtakeRight;
@@ -66,8 +72,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class SpecimenOuttakePos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.2);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.2);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.24);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.24);
                 SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
                 SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
                 return false;
@@ -90,7 +96,7 @@ public final class IntoTheAuto extends LinearOpMode {
         public class CloseClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "claw", 0.35);
+                SmartServo.setSmartPos(hardwareMap, "claw", 0);
                 return false;
             }
         }
@@ -101,9 +107,7 @@ public final class IntoTheAuto extends LinearOpMode {
         public class OpenClaw implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "claw", 0.75);
-                telemetry.addData("BEANS", 0);
-                telemetry.update();
+                SmartServo.setSmartPos(hardwareMap, "claw", 0.34);
                 return false;
             }
         }
@@ -158,21 +162,343 @@ public final class IntoTheAuto extends LinearOpMode {
         public Action liftDown() {
             return new LiftDown();
         }
+
+        public class LiftDownFast implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                leftLift.setPower(-0.6);
+                rightLift.setPower(-0.6);
+                return false;
+            }
+        }
+        public Action liftDownFast() {
+            return new LiftDownFast();
+        }
     }
 
+    public class SampleActions {
+        Servo outtakeLeft;
+        Servo outtakeRight;
+        Servo slideLeft;
+        Servo slideRight;
+
+        CRServo intakeLeft;
+        CRServo intakeRight;
+        Servo wristLeft;
+        Servo wristRight;
+        Servo claw;
+
+        /*
+         * mom, do we have skibidi slicers?
+         */
+
+        public SampleActions(HardwareMap hardwareMap) {
+            outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+            outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
+            slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+            slideRight = hardwareMap.get(Servo.class, "slideRight");
+
+            intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+            intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+            wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+            wristRight = hardwareMap.get(Servo.class,"wristLeft");
+            claw = hardwareMap.get(Servo.class, "claw");
+
+            slideLeft.setDirection(Servo.Direction.REVERSE);
+            slideRight.setDirection(Servo.Direction.REVERSE);
+            claw.setDirection(Servo.Direction.REVERSE);
+
+            intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
+        public class YoinkilySpadoinkily implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                slideLeft.setDirection(Servo.Direction.REVERSE);
+                slideRight.setDirection(Servo.Direction.REVERSE);
+                claw.setDirection(Servo.Direction.REVERSE);
+
+                intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+                /*
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0);
+
+
+                intakeRight.setPower(-1);
+                intakeLeft.setPower(-1);
+
+                //wristLeft.setPosition(0.57);
+                //wristRight.setPosition(0.57);
+
+                sleep(500);
+
+
+                 */
+
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.18);
+                SmartServo.setSmartPos(hardwareMap,"slideRight", 0.18);
+
+                sleep(350);
 
 
 
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
 
+                sleep(150);
 
-    private void function() {
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0);
+                SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
 
+                return false;
+            }
+        }
+        public Action yoinkilySpadoinkily() {
+            return new YoinkilySpadoinkily();
+        }
+
+        public class ScoreSample implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                slideLeft.setDirection(Servo.Direction.REVERSE);
+                slideRight.setDirection(Servo.Direction.REVERSE);
+                claw.setDirection(Servo.Direction.REVERSE);
+
+                intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+                DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+                DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+
+                leftLift.setPower(1);
+                rightLift.setPower(1);
+
+                sleep(1000);
+
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.8);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.8);
+                leftLift.setPower(0.6);
+                rightLift.setPower(0.6);
+
+                sleep(650);
+
+                openClaw();
+
+                sleep(200);
+
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.12);
+                SmartServo.setSmartPos(hardwareMap,"slideRight", 0.12);
+
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0);
+
+                intakeRight.setPower(-1);
+                intakeLeft.setPower(-1);
+
+                return false;
+            }
+        }
+        public Action scoreSample() {
+            return new ScoreSample();
+        }
+
+        public class SampleTransfer implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                slideLeft.setDirection(Servo.Direction.REVERSE);
+                slideRight.setDirection(Servo.Direction.REVERSE);
+                claw.setDirection(Servo.Direction.REVERSE);
+
+                intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+                openClaw();
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft" , 0.53);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
+
+                sleep(400);
+
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0 + extendoOffset);
+                SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
+
+                sleep(333);
+
+                closeClaw();
+
+                sleep(100);
+
+                /*
+                sleep(350);
+
+                intakeLeft.setPower(-1);
+                intakeRight.setPower(-1);
+
+                sleep(500);
+
+                 */
+
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.45);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.45);
+
+                intakeLeft.setPower(0);
+                intakeRight.setPower(0);
+
+                return false;
+            }
+        }
+        public Action sampleTransfer() {
+            return new SampleTransfer();
+        }
     }
+
+    private void toggleClaw() {
+        IntakeClass.clawStates currectClawState = clawState;
+        if (currectClawState == IntakeClass.clawStates.OPEN) {
+            closeClaw();
+        }
+        if (currectClawState == IntakeClass.clawStates.CLOSE) {
+            openClaw();
+        }
+    }
+
+    private void closeClaw() {
+        SmartServo.setSmartPos(hardwareMap, "claw", 0);
+        clawState = IntakeClass.clawStates.CLOSE;
+    }
+    private void openClaw() {
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.3);
+        clawState = IntakeClass.clawStates.OPEN;
+    }
+
+    /*
+
+
+    private void transferSample() {
+
+        Servo outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+        Servo outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
+        Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
+
+        CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        CRServo intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+        Servo wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+        Servo wristRight = hardwareMap.get(Servo.class,"wristLeft");
+        Servo claw = hardwareMap.get(Servo.class, "claw");
+
+        slideLeft.setDirection(Servo.Direction.REVERSE);
+        slideRight.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.REVERSE);
+
+        intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
+
+        openClaw();
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+        SmartServo.setSmartPos(hardwareMap,"wristLeft" , 0.53);
+        SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
+
+        sleep(600);
+
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0 + extendoOffset);
+        SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
+
+        sleep(500);
+
+        closeClaw();
+
+        sleep(350);
+
+        intakeLeft.setPower(-1);
+        intakeRight.setPower(-1);
+
+        sleep(500);
+
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.45);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.45);
+
+        sleep(200);
+
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
+    }
+    //:
+    private void scoreSample() {
+        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        Servo outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
+        Servo outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
+
+        leftLift.setPower(1);
+        rightLift.setPower(1);
+
+        sleep(1000);
+
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.7);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.7);
+        leftLift.setPower(0.6);
+        rightLift.setPower(0.6);
+
+        sleep(350);
+
+
+        openClaw();
+
+        sleep(200);
+
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+    }
+
+    private void yoinkilySpadoinkaly() {
+        Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
+        Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
+
+        CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        CRServo intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+        Servo wristLeft = hardwareMap.get(Servo.class,"wristLeft");
+        Servo wristRight = hardwareMap.get(Servo.class,"wristLeft");
+
+        slideLeft.setDirection(Servo.Direction.REVERSE);
+        slideRight.setDirection(Servo.Direction.REVERSE);
+
+        // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
+
+        SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
+        SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
+
+        sleep(100);
+
+        intakeRight.setPower(-1);
+        intakeLeft.setPower(1);
+
+        sleep(650);
+
+        SmartServo.setSmartPos(hardwareMap,"wristLeft", 0);
+        SmartServo.setSmartPos(hardwareMap,"wristRight", 0);
+
+        sleep(100);
+
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0);
+        SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
+    }
+
+     */
+
     @Override
     public void runOpMode() throws InterruptedException {
         Lift lift = new Lift(hardwareMap);
         Claw claw = new Claw(hardwareMap);
         Arm arm = new Arm(hardwareMap);
+        SampleActions sampleActions = new SampleActions(hardwareMap);
+
         //DO NOT MOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHH
 
         String autoStart = new String("null");
@@ -183,22 +509,32 @@ public final class IntoTheAuto extends LinearOpMode {
         Pose2d beginPose = new Pose2d(12,-62, Math.toRadians(90));
 
 
-        Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
-        Pose2d specimenPose = new Pose2d(0, -31, Math.toRadians(90));
-        Pose2d specimenPoseLeft = new Pose2d(-4, -31, Math.toRadians(90));
-        Pose2d specimenPoseRight = new Pose2d(1.25, -29.75, Math.toRadians(90));
+        Pose2d leftBasket = new Pose2d(-55,-51, Math.toRadians(45));
+        Pose2d specimenPose = new Pose2d(-3, -27, Math.toRadians(90));
+        Pose2d specimenPoseLeft = new Pose2d(-6, -27, Math.toRadians(90));
+        Pose2d specimenPoseRight = new Pose2d(0, -27, Math.toRadians(90));
         Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
+        Pose2d returnFromGiftPose = new Pose2d(40, -48, Math.toRadians(90));
 
         Pose2d yoinkPose = new Pose2d(48, -52.75, Math.toRadians(90));
         Pose2d yoinkPose2 = new Pose2d(48, -53.5, Math.toRadians(90));
 
-        Pose2d transitionPose = new Pose2d(48, -38, Math.toRadians(90));
+        Pose2d transitionPose = new Pose2d(42, -38, Math.toRadians(90));
         Pose2d coloredSample1 = new Pose2d(51, -8, Math.toRadians(90));
         //Pose2d coloredSample1 = new Pose2d(48, -8, Math.toRadians(90));
-        Pose2d coloredSample2 = new Pose2d(54, -8, Math.toRadians(90));
+        Pose2d coloredSample2 = new Pose2d(47, -8, Math.toRadians(90));
         Pose2d coloredSample3 = new Pose2d(72, -8, Math.toRadians(90));
 
         Pose2d cycle2Actor = new Pose2d(48, -40, Math.toRadians(90));
+
+
+
+
+
+
+        Pose2d intake2ndSample = new Pose2d(-49.5, -40, Math.toRadians(90));
+        Pose2d intake3rdSample = new Pose2d(-60, -40, Math.toRadians(90));
+        Pose2d intake4thSample = new Pose2d(-58, -37, Math.toRadians(135));
 
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
@@ -207,10 +543,14 @@ public final class IntoTheAuto extends LinearOpMode {
         Servo outtakeLeft = hardwareMap.get(Servo.class, "outtakeLeft");
         Servo outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
         Servo clawServo = hardwareMap.get(Servo.class, "claw");
+        CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
+        CRServo intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
+
 
         slideLeft.setDirection(Servo.Direction.REVERSE);
         slideRight.setDirection(Servo.Direction.REVERSE);
         clawServo.setDirection(Servo.Direction.REVERSE);
+
 
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
 
@@ -226,12 +566,12 @@ public final class IntoTheAuto extends LinearOpMode {
             while(!isStopRequested()) {
                 if (initState == InitStep.START) {
                     if (gamepad1.x == true) {
-                        beginPose = new Pose2d(-35, -61.5, Math.PI / 2);
+                        beginPose = new Pose2d(-33,-62, Math.toRadians(90));
                         autoType = "sample";
                         canProceed = true;
                     }
                     if (gamepad1.b == true) {
-                        beginPose = new Pose2d(14,-62, Math.toRadians(90));
+                        beginPose = new Pose2d(14,-61.5, Math.toRadians(90));
                         autoType = "porting";
                         canProceed = true;
                         //Set Starting Pos
@@ -293,42 +633,123 @@ public final class IntoTheAuto extends LinearOpMode {
 
             sleep(3500);
 
-            clawServo.setPosition(0.35);
+            clawServo.setPosition(0);
 
             waitForStart();
 
+
+
+
+            TrajectoryActionBuilder dump1st = drive.actionBuilder(beginPose)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180));
+
+            TrajectoryActionBuilder intake2nd = drive.actionBuilder(leftBasket)
+                    .setTangent(45)
+                    .splineToLinearHeading(intake2ndSample, Math.toRadians(90));
+
+            TrajectoryActionBuilder dump2nd = drive.actionBuilder(intake2ndSample)
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180));
+
+            TrajectoryActionBuilder intake3rd = drive.actionBuilder(leftBasket)
+                    .setTangent(45)
+                    .splineToLinearHeading(intake3rdSample, Math.toRadians(90));
+
+            TrajectoryActionBuilder dump3rd = drive.actionBuilder(intake3rdSample)
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180));
+
+            TrajectoryActionBuilder intake4th = drive.actionBuilder(leftBasket)
+                    .setTangent(45)
+                    .splineToLinearHeading(intake4thSample, Math.toRadians(90));
+
+            TrajectoryActionBuilder dump4th = drive.actionBuilder(intake4thSample)
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180));
+
+            Action dump1stBuilt = dump1st.build();
+            Action intake2ndBuilt = intake2nd.build();
+            Action dump2ndBuilt = dump2nd.build();
+            Action intake3rdBuilt = intake3rd.build();
+            Action dump3rdBuilt = dump3rd.build();
+            Action intake4thBuilt = intake4th.build();
+            Action dump4thBuilt = dump4th.build();
+
+
+
+
+
+
+
             //sample
             if (autoType.equals("sample")) {
-                telemetry.update();
                 Actions.runBlocking(
-                        drive.actionBuilder(beginPose)
-                                .setTangent(135)
-                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                                //.addDisplacementMarker(() -> {
-                                //  // This marker runs after the first splineTo()
+                        new SequentialAction(
+                                //TRACK score 1st
+                                dump1stBuilt,
+                                new SleepAction(0.1),
+                                sampleActions.scoreSample(),
+                                new SleepAction(1),
+                                //TRACK For second
+                                new ParallelAction(
+                                        new SequentialAction(
+                                                lift.liftDown(),
+                                                new SleepAction(2.0),
+                                                lift.liftIdle()
+                                        ),
+                                        intake2ndBuilt
+                                ),
+                                sampleActions.yoinkilySpadoinkily(), //btw this is to intake the sample
+                                new ParallelAction(
+                                        sampleActions.sampleTransfer(),
+                                        dump2ndBuilt
+                                ),
+                                new SleepAction(0.1),
+                                sampleActions.scoreSample(),
+                                new SleepAction(1),
+                                //TRACK For third
+                                new ParallelAction(
+                                        new SequentialAction(
+                                                lift.liftDown(),
+                                                new SleepAction(2.0),
+                                                lift.liftIdle()
+                                        ),
+                                        intake3rdBuilt
+                                ),
+                                sampleActions.yoinkilySpadoinkily(), //btw this is to intake the sample
+                                new ParallelAction(
+                                        sampleActions.sampleTransfer(),
+                                        dump3rdBuilt
+                                ),
+                                new SleepAction(0.1),
+                                sampleActions.scoreSample(),
+                                new SleepAction(1),
+                                //TRACK For 4rd
+                                new ParallelAction(
+                                        new SequentialAction(
+                                                lift.liftDown(),
+                                                new SleepAction(2.0),
+                                                lift.liftIdle()
+                                        ),
+                                        intake4thBuilt
+                                ),
+                                sampleActions.yoinkilySpadoinkily(), //btw this is to intake the sample
+                                new ParallelAction(
+                                        sampleActions.sampleTransfer(),
+                                        dump4thBuilt
+                                ),
+                                new SleepAction(0.1),
+                                sampleActions.scoreSample(),
+                                new SleepAction(1),
 
-                                // Run your action in here!
-                                //})
-                                .setTangent(90)
-                                .splineToLinearHeading(new Pose2d(-37, -24, Math.toRadians(180)), Math.PI / 2)
-                                .setTangent(Math.PI / 1)
-                                .lineToX(-44)
-                                .lineToX(-42)
-                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                                .setTangent(0)
-                                .splineToLinearHeading(new Pose2d(-42, -24, Math.toRadians(180)), Math.PI / 2)
-                                .setTangent(Math.PI / 1)
-                                .lineToX(-52)
-                                .lineToX(-50)
-                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                                .setTangent(0)
-                                .splineToLinearHeading(new Pose2d(-46, -24, Math.toRadians(180)), Math.PI / 2)
-                                .setTangent(Math.PI / 1)
-                                .lineToX(-60)
-                                .lineToX(-58)
-                                .splineToLinearHeading(leftBasket, Math.toRadians(235))
-                                .build());
+                                lift.liftDown(),
+                                new SleepAction(2.0),
+                                lift.liftIdle(),
+                                new SleepAction(1000)
+                        )
+                );
             }
+
             TrajectoryActionBuilder score1 = drive.actionBuilder(beginPose)
                     .splineToLinearHeading(specimenPose, Math.toRadians(90));
 
@@ -342,7 +763,7 @@ public final class IntoTheAuto extends LinearOpMode {
                      */
                     .splineToLinearHeading(coloredSample2, Math.toRadians(270))
                     .splineToLinearHeading(cycle2Actor, Math.toRadians(90))
-                    .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180));
+                    .splineToLinearHeading(returnFromGiftPose, Math.toRadians(-180));
                     /*
                     .splineToLinearHeading(coloredSample3, Math.toRadians(270))
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
@@ -363,8 +784,8 @@ public final class IntoTheAuto extends LinearOpMode {
             TrajectoryActionBuilder humanPlayerFromSpecimenAction = drive.actionBuilder(specimenPose)
                     .lineToY(-40)
                     .splineToLinearHeading(humanPlayerPose, Math.toRadians(90));
-                    //.splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                    //.splineToLinearHeading(specimenPose, Math.toRadians(90));
+            //.splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
+            //.splineToLinearHeading(specimenPose, Math.toRadians(90));
             /*
             TrajectoryActionBuilder score4 = drive.actionBuilder(specimenPose)
                     .lineToY(-40)
@@ -376,7 +797,7 @@ public final class IntoTheAuto extends LinearOpMode {
                     .splineToLinearHeading(specimenPose, Math.toRadians(90));
 
              */
-            TrajectoryActionBuilder yoink = drive.actionBuilder(humanPlayerPose).
+            TrajectoryActionBuilder yoink = drive.actionBuilder(returnFromGiftPose).
                     splineToLinearHeading(yoinkPose, Math.toRadians(90));
             TrajectoryActionBuilder yoink3rd = drive.actionBuilder(humanPlayerPose).
                     splineToLinearHeading(yoinkPose2, Math.toRadians(90));
@@ -409,13 +830,16 @@ public final class IntoTheAuto extends LinearOpMode {
                                 //TRACK lift up for a wee bit in the beginning to not clip bar, while driving
                                 new ParallelAction(
                                         new SequentialAction(
-                                            score1built,
-                                            new SleepAction(1)
+                                                score1built,
+                                                new SleepAction(1)
                                         ),
                                         new SequentialAction(
-                                                lift.liftUp(),
+                                                arm.specimenOuttakePos()
+                                                /*lift.liftUp(),
                                                 new SleepAction(.2),
                                                 lift.liftIdle()
+
+                                                 */
                                         )
                                 ),
 
@@ -429,25 +853,25 @@ public final class IntoTheAuto extends LinearOpMode {
 
                                 //TRACK Go move samples to the human player zone while putting lifts down
                                 new ParallelAction(
-                                    moveSamplesBuilt,
-                                    //Going to move samples
-                                    new SequentialAction(
-                                        lift.liftDown(),
-                                        new SleepAction(2.75),
-                                        lift.liftIdle()
-                                    )
+                                        moveSamplesBuilt,
+                                        //Going to move samples elliot is stupid
+                                        new SequentialAction(
+                                                lift.liftDown(),
+                                                new SleepAction(2.75),
+                                                lift.liftIdle()
+                                        )
                                 ),
-                                new SleepAction(0.4),
+                                new SleepAction(1),
 
                                 //TRACK Picks up specimen #2
                                 arm.armSpecimenIntake(),
-                                new SleepAction(0.7),
+                                new SleepAction(0.6),
                                 yoinkBuilt,
                                 new SleepAction(0.2),
                                 claw.closeClaw(),
-                                new SleepAction(1),
+                                new SleepAction(0.5),
                                 arm.specimenOuttakePos(),
-                                new SleepAction(1.5),
+                                new SleepAction(0.7),
 
                                 //TRACK goes to specimen bar and scores 2
                                 specimenFromHumanPlayerLeft,
@@ -475,9 +899,9 @@ public final class IntoTheAuto extends LinearOpMode {
                                 yoink3rdBuilt,
                                 new SleepAction(0.4),
                                 claw.closeClaw(),
-                                new SleepAction(1),
+                                new SleepAction(0.5),
                                 arm.specimenOuttakePos(),
-                                new SleepAction(1),
+                                new SleepAction(0.8),
                                 specimenFromHumanPlayerRight,
                                 lift.liftUp(),
                                 new SleepAction(0.7),
@@ -486,8 +910,8 @@ public final class IntoTheAuto extends LinearOpMode {
                                 new SleepAction(0.2),
 
                                 //track puts lift down
-                                lift.liftDown(),
-                                new SleepAction(3),
+                                lift.liftDownFast(),
+                                new SleepAction(1),
                                 lift.liftIdle()
 
 
@@ -573,50 +997,10 @@ public final class IntoTheAuto extends LinearOpMode {
                                 .build());
             }
 
-                /*
-                Actions.runBlocking(
-                        drive.actionBuilder(beginPose)
-                                .splineToLinearHeading(specimenPose, Math.toRadians(270))
-                                //Scored 1st
-                                .lineToY(-47)
-                                .splineToLinearHeading(coloredSample1, Math.toRadians(123))
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .splineToLinearHeading(coloredSample2, Math.toRadians(270))
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .splineToLinearHeading(coloredSample3, Math.toRadians(270))
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .splineToLinearHeading(specimenPose, Math.toRadians(90))
-                                //SCored 2nd
-                                .lineToY(-40)
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .splineToLinearHeading(specimenPose, Math.toRadians(90))
-                                //Scored 3rd
-                                .lineToY(-40)
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .splineToLinearHeading(specimenPose, Math.toRadians(90))
-                                //Scored 4th
-                                .lineToY(-40)
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .splineToLinearHeading(specimenPose, Math.toRadians(90))
-                                //Scored5th
-                                .lineToY(-40)
-                                .splineToLinearHeading(humanPlayerPose, Math.toRadians(-180))
-                                .build());
-
-                 */
-
-            /*
-            Actions.runBlocking(new SequentialAction(
-
-                    drive.actionBuilder(beginPose).lineToX(1).build()
-
-            ));
-
-             */
 
 
         } else {
             throw new RuntimeException();
         }
     }
-    }
+}

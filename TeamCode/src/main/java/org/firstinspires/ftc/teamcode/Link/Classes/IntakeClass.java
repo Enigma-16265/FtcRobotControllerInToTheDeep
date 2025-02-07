@@ -33,7 +33,7 @@ public class IntakeClass {
         YELLOW,
         OTHER
     }
-    enum clawStates {
+    public enum clawStates {
         OPEN,
         CLOSE
     }
@@ -97,7 +97,7 @@ public class IntakeClass {
 
     transferringStates transferState = transferringStates.IDLE;
     colorSensorReturns CSReturn = colorSensorReturns.NOT_IN_INTAKE;
-    clawStates clawState = clawStates.OPEN;
+    public clawStates clawState = clawStates.OPEN;
 
 
     // constructor
@@ -122,7 +122,6 @@ public class IntakeClass {
         slideRight.setDirection(Servo.Direction.REVERSE);
         claw.setDirection(Servo.Direction.REVERSE);
 
-        //SAME WAY IS BOTH OR NONE
         intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         //intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -161,7 +160,7 @@ public class IntakeClass {
             }
         }
 
-        // if triggers are both on or both off, do nothing.
+        // if triggers are both on or both off, do nothing
         if (gamepad2.left_trigger > triggerThreshold && gamepad2.right_trigger > triggerThreshold) {
             spitToggle = false;
             intakeToggle = false;
@@ -376,10 +375,10 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.125314159);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.125314159);
-                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
-                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.53);
+                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
 
                 transferState = transferringStates.RETRACTING_EXTENDO;
                 transferTime = 0;
@@ -472,11 +471,11 @@ public class IntakeClass {
     }
 
     private void closeClaw() {
-        SmartServo.setSmartPos(hardwareMap, "claw", 0.4);
+        SmartServo.setSmartPos(hardwareMap, "claw", 0);
         clawState = clawStates.CLOSE;
     }
     private void openClaw() {
-        SmartServo.setSmartPos(hardwareMap, "claw", 0.7);
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.3);
         clawState = clawStates.OPEN;
     }
 

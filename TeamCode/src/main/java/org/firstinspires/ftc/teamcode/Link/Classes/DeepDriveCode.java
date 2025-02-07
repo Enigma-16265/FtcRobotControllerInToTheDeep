@@ -26,11 +26,11 @@ public class DeepDriveCode extends DriveCodeAbstract {
         // Run wheels in POV mode (note: The joystick goes negative when pushed forward, so negate it)
         // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
         // This way it's also easy to just drive straight, or just turn.\
-        double boostMultiplier = 1.2;
+        double boostMultiplier = 1.5; //probably should be 1.25 (reciprocal of speed)
 
-        double drive = -gamepad1.left_stick_y * boostMultiplier;
+        double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
-        double strafe = gamepad1.left_stick_x * boostMultiplier;
+        double strafe = gamepad1.left_stick_x;
 
 
         // Combine drive and turn for blended motion.
@@ -40,23 +40,17 @@ public class DeepDriveCode extends DriveCodeAbstract {
         double rightFront = drive - turn - strafe;
         double rightBack = drive - turn + strafe;
 
-        // Normalize the values so neither exceed +/- 1.0
 
-        double max = Math.max(Math.abs(leftFront), Math.abs(rightFront));
-        if (max > 1.0)
-        {
-            leftFront /= max;
-            rightFront /= max;
-        }
 
 
 
         // Output the safe vales to the motor drives.
         // he he they're now NOT safe >:) -E
-        leftFrontDrive.setPower(leftFront * speed);
-        leftBackDrive.setPower(leftBack * speed);
-        rightFrontDrive.setPower(rightFront * speed);
-        rightBackDrive.setPower(rightBack * speed);
+        //
+        leftFrontDrive.setPower(leftFront * speed * boostMultiplier);
+        leftBackDrive.setPower(leftBack * speed * boostMultiplier);
+        rightFrontDrive.setPower(rightFront * speed * boostMultiplier);
+        rightBackDrive.setPower(rightBack * speed* boostMultiplier);
     }
 
     /*public boolean areWheelsMoving(){

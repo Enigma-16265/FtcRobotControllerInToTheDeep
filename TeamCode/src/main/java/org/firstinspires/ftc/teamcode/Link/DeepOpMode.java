@@ -102,6 +102,7 @@ DeepOpMode extends LinearOpMode {
 
         // Wait for driver to press START
         waitForStart();
+        intakeCode.clawState = IntakeClass.clawStates.OPEN;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -126,8 +127,8 @@ DeepOpMode extends LinearOpMode {
             idle();
         }
     }
-
     // puts position of all servos on screen
+
     private void whatServoAt() {
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
@@ -135,6 +136,7 @@ DeepOpMode extends LinearOpMode {
         telemetry.addData("slideRight   = ", hardwareMap.get(Servo.class,"slideRight").getPosition());
         telemetry.addData("outtakeLeft  = ", hardwareMap.get(Servo.class,"outtakeLeft").getPosition());
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
+        telemetry.addData("claw         = ", hardwareMap.get(Servo.class,"claw").getPosition());
         telemetry.addData("driverMotorPower", hardwareMap.get(DcMotor.class, "rightFront").getPower());
         //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());

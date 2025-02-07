@@ -35,11 +35,11 @@ public class MeepMeepNew {
 
     public static void main(String[] args) {
 
-        String autoType = "optimized";
+        String autoType = "samplenewest";
 
         Pose2d beginPose = new Pose2d(14,-62, Math.toRadians(90));
 
-        Pose2d leftBasket = new Pose2d(-60,-60, Math.toRadians(90));
+        Pose2d leftBasket = new Pose2d(-56,-56, Math.toRadians(45));
         Pose2d specimenPose = new Pose2d(0, -31, Math.toRadians(90));
         Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
 
@@ -58,7 +58,44 @@ public class MeepMeepNew {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-
+        if (autoType == "samplenewest") {
+            myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-33,-62, Math.toRadians(90)))
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180)) //1
+                    .setTangent(45)
+                    .splineToLinearHeading(new Pose2d(-48, -40, Math.toRadians(90)), Math.toRadians(90))
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .setTangent(45)
+                    .splineToLinearHeading(new Pose2d(-56, -40, Math.toRadians(90)), Math.toRadians(90))
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .setTangent(45)
+                    .splineToLinearHeading(new Pose2d(-58, -38, Math.toRadians(135)), Math.toRadians(90))
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .build());
+        }
+        if (autoType == "samplenew") {
+            myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .setTangent(45)
+                    .splineToLinearHeading(new Pose2d(-48, -38, Math.toRadians(90)), Math.toRadians(90))
+                    .lineToY(-32)
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .setTangent(45)
+                    .splineToLinearHeading(new Pose2d(-58, -38, Math.toRadians(90)), Math.toRadians(90))
+                    .lineToY(-32)
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .setTangent(45)
+                    .splineToLinearHeading(new Pose2d(-58, -34, Math.toRadians(145)), Math.toRadians(90))
+                    .setTangent(125)
+                    .lineToX(-64)
+                    .setTangent(270)
+                    .splineToLinearHeading(leftBasket, Math.toRadians(180))
+                    .build());
+        }
         if (autoType == "sample") {
             myBot.runAction(myBot.getDrive().actionBuilder(beginPose)
                     .setTangent(135)
