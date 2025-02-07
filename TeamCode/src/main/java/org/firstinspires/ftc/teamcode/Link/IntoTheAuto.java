@@ -236,8 +236,8 @@ public final class IntoTheAuto extends LinearOpMode {
 
                  */
 
-                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.18);
-                SmartServo.setSmartPos(hardwareMap,"slideRight", 0.18);
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.19);
+                SmartServo.setSmartPos(hardwareMap,"slideRight", 0.19);
 
                 sleep(350);
 
@@ -532,8 +532,8 @@ public final class IntoTheAuto extends LinearOpMode {
 
 
 
-        Pose2d intake2ndSample = new Pose2d(-49.5, -40, Math.toRadians(90));
-        Pose2d intake3rdSample = new Pose2d(-60, -40, Math.toRadians(90));
+        Pose2d intake2ndSample = new Pose2d(-49.5, -41, Math.toRadians(90));
+        Pose2d intake3rdSample = new Pose2d(-60, -41, Math.toRadians(90));
         Pose2d intake4thSample = new Pose2d(-58, -37, Math.toRadians(135));
 
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
