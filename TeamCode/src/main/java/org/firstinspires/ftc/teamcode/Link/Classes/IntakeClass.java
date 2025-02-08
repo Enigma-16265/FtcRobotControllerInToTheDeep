@@ -375,8 +375,8 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.13);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.13);
                 SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.53);
                 SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
 

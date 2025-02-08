@@ -72,8 +72,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class SpecimenOuttakePos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.24);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.24);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.27);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.27);
                 SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
                 SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
                 return false;
@@ -514,15 +514,16 @@ public final class IntoTheAuto extends LinearOpMode {
         Pose2d specimenPoseLeft = new Pose2d(-6, -27, Math.toRadians(90));
         Pose2d specimenPoseRight = new Pose2d(0, -27, Math.toRadians(90));
         Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
-        Pose2d returnFromGiftPose = new Pose2d(40, -48, Math.toRadians(90));
+        Pose2d returnFromGiftPose = new Pose2d(44, -44, Math.toRadians(90));
+        //TODO: reduce accel from 2nd pickup
 
-        Pose2d yoinkPose = new Pose2d(48, -52.75, Math.toRadians(90));
+        Pose2d yoinkPose = new Pose2d(44, -52.75, Math.toRadians(90));
         Pose2d yoinkPose2 = new Pose2d(48, -53.5, Math.toRadians(90));
 
-        Pose2d transitionPose = new Pose2d(42, -38, Math.toRadians(90));
+        Pose2d transitionPose = new Pose2d(44, -38, Math.toRadians(90));
         Pose2d coloredSample1 = new Pose2d(51, -8, Math.toRadians(90));
         //Pose2d coloredSample1 = new Pose2d(48, -8, Math.toRadians(90));
-        Pose2d coloredSample2 = new Pose2d(47, -8, Math.toRadians(90));
+        Pose2d coloredSample2 = new Pose2d(49, -16, Math.toRadians(90));
         Pose2d coloredSample3 = new Pose2d(72, -8, Math.toRadians(90));
 
         Pose2d cycle2Actor = new Pose2d(48, -40, Math.toRadians(90));
