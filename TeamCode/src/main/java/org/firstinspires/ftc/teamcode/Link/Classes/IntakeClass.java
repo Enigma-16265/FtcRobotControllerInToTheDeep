@@ -88,7 +88,7 @@ public class IntakeClass {
 
     double wrist_rotation_speed = 0.05;
 
-    public static double extendoOffset = 0.05;
+    public static double extendoOffset = -0.1;
     private double intakeWristThreshold = 0.4;
 
 
@@ -273,8 +273,8 @@ public class IntakeClass {
         SmartServo.setSmartPos(hardwareMap, "outtakeRight", 1);
     }
     private void specimenOuttakePos() {
-        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
-        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1678);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.27);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.27);
         SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
         SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
     }
@@ -375,8 +375,8 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.13);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.13);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.12);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.12);
                 SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.53);
                 SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
 
@@ -410,8 +410,8 @@ public class IntakeClass {
                     intakeRight.setPower(-1);
                 }
                 if (transferTime >= 20) {
-                    SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.7);
-                    SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.7);
+                    SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.8);
+                    SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.8);
                     transferState = transferringStates.FINISH;
                     transferTime = 0;
                 }
