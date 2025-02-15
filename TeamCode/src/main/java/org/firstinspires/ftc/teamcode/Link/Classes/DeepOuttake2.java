@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Link.Classes;
 
+import static java.lang.System.currentTimeMillis;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 /*
@@ -13,7 +16,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * to change which button does what, go to Outtake()
  */
 
-public class DeepOuttake {
+public class DeepOuttake2 {
 
     // lifts
     // all servos are controlled through smart servo anyway
@@ -25,7 +28,7 @@ public class DeepOuttake {
     private final HardwareMap hardwareMap;
 
     // constructor
-    public DeepOuttake(HardwareMap hardwareMap, Gamepad gamepad) {
+    public DeepOuttake2(HardwareMap hardwareMap, Gamepad gamepad) {
         // initialize servos
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
@@ -33,7 +36,6 @@ public class DeepOuttake {
 
         // reverse necessary motor
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
-
 
 
         // set instance variables
@@ -46,16 +48,20 @@ public class DeepOuttake {
 
         // control the lifts with some other buttons
         if (gamepad.dpad_up) {
+
             rightLift.setPower(1);
-            leftLift.setPower(1);
-        } else if (gamepad.dpad_down) {
-            rightLift.setPower(-0.49);
-            leftLift.setPower(-0.49);
-        } else {
-            rightLift.setPower(0);
-            leftLift.setPower(0);
+            rightLift.setTargetPosition(6188);
+            rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
+        if (gamepad.dpad_down) {
 
+            rightLift.setPower(1);
+            rightLift.setTargetPosition(0);
+            rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // runs the next step in the outtake sequence
+        }
     }
 }

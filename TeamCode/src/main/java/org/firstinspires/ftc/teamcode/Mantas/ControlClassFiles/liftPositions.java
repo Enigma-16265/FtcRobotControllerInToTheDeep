@@ -1,14 +1,13 @@
 //imports
 package org.firstinspires.ftc.teamcode.Mantas.ControlClassFiles;
 
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-
-public class liftPositions {
+public class liftPositions2 {
 
     //objects
     private final DcMotor rightLift;
@@ -16,24 +15,8 @@ public class liftPositions {
     private final Gamepad gamePad;
     private final Telemetry telemetry;
 
-    //not objects
-    private double last_time_x_pressed;
-    private double last_time_y_pressed;
-    private double last_time_dPadRight_pressed;
-    private double pauseTimeMillis;
-
-    enum liftStages {
-        isFullyUp,
-        isInMiddle,
-        isFullyDown,
-        inactive
-    }
-
-    private liftStages currently_lifting = liftStages.isFullyDown;
-
     // constructor
-    public liftPositions(HardwareMap hardwareMap, Gamepad gamePad, Telemetry telemetry) {
-        //sets all the wheels to what they are in the hardware map
+    public liftPositions2(HardwareMap hardwareMap, Gamepad gamePad, Telemetry telemetry) {
         rightLift = hardwareMap.get(DcMotor.class, "rightHang");
         leftLift = hardwareMap.get(DcMotor.class, "leftHang");
 
@@ -45,134 +28,34 @@ public class liftPositions {
 
     public void makeLiftsWork() {
 
-        if (gamePad.b) {
+        if (gamePad.dpad_up) {
+
+            //make the right lift go to the max height
             rightLift.setPower(1);
-            leftLift.setPower(1);
-            telemetry.addLine("um");
-            telemetry.update();
+            rightLift.setTargetPosition(6188);
+
+            rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // code that might work
+            /*while (rightLift.isBusy()) {
+                leftLift.setPower(1);
+                telemetry.update();
+
+            }*/
         }
 
-        telemetry.addLine("no");
-        telemetry.update();
-        if (gamePad.x) {
-           telemetry.addLine("yes");
-           telemetry.update();
-            last_time_x_pressed = System.currentTimeMillis();
-            rightLift.setDirection(DcMotor.Direction.FORWARD);
-            leftLift.setDirection(DcMotor.Direction.FORWARD);
-            pauseTimeMillis = System.currentTimeMillis();
+        if (gamePad.dpad_down) {
 
-            if (currently_lifting == liftStages.isFullyDown) {
-                telemetry.addLine("thing");
+            //make the right lift go to the min height
+            rightLift.setPower(1);
+            rightLift.setTargetPosition(0);
+            rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            //code that might work
+            /*while (rightLift.isBusy()) {
+                leftLift.setPower(-1);
                 telemetry.update();
-                rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                    telemetry.addLine("stuff");
-                    telemetry.update();
-                    rightLift.setPower(1);
-                    leftLift.setPower(1);
-                }
-                    rightLift.setPower(0);
-                    leftLift.setPower(0);
-
-                    currently_lifting = liftStages.isFullyUp;
-            }
-
-                if (currently_lifting == liftStages.isInMiddle) {
-
-                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                    while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                        rightLift.setPower(1);
-                        leftLift.setPower(1);
-                    }
-
-                    rightLift.setPower(0);
-                    leftLift.setPower(0);
-
-                    currently_lifting = liftStages.isFullyUp;
-                }
-            }
-
-            if (gamePad.dpad_right && last_time_dPadRight_pressed + 1000 < System.currentTimeMillis()) {
-                last_time_dPadRight_pressed = System.currentTimeMillis();
-                rightLift.setDirection(DcMotor.Direction.FORWARD);
-                leftLift.setDirection(DcMotor.Direction.FORWARD);
-                pauseTimeMillis = System.currentTimeMillis();
-
-                if (currently_lifting == liftStages.isFullyDown) {
-
-                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                    while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
-                        rightLift.setPower(1);
-                        leftLift.setPower(1);
-                    }
-
-                    rightLift.setPower(0);
-                    leftLift.setPower(0);
-
-                    currently_lifting = liftStages.isInMiddle;
-                }
-
-                if (currently_lifting == liftStages.isFullyUp) {
-
-                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                    while (pauseTimeMillis + 1350 > System.currentTimeMillis()) {
-                        rightLift.setPower(-1);
-                        leftLift.setPower(-1);
-                    }
-
-                    rightLift.setPower(0);
-                    leftLift.setPower(0);
-
-                    currently_lifting = liftStages.isInMiddle;
-                }
-            }
-
-            if (gamePad.y && last_time_y_pressed + 1000 < System.currentTimeMillis()) {
-                last_time_y_pressed = System.currentTimeMillis();
-                rightLift.setDirection(DcMotor.Direction.REVERSE);
-                leftLift.setDirection(DcMotor.Direction.REVERSE);
-                pauseTimeMillis = System.currentTimeMillis();
-
-                if (currently_lifting == liftStages.isFullyUp) {
-
-                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                    while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                        rightLift.setPower(1);
-                        leftLift.setPower(1);
-                    }
-
-                    rightLift.setPower(0);
-                    leftLift.setPower(0);
-
-                    currently_lifting = liftStages.isFullyDown;
-                }
-
-                if (currently_lifting == liftStages.isInMiddle) {
-
-                    rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-                    while (pauseTimeMillis + 2700 > System.currentTimeMillis()) {
-                        rightLift.setPower(1);
-                        leftLift.setPower(1);
-                    }
-
-                    rightLift.setPower(0);
-                    leftLift.setPower(0);
-
-                    currently_lifting = liftStages.isFullyDown;
-                }
-            }
+            }*/
         }
     }
+}
