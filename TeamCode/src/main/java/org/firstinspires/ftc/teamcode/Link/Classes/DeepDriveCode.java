@@ -30,7 +30,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
         double drive = -gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
-        double strafe = gamepad1.left_stick_x;
+        double strafe = gamepad1.left_stick_x * 0.7;
 
 
         // Combine drive and turn for blended motion.
