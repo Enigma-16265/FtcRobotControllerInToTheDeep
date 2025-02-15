@@ -19,10 +19,11 @@ public class PIDF_Lift extends LinearOpMode {
 
     public static int target = 0;
 
-    private final double ticks_in_degree = 700 / 180.0; //TODO probably change this lmaoo
+    private final double ticks_in_degree = 700 / 180.0; //TODO probably change this lmao
 
     private DcMotor leftLift;
     private DcMotor rightLift;
+    private DcMotor armMotor;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,9 +31,11 @@ public class PIDF_Lift extends LinearOpMode {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        leftLift = hardwareMap.get(DcMotor.class, "leftLift");
-        rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //leftLift = hardwareMap.get(DcMotor.class, "leftLift");
+        //rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        //leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
 
         telemetry.update();
         waitForStart();

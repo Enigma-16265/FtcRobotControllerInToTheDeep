@@ -24,7 +24,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
 
     public void runWheels() {
         // Run wheels in POV mode (note: The joystick goes negative when pushed forward, so negate it)
-        // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
+        // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right. sledfyp xtvf
         // This way it's also easy to just drive straight, or just turn.\
         double boostMultiplier = 1.5; //probably should be 1.25 (reciprocal of speed)
 
