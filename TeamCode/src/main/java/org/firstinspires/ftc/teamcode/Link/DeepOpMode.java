@@ -75,7 +75,7 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
  *
  */
 
-@TeleOp(name="! Deep Teleop", group="Robot")
+@TeleOp(name="! Deep Teleop")
 //@Disabled
 public class
 DeepOpMode extends LinearOpMode {

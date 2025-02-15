@@ -42,7 +42,7 @@ enum InitStep {
 public final class IntoTheAuto extends LinearOpMode {
 
     public IntakeClass.clawStates clawState = IntakeClass.clawStates.OPEN;
-    private double extendoOffset = 0.05;
+    private double extendoOffset = IntakeClass.extendoOffset;
 
     public class Arm {
         private Servo outtakeLeft;
@@ -72,8 +72,8 @@ public final class IntoTheAuto extends LinearOpMode {
         public class SpecimenOuttakePos implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.24);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.24);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.27);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.27);
                 SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
                 SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
                 return false;
@@ -236,8 +236,8 @@ public final class IntoTheAuto extends LinearOpMode {
 
                  */
 
-                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.19);
-                SmartServo.setSmartPos(hardwareMap,"slideRight", 0.19);
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.23 + extendoOffset);
+                SmartServo.setSmartPos(hardwareMap,"slideRight", 0.23);
 
                 sleep(350);
 
@@ -248,7 +248,7 @@ public final class IntoTheAuto extends LinearOpMode {
 
                 sleep(150);
 
-                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0);
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0 + extendoOffset);
                 SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
 
                 return false;
@@ -289,7 +289,7 @@ public final class IntoTheAuto extends LinearOpMode {
                 SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
                 SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
 
-                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.12);
+                SmartServo.setSmartPos(hardwareMap,"slideLeft", 0.12 + extendoOffset);
                 SmartServo.setSmartPos(hardwareMap,"slideRight", 0.12);
 
                 SmartServo.setSmartPos(hardwareMap,"wristLeft", 0);
@@ -315,8 +315,8 @@ public final class IntoTheAuto extends LinearOpMode {
                 intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.14);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.14);
                 SmartServo.setSmartPos(hardwareMap,"wristLeft" , 0.53);
                 SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
 
@@ -341,8 +341,8 @@ public final class IntoTheAuto extends LinearOpMode {
 
                  */
 
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.45);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.45);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.47);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.47);
 
                 intakeLeft.setPower(0);
                 intakeRight.setPower(0);
@@ -514,27 +514,28 @@ public final class IntoTheAuto extends LinearOpMode {
         Pose2d specimenPoseLeft = new Pose2d(-6, -27, Math.toRadians(90));
         Pose2d specimenPoseRight = new Pose2d(0, -27, Math.toRadians(90));
         Pose2d humanPlayerPose = new Pose2d(48, -50, Math.toRadians(90));
-        Pose2d returnFromGiftPose = new Pose2d(40, -48, Math.toRadians(90));
+        Pose2d returnFromGiftPose = new Pose2d(46, -48, Math.toRadians(90));
+        //TODO: reduce accel from 2nd pickup
 
-        Pose2d yoinkPose = new Pose2d(48, -52.75, Math.toRadians(90));
-        Pose2d yoinkPose2 = new Pose2d(48, -53.5, Math.toRadians(90));
+        Pose2d yoinkPose = new Pose2d(44, -53.25, Math.toRadians(90));
+        Pose2d yoinkPose2 = new Pose2d(48, -52.75, Math.toRadians(90));
 
-        Pose2d transitionPose = new Pose2d(42, -38, Math.toRadians(90));
+        Pose2d transitionPose = new Pose2d(44, -38, Math.toRadians(90));
         Pose2d coloredSample1 = new Pose2d(51, -8, Math.toRadians(90));
         //Pose2d coloredSample1 = new Pose2d(48, -8, Math.toRadians(90));
-        Pose2d coloredSample2 = new Pose2d(47, -8, Math.toRadians(90));
+        Pose2d coloredSample2 = new Pose2d(56, -16, Math.toRadians(90));
         Pose2d coloredSample3 = new Pose2d(72, -8, Math.toRadians(90));
 
-        Pose2d cycle2Actor = new Pose2d(48, -40, Math.toRadians(90));
+        Pose2d cycle2Actor = new Pose2d(56, -40, Math.toRadians(90));
 
 
 
 
 
 
-        Pose2d intake2ndSample = new Pose2d(-49.5, -41, Math.toRadians(90));
-        Pose2d intake3rdSample = new Pose2d(-60, -41, Math.toRadians(90));
-        Pose2d intake4thSample = new Pose2d(-58, -37, Math.toRadians(135));
+        Pose2d intake2ndSample = new Pose2d(-49.5, -40, Math.toRadians(90));
+        Pose2d intake3rdSample = new Pose2d(-60, -40, Math.toRadians(90));
+        Pose2d intake4thSample = new Pose2d(-59, -35, Math.toRadians(135));
 
         Servo slideLeft = hardwareMap.get(Servo.class, "slideLeft");
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
@@ -625,7 +626,7 @@ public final class IntoTheAuto extends LinearOpMode {
 
 
             SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
-            SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+            SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0 + extendoOffset);
             SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.52);
             SmartServo.setSmartPos(hardwareMap,"wristRight", 0.52);
             SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
