@@ -9,11 +9,11 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     //TODO: Step 1, Replace all "wrist","hopper", etc with your servos
     Servo wrist;
     Servo elbow;
-    Servo leftFinger;
-    Servo rightFinger;
     Servo shoulder;
     Servo leftLift;
     Servo rightLift;
+    Servo wristLeft;
+    Servo wristRight;
 
     //DcMotor frontIntake;
     //DcMotor rearIntake;
@@ -26,10 +26,12 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     enum ServoTypes{
         SHOULDER,
         ELBOW,
-        LEFT_FINGER,
-        RIGHT_FINGER,
         WRIST,
-        LIFT
+        CLAW,
+        LIFT,
+        WRIST_ROTATION,
+
+
     }
     ServoTypes which;
     //TODO: Step 4, replace all names of Servos with yours, and replace all capitals with what you set them to from step 3
@@ -42,18 +44,13 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
             else if (which == ServoTypes.ELBOW) {
                 elbow.setPosition(elbow.getPosition() - speedAmount);
             }
-            else if (which == ServoTypes.LEFT_FINGER) {
-                leftFinger.setPosition(leftFinger.getPosition() - speedAmount);
-            }
-            else if (which == ServoTypes.RIGHT_FINGER) {
-                rightFinger.setPosition(rightFinger.getPosition() - speedAmount);
-            }
             else if (which == ServoTypes.WRIST) {
-                wrist.setPosition(wrist.getPosition() - speedAmount);
+                wristLeft.setPosition(wristLeft.getPosition() - speedAmount);
+                wristRight.setPosition(wristRight.getPosition() - speedAmount);
             }
-            else if (which == ServoTypes.LIFT) {
-                leftLift.setPosition(leftLift.getPosition() - speedAmount);
-                rightLift.setPosition(rightLift.getPosition() - speedAmount);
+            else if (which == ServoTypes.WRIST_ROTATION) {
+                wristLeft.setPosition(wristLeft.getPosition() - speedAmount);
+                wristRight.setPosition(wristRight.getPosition() + speedAmount);
             }
         }
         else if (gamepad1.right_bumper) {
@@ -63,18 +60,13 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
             else if (which == ServoTypes.ELBOW) {
                 elbow.setPosition(elbow.getPosition() + speedAmount);
             }
-            else if (which == ServoTypes.LEFT_FINGER) {
-                leftFinger.setPosition(leftFinger.getPosition() + speedAmount);
-            }
-            else if (which == ServoTypes.RIGHT_FINGER) {
-                rightFinger.setPosition(rightFinger.getPosition() + speedAmount);
-            }
             else if (which == ServoTypes.WRIST) {
-                wrist.setPosition(wrist.getPosition() + speedAmount);
+                wristLeft.setPosition(wristLeft.getPosition() + speedAmount);
+                wristRight.setPosition(wristRight.getPosition() + speedAmount);
             }
-            else if (which == ServoTypes.LIFT) {
-                leftLift.setPosition(rightLift.getPosition() + speedAmount);
-                rightLift.setPosition(rightLift.getPosition() + speedAmount);
+            else if (which == ServoTypes.WRIST_ROTATION) {
+                wristLeft.setPosition(wristLeft.getPosition() + speedAmount);
+                wristRight.setPosition(wristRight.getPosition() - speedAmount);
             }
         }
     }
@@ -90,17 +82,9 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
             which = ServoTypes.WRIST;
         }
         else if (gamepad1.a) {
-            which = ServoTypes.LIFT;
+            which = ServoTypes.WRIST_ROTATION;
         }
         telemetry.addData("Selected Servo = ", which.toString());
-    }
-    private void setExtra() {
-        if (gamepad1.dpad_left) {
-            which = ServoTypes.LEFT_FINGER;
-        }
-        else if (gamepad1.dpad_right) {
-            which = ServoTypes.RIGHT_FINGER;
-        }
     }
 
     //TODO: Step 7, your done! This was written by Goober on 11/5/23 slouching in a chair at 10:35 in the morning.
@@ -112,8 +96,6 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
     private void whatServoAt() {
         telemetry.addData("Shoulder = ", shoulder.getPosition());
         telemetry.addData("Elbow = ", elbow.getPosition());
-        telemetry.addData("Left Finger = ", leftFinger.getPosition());
-        telemetry.addData("Right Finger = ", rightFinger.getPosition());
         telemetry.addData("Wrist = ", wrist.getPosition());
         telemetry.addData("Lift Left = ",leftLift.getPosition());
         telemetry.addData("Lift Right = ",rightLift.getPosition());
@@ -126,23 +108,20 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
         //this is a coment to mAKE git update
 
         //TODO: Step 2, Replace the device names with your 4 (or more if you use two servos for one task) Into the deep me here, just replace var names and device names
-        wrist = hardwareMap.get(Servo.class, "wrist");
         elbow = hardwareMap.get(Servo.class, "elbow");
-        leftFinger = hardwareMap.get(Servo.class, "lFinger");
-        rightFinger = hardwareMap.get(Servo.class, "rFinger");
         shoulder = hardwareMap.get(Servo.class, "shoulder");
         rightLift = hardwareMap.get(Servo.class, "rightLift");
         leftLift = hardwareMap.get(Servo.class, "leftLift");
+        wristLeft = hardwareMap.get(Servo.class, "wristLeft");
+        wristRight = hardwareMap.get(Servo.class, "wristRight");
 
         shoulder.setDirection(Servo.Direction.REVERSE);
-        wrist.setDirection(Servo.Direction.REVERSE);
+        wristRight.setDirection(Servo.Direction.REVERSE);
 
 
         wrist.setPosition(0.575);
         shoulder.setPosition(0.425);
         elbow.setPosition(0.5);
-        rightFinger.setPosition(0.27);
-        leftFinger.setPosition(0.74);
         leftLift.setPosition(0.06);
         rightLift.setPosition(0.06);
 
@@ -153,7 +132,6 @@ public class McMuffin_the_REVENGE extends LinearOpMode {
         while(opModeIsActive()) {
             setServo();
             masterTuner();
-            setExtra();
             whatServoAt();
             //telemetry.addData("Selected", which.toString());
             //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");

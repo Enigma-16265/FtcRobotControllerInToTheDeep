@@ -78,7 +78,6 @@ public class RosesMantasOpMode extends LinearOpMode {
 
             // run various control code
             wheelCode.runWheels();
-
            // if (gamepad1.b) {
             //    armCode.grab();
            // }

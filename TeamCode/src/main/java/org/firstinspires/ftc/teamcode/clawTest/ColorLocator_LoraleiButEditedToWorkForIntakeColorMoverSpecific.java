@@ -5,7 +5,6 @@ import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,22 +18,21 @@ import org.opencv.core.RotatedRect;
 
 import java.util.Arrays;
 import java.util.List;
-@Autonomous(name = "LocatorTest1", group = "Teleop")
-public class ColorLocator_LoraleiButEditedToWorkForIntakeClaw extends LinearOpMode {
-    public ColorLocator_LoraleiButEditedToWorkForIntakeClaw(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap) {
+
+@Autonomous(name = "LocatorTest", group = "Teleop")
+public class ColorLocator_LoraleiButEditedToWorkForIntakeColorMoverSpecific extends LinearOpMode {
+    public ColorLocator_LoraleiButEditedToWorkForIntakeColorMoverSpecific(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
     }
-HardwareMap hardwareMap;
+    HardwareMap hardwareMap;
     public VisionPortal portal;
     public Point[] myBoxCorners;
-    public double[] centerX = {16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265};
-    public double[] centerY = {16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265,16265};
+    public double centerX = 16265;
+    public double centerY = 16265;
     public boolean seeBlueBlobs = false;
     public ColorBlobLocatorProcessor colorLocator;
     public int blobNum = 0;
-    public boolean problem = false;
     public void Setup(){
-        //WebcamName webcamName = hardwareMap.get(WebcamName.class,"Webcam 1");
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
          * - Specify the color range you are looking for.  You can use a predefined color, or create you own color range
          *     .setTargetColorRange(ColorRange.BLUE)                      // use a predefined color match
@@ -107,6 +105,7 @@ HardwareMap hardwareMap;
     }
     public void colorFinder(){
         seeBlueBlobs = false;
+        telemetry.addData("preview on/off", "... Camera Stream\n");
 
         // Read the current list
         List<ColorBlobLocatorProcessor.Blob> blobs = colorLocator.getBlobs();
@@ -143,13 +142,6 @@ HardwareMap hardwareMap;
         telemetry.addLine(" Area Density Aspect  Center");
 
         // Display the size (area) and center location for each Blob.
-        for (int i = 0; i < blobNum; i++){
-            centerX[i] = 16265;
-            centerY[i] = 16265;
-        }
-        if (centerX[0] != 16265 || centerY[0] != 16265){
-            problem = true;
-        }
         blobNum = 0;
         for(ColorBlobLocatorProcessor.Blob b : blobs)
         {
@@ -162,11 +154,12 @@ HardwareMap hardwareMap;
             myBoxCorners = new Point[4];
             boxFit.points(myBoxCorners);
             telemetry.addLine(Arrays.toString(myBoxCorners));
-            centerX[blobNum] = boxFit.center.x;
-            centerY[blobNum] = boxFit.center.y;
+            centerX = boxFit.center.x;
+            centerY = boxFit.center.y;
             telemetry.addLine(String.valueOf(centerX));
-            telemetry.addLine(String.valueOf(centerY[blobNum]));
+            telemetry.addLine(String.valueOf(centerY));
         }
+        telemetry.update();
         sleep(50);
     }
     @SuppressLint("DefaultLocale")
