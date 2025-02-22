@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.clawTest;
+package org.firstinspires.ftc.teamcode.visionStuff;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Link.Classes.IntakeClass;
+import org.firstinspires.ftc.teamcode.Link.mechanisms.IntakeClass;
 
 import java.util.jar.Attributes;
 
@@ -22,12 +22,8 @@ public class ColorMoverCompiler extends LinearOpMode {
         wristRight = hardwareMap.get(Servo.class, "wristRight");
         elbow = hardwareMap.get(Servo.class, "elbow");
         waitForStart();
-        telemetry.addData("started", toString());
-        telemetry.update();
         elbow.setPosition(0.5);
         sleep (10000);
-        wristLeft.setPosition(0);
-        wristRight.setPosition(0);
         wristRight.setPosition(0.5);
         wristLeft.setPosition(0.5);
         intakeColorMover farMover = new intakeColorMover(hardwareMap, gamepad1);
@@ -35,12 +31,9 @@ public class ColorMoverCompiler extends LinearOpMode {
         double waitTimer = 0;
         double drivePast = 0;
         double strafePast = 0;
-        telemetry.addData("Drive = " + farMover.drive, toString());
-        telemetry.addData("Change in drive over 500 ms is " + drivePast, toString());
         telemetry.update();
         //farMover.colorMove();
         while (opModeIsActive()) {
-            telemetry.addData("driveSpec = " + farMover.driveSpec, toString());
             telemetry.update();
             if ((farMover.strafe == 0 && farMover.drive == 0) || (System.currentTimeMillis() - waitTimer >= 500 && farMover.drive == drivePast && farMover.strafe == strafePast)) {
                 if (!servoSet) {

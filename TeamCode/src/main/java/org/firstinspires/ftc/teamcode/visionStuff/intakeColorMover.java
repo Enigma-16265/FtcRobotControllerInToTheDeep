@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Link.Classes.DeepDriveCode;
+import org.firstinspires.ftc.teamcode.Link.driveCodes.DeepDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.LorelaisDriveCode;
 
 public class intakeColorMover{
