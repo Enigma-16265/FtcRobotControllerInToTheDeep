@@ -34,53 +34,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import javax.script.*;
 
 @TeleOp(name="Olivers Drive Code") //, group="Linear OpMode")
 public class OliversDriveCode extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFront = null;
-    private DcMotor leftBack = null;
-    private DcMotor rightFront = null;
-    private DcMotor rightBack = null;
-
-    // Used to reverse the controls if necessary
-    private int driveReverse = 1;
-    private int turnReverse = 1;
-    private int rightReverse = 1;
-    private int leftReverse = 1;
-
-    // Variables to prevent control loops
-    private boolean xPressed = false;
-    private boolean yPressed = false;
-    private boolean aPressed = false;
-    private boolean bPressed = false;
-    private boolean rbPressed = false; //Right Bumper
-    private boolean rtPressed = false; //Right Trigger
-    private boolean lbPressed = false; //Left Bumper
-    private boolean ltPressed = false; //Left Trigger
-    private boolean rsPressed = false; //Right Stick
-    private boolean lsPressed = false; //Left Stick
-
-
-    private enum Buttons {
-        aButton,
-        bButton,
-        xButton,
-        yButton,
-        rightBumper,
-        rightTrigger,
-        leftBumper,
-        leftTrigger,
-        rightStick,
-        leftStick,
-        dpadUp,
-        dpadDown,
-        dpadRight,
-        dpadLeft,
-    }
+    private DcMotor leftFront;
+    private DcMotor leftBack;
+    private DcMotor rightFront;
+    private DcMotor rightBack;
 
     @Override
     public void runOpMode() {
@@ -104,27 +67,9 @@ public class OliversDriveCode extends LinearOpMode {
             double drivePower = gamepad1.left_stick_x;
             double turnPower = gamepad1.left_stick_y;
 
-            // Check if X/Y is pressed on controller
-            // If so reverse drive and turn functions
-            if (gamepad1.x && !xPressed) {
-                xPressed = true;
-                driveReverse *= -1;
-            } else if (!gamepad1.x) {
-                xPressed = false;
-            }
-
-            if (gamepad1.y && !yPressed) {
-                yPressed = true;
-                turnReverse *= -1;
-            } else if (!gamepad1.y) {
-                yPressed = false;
-            }
-
-
-
             // Calculate power from variables
-            double rightPower = Range.clip(drivePower + (turnPower * turnReverse), -1.0, 1.0) * driveReverse;
-            double leftPower = Range.clip(drivePower - (turnPower * turnReverse), -1.0, 1.0) * driveReverse;
+            double rightPower = Range.clip(drivePower + turnPower, -1.0, 1.0);
+            double leftPower = Range.clip(drivePower - turnPower, -1.0, 1.0);
 
             // Send calculated power to wheels
             rightFront.setPower(rightPower);
@@ -135,27 +80,8 @@ public class OliversDriveCode extends LinearOpMode {
             // Stuff to print to the console (clears every loop)
             telemetry.addData("Version", "1.1");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Reverses", "Drive: [%d], Turn: [%d]", driveReverse, turnReverse);
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
         }
-    }
-
-    private static class bind {
-         public class add<T> {
-             Buttons button;
-             T variable;
-             T modifier;
-
-             public add(Buttons Button, T Variable, T Modifier) {
-                 this.button = Button;
-                 this.variable = Variable;
-                 this.modifier = Modifier;
-             }
-
-             public void check() {
-
-             }
-         }
     }
 }
