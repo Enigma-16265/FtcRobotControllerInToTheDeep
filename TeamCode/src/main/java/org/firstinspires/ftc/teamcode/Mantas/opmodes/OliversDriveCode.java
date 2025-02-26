@@ -32,18 +32,41 @@ package org.firstinspires.ftc.teamcode.Mantas.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Olivers Drive Code") //, group="Linear OpMode")
 public class OliversDriveCode extends LinearOpMode {
 
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    // Variables for the robot
     private DcMotor leftFront;
     private DcMotor leftBack;
     private DcMotor rightFront;
     private DcMotor rightBack;
+
+    // Variables for opmode
+    private int driveReverse = 1;
+    private int turnReverse = 1;
+    private boolean strafeToggle;
+
+    // Button Stuff
+    private boolean buttonPressed[] = new boolean[14];
+
+    private enum Buttons {
+        aButton,
+        bButton,
+        xButton,
+        yButton,
+        leftBumper,
+        leftTrigger,
+        rightBumper,
+        rightTrigger,
+        leftStick,
+        rightStick,
+        dpadUp,
+        dpadDown,
+        dpadLeft,
+        dpadRight,
+    }
 
     @Override
     public void runOpMode() {
@@ -58,30 +81,192 @@ public class OliversDriveCode extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
-        runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double drivePower = gamepad1.left_stick_x;
-            double turnPower = gamepad1.left_stick_y;
+            telemetry.addData("Version", "1.03");
 
-            // Calculate power from variables
-            double rightPower = Range.clip(drivePower + turnPower, -1.0, 1.0);
-            double leftPower = Range.clip(drivePower - turnPower, -1.0, 1.0);
+            //Button handling
+            if (checkButton(Buttons.leftTrigger)) {
+                driveReverse *= -1;
+            }
 
-            // Send calculated power to wheels
-            rightFront.setPower(rightPower);
-            rightBack.setPower(rightPower);
-            leftFront.setPower(leftPower);
-            leftBack.setPower(leftPower);
+            if (checkButton(Buttons.leftBumper)) {
+                turnReverse *= -1;
+            }
 
-            // Stuff to print to the console (clears every loop)
-            telemetry.addData("Version", "1.1");
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            if (checkButton(Buttons.rightTrigger)) {
+                strafeToggle = !strafeToggle;
+            }
+
+            // Run functions for driving
+            if (strafeToggle) {
+                telemetry.addData("Strafe Toggle", "[TRUE]");
+                StrafeDrive();
+            } else {
+                telemetry.addData("Strafe Toggle", "[FALSE]");
+                DriveStandard();
+            }
+
+            // Print telemetry data to console.
             telemetry.update();
         }
+    }
+
+    private void DriveStandard() {
+        // Setup a variable for each drive wheel to save power level for telemetry
+        double drivePower = gamepad1.left_stick_x;
+        double turnPower = gamepad1.left_stick_y;
+
+        // Calculate power from variables
+        double rightPower = Range.clip(drivePower + (turnPower * turnReverse), -1.0, 1.0) * driveReverse;
+        double leftPower = Range.clip(drivePower - (turnPower * turnReverse), -1.0, 1.0) * driveReverse;
+
+        // Send calculated power to wheels
+        rightFront.setPower(rightPower);
+        rightBack.setPower(rightPower);
+        leftFront.setPower(leftPower);
+        leftBack.setPower(leftPower);
+
+        telemetry.addData("Motors", "Drive: (%d), Turn: (%d)", driveReverse, turnReverse);
+        telemetry.addData("Motors", "Left: (%d), Right(%d)", leftPower, rightPower);
+    }
+
+    private void StrafeDrive() {
+        telemetry.addData("aw hell nah", "you expect me to write strafe code??? im so cooked");
+    }
+
+    private boolean checkButton(Buttons button) {
+        // CRAPPY CODE!!! im not fixing it
+        switch (button) {
+            case aButton:
+                if (gamepad1.a && !buttonPressed[0]) {
+                    buttonPressed[0] = true;
+                    return true;
+                } else if (!gamepad1.a) {
+                    buttonPressed[0] = false;
+                }
+                break;
+
+            case bButton:
+                if (gamepad1.b && !buttonPressed[1]) {
+                    buttonPressed[1] = true;
+                    return true;
+                } else if (!gamepad1.b) {
+                    buttonPressed[1] = false;
+                }
+                break;
+
+            case xButton:
+                if (gamepad1.x && !buttonPressed[2]) {
+                    buttonPressed[2] = true;
+                    return true;
+                } else if (!gamepad1.x) {
+                    buttonPressed[2] = false;
+                }
+                break;
+
+            case yButton:
+                if (gamepad1.y && !buttonPressed[3]) {
+                    buttonPressed[3] = true;
+                    return true;
+                } else if (!gamepad1.y) {
+                    buttonPressed[3] = false;
+                }
+                break;
+
+            case leftBumper:
+                if (gamepad1.left_bumper && !buttonPressed[4]) {
+                    buttonPressed[4] = true;
+                    return true;
+                } else if (!gamepad1.left_bumper) {
+                    buttonPressed[4] = false;
+                }
+                break;
+
+            case leftTrigger:
+                if (gamepad1.left_trigger > 0.5 && !buttonPressed[5]) {
+                    buttonPressed[5] = true;
+                    return true;
+                } else if (gamepad1.left_trigger <= 0.5) {
+                    buttonPressed[5] = false;
+                }
+                break;
+
+            case rightBumper:
+                if (gamepad1.right_bumper && !buttonPressed[6]) {
+                    buttonPressed[6] = true;
+                    return true;
+                } else if (!gamepad1.right_bumper) {
+                    buttonPressed[6] = false;
+                }
+                break;
+
+            case rightTrigger:
+                if (gamepad1.right_trigger > 0.5 && !buttonPressed[7]) {
+                    buttonPressed[7] = true;
+                    return true;
+                } else if (gamepad1.right_trigger <= 0.5) {
+                    buttonPressed[7] = false;
+                }
+                break;
+
+            case leftStick:
+                if (gamepad1.left_stick_button && !buttonPressed[8]) {
+                    buttonPressed[8] = true;
+                    return true;
+                } else if (!gamepad1.left_stick_button) {
+                    buttonPressed[8] = false;
+                }
+                break;
+
+            case rightStick:
+                if (gamepad1.right_stick_button && !buttonPressed[9]) {
+                    buttonPressed[9] = true;
+                    return true;
+                } else if (!gamepad1.right_stick_button) {
+                    buttonPressed[9] = false;
+                }
+                break;
+
+            case dpadUp:
+                if (gamepad1.dpad_up && !buttonPressed[10]) {
+                    buttonPressed[10] = true;
+                    return true;
+                } else if (!gamepad1.dpad_up) {
+                    buttonPressed[10] = false;
+                }
+                break;
+
+            case dpadDown:
+                if (gamepad1.dpad_down && !buttonPressed[11]) {
+                    buttonPressed[11] = true;
+                    return true;
+                } else if (!gamepad1.dpad_down) {
+                    buttonPressed[11] = false;
+                }
+                break;
+
+            case dpadLeft:
+                if (gamepad1.dpad_left && !buttonPressed[1]) {
+                    buttonPressed[12] = true;
+                    return true;
+                } else if (!gamepad1.dpad_left) {
+                    buttonPressed[12] = false;
+                }
+                break;
+
+            case dpadRight:
+                if (gamepad1.dpad_right && !buttonPressed[1]) {
+                    buttonPressed[13] = true;
+                    return true;
+                } else if (!gamepad1.dpad_right) {
+                    buttonPressed[13] = false;
+                }
+                break;
+        }
+
+        return false;
     }
 }
