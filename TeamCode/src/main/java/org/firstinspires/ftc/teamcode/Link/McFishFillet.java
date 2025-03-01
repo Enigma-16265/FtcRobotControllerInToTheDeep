@@ -12,15 +12,15 @@ import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 @TeleOp
 public class McFishFillet extends LinearOpMode {
     //TODO: Step 1, Replace all "wrist","hopper", etc with your servos
-    Servo slideLeft;
-    Servo slideRight;
-    Servo outtakeLeft;
-    Servo outtakeRight;
-    Servo claw;
+    Servo   slideLeft;
+    Servo   slideRight;
+    Servo   outtakeLeft;
+    Servo   outtakeRight;
+    Servo   claw;
     CRServo intakeLeft;
     CRServo intakeRight;
-    Servo wristLeft;
-    Servo wristRight;
+    Servo   wristLeft;
+    Servo   wristRight;
     DcMotor rightLift;
     DcMotor leftLift;
 
