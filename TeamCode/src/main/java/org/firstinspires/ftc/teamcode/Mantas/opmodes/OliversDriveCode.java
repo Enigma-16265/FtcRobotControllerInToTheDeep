@@ -117,7 +117,7 @@ public class OliversDriveCode extends LinearOpMode {
         double rightPower = Range.clip(drivePower + (turnPower * turnReverse), -1.0, 1.0) * driveReverse;
         double leftPower = Range.clip(drivePower - (turnPower * turnReverse), -1.0, 1.0) * driveReverse;
 
-        // Send calculated power to wheels
+        // Send calculated power to wheels e
         rightFront.setPower(rightPower);
         rightBack.setPower(rightPower);
         leftFront.setPower(leftPower);
