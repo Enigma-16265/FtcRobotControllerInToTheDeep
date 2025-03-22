@@ -32,8 +32,10 @@ package org.firstinspires.ftc.teamcode.Mantas.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.LorelaisDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.mechanisms.RandomMovementControls;
@@ -46,25 +48,18 @@ import org.firstinspires.ftc.teamcode.Mantas.mechanisms.seconedLiftCode;
  * move around and stuff
  */
 
-@TeleOp(name="Robot: Roses Teleop POV", group="Robot")
+@TeleOp(name="thing", group="Robot")
 //@Disabled
-public class RosesMantasOpMode extends LinearOpMode {
+public class thing extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
         // Define and initialize wheels and declare wheelCode
-        //DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap,gamepad1);
-        //RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
-        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1, telemetry);
-
+        seconedLiftCode liftCode = new seconedLiftCode(hardwareMap,gamepad1,telemetry);
         // Define and initialize ALL installed servos and declare armCode
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
 
-        DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftHang");
-        DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightHang");
-
-        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData(">", "Robot Ready.  Press START.");
@@ -77,22 +72,11 @@ public class RosesMantasOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // run various control code
-            //wheelCode.runWheels();
-
-           //spinCode.spinAroundFunction();
-           liftcode.makeLiftsWork();
-
+            liftCode.makeLiftsWork();
             // Send telemetry message to signify robot running
-            whatServoAt();
-            telemetry.update();
 
             // Pace this loop so jaw action is reasonable speed.
             sleep(50);
         }
-    }
-
-    private void whatServoAt() {
-        telemetry.addData("leftLift", hardwareMap.get(DcMotor.class, "leftHang").getCurrentPosition());
-        telemetry.addData("leftLift", hardwareMap.get(DcMotor.class, "leftHang").isBusy());
     }
 }
