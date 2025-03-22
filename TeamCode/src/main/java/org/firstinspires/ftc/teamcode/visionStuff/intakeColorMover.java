@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.visionStuff;
 
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Link.driveCodes.DeepDriveCode;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.LorelaisDriveCode;
+import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
+
+import java.util.List;
 
 public class intakeColorMover{
     public intakeColorMover(com.qualcomm.robotcore.hardware.HardwareMap hardwareMap, Gamepad gamepad1) {
@@ -23,17 +19,21 @@ public class intakeColorMover{
     Gamepad gamepad1;
     LorelaisDriveCode wheelCode;
     ColorLocator_LoraleiButEditedToWorkForIntakeClaw locator;
-    double strafe = 0;
-    double drive = 0;
-    double driveSpec = 0;
-    double strafeSpec = 0;
+    public double strafe = 0;
+    public double drive = 0;
+    public double driveSpec = 0;
+    public double strafeSpec = 0;
     public boolean weSawBlue = false;
     public boolean problem;
+    double lowestCenter;
+    int arrayPos;
     public void colorMove() {
         locator.colorFinder();
         //Closest finder: For the camera mounted on the drivetrain
-        double lowestCenter = 100000000;
-        int arrayPos = 16265;
+        lowestCenter = 100000000;
+        arrayPos = 16265;
+        drive = 0;
+        strafe = 0;
         for (int i = 0; i < locator.centerY.length; i++) {
             if (locator.centerY[i] != 16265) {
                 if (lowestCenter > locator.centerY[i]) {
@@ -53,21 +53,28 @@ public class intakeColorMover{
             if (drive <= 0.1 && drive > 0 || drive >= -0.1 && drive < 0) {
                 drive = 0;
             }
-            double left = -drive + strafe;
-            double leftBackPower = -drive - strafe;
-            double right = -drive - strafe;
-            double rightBackPower = -drive + strafe;
-            driveSpec = 0;
-            strafeSpec = 0;
-            double max = Math.max(Math.abs(left), Math.abs(right));
-            if (max > 1) {
-                left /= max;
-                right /= max;
-            }
+        }
+        double left = -drive + strafe;
+        double leftBackPower = -drive - strafe;
+        double right = -drive - strafe;
+        double rightBackPower = -drive + strafe;
+        driveSpec = 0;
+        strafeSpec = 0;
+        double max = Math.max(Math.abs(left), Math.abs(right));
+        if (max > 1) {
+            left /= max;
+            right /= max;
+        }
+        if (drive != 0 || strafe != 0) {
             wheelCode.leftFrontDrive.setPower(left * wheelCode.speed);
             wheelCode.leftBackDrive.setPower(leftBackPower * wheelCode.speed);
             wheelCode.rightFrontDrive.setPower(right * wheelCode.speed);
             wheelCode.rightBackDrive.setPower(rightBackPower * wheelCode.speed);
+        }else{
+            wheelCode.leftFrontDrive.setPower(0);
+            wheelCode.leftBackDrive.setPower(0);
+            wheelCode.rightFrontDrive.setPower(0);
+            wheelCode.rightBackDrive.setPower(0);
         }
     }
     public void colorMoveSpecific() {

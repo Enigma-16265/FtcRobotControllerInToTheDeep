@@ -33,6 +33,7 @@ HardwareMap hardwareMap;
     public ColorBlobLocatorProcessor colorLocator;
     public int blobNum = 0;
     public boolean problem = false;
+    public double blobs;
     public void Setup(){
         //WebcamName webcamName = hardwareMap.get(WebcamName.class,"Webcam 1");
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
@@ -76,7 +77,7 @@ HardwareMap hardwareMap;
          *                                    "pixels" in the range of 2-4 are suitable for low res images.
          */
         colorLocator = new ColorBlobLocatorProcessor.Builder()
-                .setTargetColorRange(ColorRange.BLUE)         // use a predefined color match
+                .setTargetColorRange(ColorRange.RED)         // use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-1, 1, 1, -1))  // search central 1/4 of camera view
                 .setDrawContours(true)                        // Show contours on the Stream Preview
@@ -107,7 +108,6 @@ HardwareMap hardwareMap;
     }
     public void colorFinder(){
         seeBlueBlobs = false;
-
         // Read the current list
         List<ColorBlobLocatorProcessor.Blob> blobs = colorLocator.getBlobs();
 
@@ -143,7 +143,7 @@ HardwareMap hardwareMap;
         telemetry.addLine(" Area Density Aspect  Center");
 
         // Display the size (area) and center location for each Blob.
-        for (int i = 0; i < blobNum; i++){
+        for (int i = 0; i < centerY.length; i++){
             centerX[i] = 16265;
             centerY[i] = 16265;
         }
@@ -167,6 +167,7 @@ HardwareMap hardwareMap;
             telemetry.addLine(String.valueOf(centerX));
             telemetry.addLine(String.valueOf(centerY[blobNum]));
         }
+        colorLocator.getBlobs().removeAll(colorLocator.getBlobs());
         sleep(50);
     }
     @SuppressLint("DefaultLocale")
