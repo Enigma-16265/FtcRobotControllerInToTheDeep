@@ -51,6 +51,7 @@ public class RandomMovementControls {
 
     // the function for spinning the robot 180 degrees
     public void spinAroundFunction() {
+        // I could have just put a for loop here but I did not know I was making one at the time
 
         //if a was pressed do not let spinAroundFunction run for another second
         if (gamePad.a && ((last_time_a_pressed + 1000) < System.currentTimeMillis())) {
@@ -69,7 +70,6 @@ public class RandomMovementControls {
             //minus 1 to cycle_number
             cycle_number_spin--;
 
-            //spin the robot 18 degrees
             leftFrontWheel.setPower(speed);
             leftBackWheel.setPower(speed);
             rightFrontWheel.setPower(-speed);
