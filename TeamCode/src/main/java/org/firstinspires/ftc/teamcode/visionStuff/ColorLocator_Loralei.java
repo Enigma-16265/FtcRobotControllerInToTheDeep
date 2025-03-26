@@ -66,6 +66,7 @@ public class ColorLocator_Loralei extends LinearOpMode
     public double centery;
     public VisionPortal portal;
     public ColorBlobLocatorProcessor colorLocator;
+    public double blobs;
     public void Setup(){
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
          * - Specify the color range you are looking for.  You can use a predefined color, or create you own color range
@@ -108,7 +109,7 @@ public class ColorLocator_Loralei extends LinearOpMode
          *                                    "pixels" in the range of 2-4 are suitable for low res images.
          */
          colorLocator = new ColorBlobLocatorProcessor.Builder()
-                .setTargetColorRange(ColorRange.BLUE)         // use a predefined color match
+                .setTargetColorRange(ColorRange.RED)         // use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.5, 0.5, 0.5, -0.5))  // search central 1/4 of camera view
                 .setDrawContours(true)                        // Show contours on the Stream Preview
@@ -139,10 +140,13 @@ public class ColorLocator_Loralei extends LinearOpMode
     }
     public void colorFinder(){
         telemetry.addData("preview on/off", "... Camera Stream\n");
-
+        portal = new VisionPortal.Builder()
+                .addProcessor(colorLocator)
+                .setCameraResolution(new Size(640, 480))
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .build();
         // Read the current list
         List<ColorBlobLocatorProcessor.Blob> blobs = colorLocator.getBlobs();
-
         /*
          * The list of Blobs can be filtered to remove unwanted Blobs.
          *   Note:  All contours will be still displayed on the Stream Preview, but only those that satisfy the filter

@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.StuffWeMayUseSomeday.OliveTemplate;
+
 @TeleOp(name="Olivers Drive Code") //, group="Linear OpMode")
 public class OliversDriveCode extends LinearOpMode {
 
@@ -48,8 +50,12 @@ public class OliversDriveCode extends LinearOpMode {
     private int turnReverse = 1;
     private boolean strafeToggle;
 
+    private OliveTemplate OliveUtils = new OliveTemplate() {
+        public void runOpMode() throws InterruptedException {}
+    };
+
     // Button Stuff
-    private boolean buttonPressed[] = new boolean[14];
+    /*private boolean buttonPressed[] = new boolean[14];
 
     private enum Buttons {
         aButton,
@@ -66,7 +72,7 @@ public class OliversDriveCode extends LinearOpMode {
         dpadDown,
         dpadLeft,
         dpadRight,
-    }
+    }*/
 
     @Override
     public void runOpMode() {
@@ -88,20 +94,17 @@ public class OliversDriveCode extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Button handling
-            if (checkButton(Buttons.leftTrigger)) driveReverse *= -1;
-
-            if (checkButton(Buttons.leftBumper)) turnReverse *= -1;
-
-            if (checkButton(Buttons.rightTrigger)) strafeToggle = !strafeToggle;
 
             // Run functions for driving
-            if (strafeToggle) {
+            /*if (strafeToggle) {
                 telemetry.addData("Strafe Toggle", "[TRUE]");
                 StrafeDrive();
             } else {
                 telemetry.addData("Strafe Toggle", "[FALSE]");
                 DriveStandard();
-            }
+            }*/
+
+            OliveUtils.test();
 
             // Print telemetry data to console.
             telemetry.update();
@@ -131,178 +134,6 @@ public class OliversDriveCode extends LinearOpMode {
         telemetry.addData("aw hell nah", "you expect me to write strafe code??? im so cooked");
     }
 
-    private boolean checkButton(Buttons button, boolean held) {
-        /*
-            CRAPPY CODE AHEAD!!! BEWARE!! ⚠️⚠️⚠️🚨‼️‼️
-            I dont know how I would improve it...
-
-            If held not referenced; defaults to false
-            If held = true; returns true when button is held
-            If held = false; returns true only when user begins to press the button
-
-            if(checkButton(Buttons.[BUTTON], [BOOL])) [CODE];
-        */
-        switch (button) {
-            case aButton:
-                if (gamepad1.a) {
-                    if (!buttonPressed[0]) {
-                        buttonPressed[0] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[0] = false;
-                }
-                break;
-
-            case bButton:
-                if (gamepad1.b) {
-                    if (!buttonPressed[1]) {
-                        buttonPressed[1] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[1] = false;
-                }
-                break;
-
-            case xButton:
-                if (gamepad1.x) {
-                    if (!buttonPressed[2]) {
-                        buttonPressed[2] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[2] = false;
-                }
-                break;
-
-            case yButton:
-                if (gamepad1.y) {
-                    if (!buttonPressed[3]) {
-                        buttonPressed[3] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[3] = false;
-                }
-                break;
-
-            case leftBumper:
-                if (gamepad1.left_bumper) {
-                    if (!buttonPressed[4]) {
-                        buttonPressed[4] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[4] = false;
-                }
-                break;
-
-            case leftTrigger:
-                if (gamepad1.left_trigger > 0.5) {
-                    if (!buttonPressed[5]) {
-                        buttonPressed[5] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[5] = false;
-                }
-                break;
-
-            case rightBumper:
-                if (gamepad1.right_bumper) {
-                    if (!buttonPressed[6]) {
-                        buttonPressed[6] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[6] = false;
-                }
-                break;
-
-            case rightTrigger:
-                if (gamepad1.right_trigger > 0.5) {
-                    if (!buttonPressed[7]) {
-                        buttonPressed[7] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[7] = false;
-                }
-                break;
-
-            case leftStick:
-                if (gamepad1.left_stick_button) {
-                    if (!buttonPressed[8]) {
-                        buttonPressed[8] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[8] = false;
-                }
-                break;
-
-            case rightStick:
-                if (gamepad1.right_stick_button) {
-                    if (!buttonPressed[9]) {
-                        buttonPressed[9] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[9] = false;
-                }
-                break;
-
-            case dpadUp:
-                if (gamepad1.dpad_up) {
-                    if (!buttonPressed[10]) {
-                        buttonPressed[10] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[10] = false;
-                }
-                break;
-
-            case dpadDown:
-                if (gamepad1.dpad_down) {
-                    if (!buttonPressed[11]) {
-                        buttonPressed[11] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[11] = false;
-                }
-                break;
-
-            case dpadLeft:
-                if (gamepad1.dpad_left) {
-                    if (!buttonPressed[12]) {
-                        buttonPressed[12] = true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[12] = false;
-                }
-                break;
-
-            case dpadRight:
-                if (gamepad1.dpad_right) {
-                    if (!buttonPressed[13]) {
-                        buttonPressed[13] = true;
-                        return true;
-                    } else if (held) return true;
-                } else {
-                    buttonPressed[13] = false;
-                }
-                break;
-        }
-
-        return false;
-    }
-
-    private boolean checkButton(Buttons button) {
-        return checkButton(button, false);
-    }
 
     private void guh() {
         //something for auto drive
