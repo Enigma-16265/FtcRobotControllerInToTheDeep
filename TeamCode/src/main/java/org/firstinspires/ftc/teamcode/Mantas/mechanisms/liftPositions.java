@@ -1,14 +1,7 @@
 //imports
 package org.firstinspires.ftc.teamcode.Mantas.mechanisms;
 
-
-
-
-import static android.os.SystemClock.sleep;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -18,21 +11,18 @@ public class liftPositions {
     private final DcMotor rightLift;
     private final DcMotor leftLift;
     private final Gamepad gamePad;
-    private final Telemetry telemetry;
     public double setPoint;
 
     // constructor
-    public liftPositions(HardwareMap hardwareMap, Gamepad gamePad, Telemetry telemetry) {
+    public liftPositions(HardwareMap hardwareMap, Gamepad gamePad) {
         rightLift = hardwareMap.get(DcMotor.class, "rightHang");
         leftLift = hardwareMap.get(DcMotor.class, "leftHang");
 
         this.gamePad = gamePad;
-        this.telemetry = telemetry;
 
     }
 
     public void makeLiftsWork() {
-        //code that might work
 
         if (gamePad.dpad_up) {
 
@@ -53,6 +43,7 @@ public class liftPositions {
             leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         }
+        //if the left lift is not close to its destination, the right lift moves
         if (setPoint - leftLift.getCurrentPosition() >= 30) {
             rightLift.setPower(1);
         } else if (setPoint - leftLift.getCurrentPosition() <= -30) {

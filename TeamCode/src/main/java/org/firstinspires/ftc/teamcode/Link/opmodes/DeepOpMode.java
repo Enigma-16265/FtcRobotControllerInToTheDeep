@@ -148,6 +148,7 @@ DeepOpMode extends LinearOpMode {
         Servo slideRight = hardwareMap.get(Servo.class, "slideRight");
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //CRServo intake = hardwareMap.get(CRServo.class, "intake");
 
         CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");

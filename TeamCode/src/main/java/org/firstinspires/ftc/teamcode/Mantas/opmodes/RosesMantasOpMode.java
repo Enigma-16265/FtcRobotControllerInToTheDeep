@@ -54,9 +54,9 @@ public class RosesMantasOpMode extends LinearOpMode {
     public void runOpMode() {
 
         // Define and initialize wheels and declare wheelCode
-        //DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap,gamepad1);
-        //RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
-        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1, telemetry);
+        DriveCodeAbstract wheelCode = new LorelaisDriveCode(hardwareMap,gamepad1);
+        RandomMovementControls spinCode = new RandomMovementControls(hardwareMap, gamepad1);
+        liftPositions liftcode = new liftPositions(hardwareMap, gamepad1);
 
         // Define and initialize ALL installed servos and declare armCode
         //RosesMcMuffinClass mcMuffin = new RosesMcMuffinClass(hardwareMap, gamepad1);
@@ -77,9 +77,9 @@ public class RosesMantasOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             // run various control code
-            //wheelCode.runWheels();
+            wheelCode.runWheels();
 
-           //spinCode.spinAroundFunction();
+           spinCode.spinAroundFunction();
            liftcode.makeLiftsWork();
 
             // Send telemetry message to signify robot running
