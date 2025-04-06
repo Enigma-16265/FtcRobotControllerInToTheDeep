@@ -99,6 +99,7 @@ public class NinteenDollars extends LinearOpMode {
         rightBack.setPower(0.5);
         leftBack.setPower(-0.5);
         rightFront.setPower(0.5);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     private void brake() {
         leftFront.setPower(0);

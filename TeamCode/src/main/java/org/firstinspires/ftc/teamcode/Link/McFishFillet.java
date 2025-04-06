@@ -7,10 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Link.Classes.DeepDriveCode;
+import org.firstinspires.ftc.teamcode.Link.Classes.PIDF_Lift;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 
 @TeleOp
 public class McFishFillet extends LinearOpMode {
+
     //TODO: Step 1, Replace all "wrist","hopper", etc with your servos
     Servo   slideLeft;
     Servo   slideRight;
@@ -21,13 +24,17 @@ public class McFishFillet extends LinearOpMode {
     CRServo intakeRight;
     Servo   wristLeft;
     Servo   wristRight;
+    Servo clawWrist;
     DcMotor rightLift;
     DcMotor leftLift;
+
+    int counter;
 
     //DcMotor frontIntake;
     //DcMotor rearIntake;
 
     double speedAmount;
+    boolean gooberMode = false;
     //TODO: Add offset if needed w/ eg double lift
     //double LiftLeftOffset = -.05;
 
@@ -38,7 +45,9 @@ public class McFishFillet extends LinearOpMode {
         OUTTAKE,
         INTAKEPIVOT,
         INTAKE,
-        LIFT
+        CLAWWRIST,
+        LIFT,
+        PID_LIFT
     }
     ServoTypes which;
     //TODO: Step 4, replace all names of Servos with yours, and replace all capitals with what you set them to from step 3
@@ -63,9 +72,15 @@ public class McFishFillet extends LinearOpMode {
             else if (which == ServoTypes.INTAKE) {
                 //intake.setPosition(intake.getPosition() - speedAmount);
             }
+            else if (which == ServoTypes.CLAWWRIST) {
+                clawWrist.setPosition(clawWrist.getPosition() - speedAmount);
+            }
+            else if (which == ServoTypes.PID_LIFT) {
+                PIDF_Lift.target = PIDF_Lift.target - 5;
+            }
             else if (which == ServoTypes.LIFT) {
-                rightLift.setPower(0.1);
-                leftLift.setPower(0.1);
+                rightLift.setPower(0.5);
+                leftLift.setPower(0.5);
             }
 
         }
@@ -88,9 +103,15 @@ public class McFishFillet extends LinearOpMode {
             else if (which == ServoTypes.INTAKE) {
                 //intake.setPosition(intake.getPosition() + speedAmount);
             }
+            else if (which == ServoTypes.CLAWWRIST) {
+                clawWrist.setPosition(clawWrist.getPosition() + speedAmount);
+            }
+            else if (which == ServoTypes.PID_LIFT) {
+                PIDF_Lift.target = PIDF_Lift.target + 5;
+            }
             else if (which == ServoTypes.LIFT) {
-                rightLift.setPower(-0.1);
-                leftLift.setPower(-0.1);
+                rightLift.setPower(-0.25);
+                leftLift.setPower(-0.25);
             }
         }
         else {
@@ -111,6 +132,9 @@ public class McFishFillet extends LinearOpMode {
         }
         else if (gamepad1.a) {
             which = ServoTypes.LIFT;
+        }
+        else if (gamepad1.right_stick_button) {
+            which = ServoTypes.CLAWWRIST;
         }
 
         telemetry.addData("Selected Servo = ", which.toString());
@@ -137,6 +161,12 @@ public class McFishFillet extends LinearOpMode {
             intakeRight.setPower(0);
         }
     }
+    private void checkGoobage() {
+        if(gamepad1.back && gamepad1.start) {
+            gooberMode = true;
+            PIDF_Lift.target = 50;
+        }
+    }
 
     //TODO: Step 7, your done! This was written by Goober on 11/5/23 slouching in a chair at 10:35 in the morning.
     // And as I'm writing this I wonder if anybody will actually use this. Problably not,
@@ -151,12 +181,29 @@ public class McFishFillet extends LinearOpMode {
         telemetry.addData("outtakeRight (B) = ", outtakeRight.getPosition());
         telemetry.addData("slideLeft (X) = ", slideLeft.getPosition());
         telemetry.addData("wrist (Dpad R)= ", wristLeft.getPosition());
-        telemetry.addData("alvin and the chipmuks", 0);
+        telemetry.addData("clawWrist (RSB)", clawWrist.getPosition());
+        telemetry.addData("goober mode = ", gooberMode);
         //telemetry.addData("intake (Dpad L)= ", intake.getPosition());
     }
 
+    private void fishLoop() {
+        setServo();
+        masterTuner();
+        setExtra();
+        whatServoAt();
+        //telemetry.addData("Selected", which.toString());
+        //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");
+        scuffedIntake();
+        telemetry.update();
+        sleep(100);
+    }
     @Override
     public void runOpMode() {
+
+        //PIDF_Lift pidfLift = new PIDF_Lift();
+        DeepDriveCode wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
+
+
         which = ServoTypes.LID;
         speedAmount = 0.01;
         //this is a coment to mAKE git update
@@ -170,6 +217,7 @@ public class McFishFillet extends LinearOpMode {
         //intake = hardwareMap.get(CRServo.class, "intake");
         wristLeft = hardwareMap.get(Servo.class, "wristLeft");
         wristRight = hardwareMap.get(Servo.class, "wristRight");
+        clawWrist = hardwareMap.get(Servo.class, "clawWrist");
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
@@ -181,6 +229,9 @@ public class McFishFillet extends LinearOpMode {
         slideRight.setDirection(Servo.Direction.REVERSE);
         claw.setDirection(Servo.Direction.REVERSE);
         intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //
         //
         // intake.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -197,16 +248,17 @@ public class McFishFillet extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+
+
+
         while(opModeIsActive()) {
-            setServo();
-            masterTuner();
-            setExtra();
-            whatServoAt();
-            //telemetry.addData("Selected", which.toString());
-            //telemetry.addLine("Y = Shoulder - X = Hopper - B = Wrist A = Lift");
-            scuffedIntake();
-            telemetry.update();
-            sleep(100);
+            counter += 1;
+            if (counter >= 100) {
+                fishLoop();
+            }
+            //pidfLift.liftMain();
+            // TODO: MAKE THIS WORK wheelCode.runWheels();
+            sleep(1);
             idle();
         }
     }

@@ -59,7 +59,7 @@ public class IntakeClass {
     Servo wristRight;
     Servo claw;
 
-    RevColorSensorV3 colorSensor;
+    //RevColorSensorV3 colorSensor;
 
     // lots of usage variables
     double triggerThreshold = 0.4;
@@ -92,7 +92,7 @@ public class IntakeClass {
     private double intakeWristThreshold = 0.4;
 
 
-    String team = "red";
+    //String team = "red";
 
 
     transferringStates transferState = transferringStates.IDLE;
@@ -125,7 +125,7 @@ public class IntakeClass {
         intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         //intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+        //colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
         /*
         outtakeRight.setDirection(Servo.Direction.REVERSE);
         slideLeft.setDirection(Servo.Direction.REVERSE);
@@ -184,6 +184,7 @@ public class IntakeClass {
             intakeLeft.setPower(0);
             intakeRight.setPower(0);
 
+            /*
             if (team.equals("red")) {
                 //If robot has sample
                 if (colorDetection() == colorSensorReturns.BLUE) {
@@ -197,7 +198,11 @@ public class IntakeClass {
                     intakeRight.setPower(-1);
                     intakeLeft.setPower(-1);
                 }
+
+
             }
+
+             */
         }
 
         //Safety
@@ -234,6 +239,7 @@ public class IntakeClass {
 
      */
 
+    /*
     private Enum<colorSensorReturns> colorDetection() {
         if (wristLeft.getPosition() > intakeWristThreshold && wristRight.getPosition() > intakeWristThreshold) {
             redDetection = colorSensor.red(); //Add the actual value
@@ -258,6 +264,8 @@ public class IntakeClass {
         }
         return CSReturn;
     }
+
+     */
 
     private void specimenPosHandler() {
         if (gamepad1.left_bumper) {
