@@ -26,14 +26,14 @@ public class SmartServo {
         if(!isInitialized) {
             isInitialized = true;
 
-            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.0, 0.3506));
-            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.0, 0.3506));
+            constraintsForEachServo.put("slideLeft", new SingleServoConstraints(0.0, 0.28));
+            constraintsForEachServo.put("slideRight", new SingleServoConstraints(0.0, 0.28));
             constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0, 1)); //Arm btw
             constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0, 1)); //Init .51
             constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.075)); //.75
-            constraintsForEachServo.put("wristLeft", new SingleServoConstraints(0, 0.75));
-            constraintsForEachServo.put("wristRight", new SingleServoConstraints(0, 0.75));
-            constraintsForEachServo.put("claw", new SingleServoConstraints(0, 0.3));
+            constraintsForEachServo.put("wristLeft", new SingleServoConstraints(0, 0.96));
+            constraintsForEachServo.put("claw", new SingleServoConstraints(0.6, 0.92));
+            constraintsForEachServo.put("clawWrist", new SingleServoConstraints(0, 0.55));
         }
     }
 

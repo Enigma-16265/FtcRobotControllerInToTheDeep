@@ -9,14 +9,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @Config
 @TeleOp
 public class PIDF_Lift extends OpMode {
     private PIDController controller;
 
-    public static double p = 0.07, i = 0.001, d = 0.0009;
-    public static double f = 0.12;
+    public static double p = 0.09, i = 0.001, d = 0.0008;
+    public static double f = 0.14;
 
     public static int target = 0;
 
@@ -25,6 +27,8 @@ public class PIDF_Lift extends OpMode {
     private DcMotor lift_left;
     private DcMotor lift_right;
 
+
+
     @Override
     public void init() {
         controller = new PIDController(p, i, d);
@@ -32,7 +36,6 @@ public class PIDF_Lift extends OpMode {
 
         lift_left = hardwareMap.get(DcMotor.class, "leftLift");
         lift_right = hardwareMap.get(DcMotor.class, "rightLift");
-        lift_left.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 

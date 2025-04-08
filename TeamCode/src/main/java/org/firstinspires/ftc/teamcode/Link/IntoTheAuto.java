@@ -124,7 +124,6 @@ public final class IntoTheAuto extends LinearOpMode {
         public Lift(HardwareMap hardwareMap) {
             leftLift = hardwareMap.get(DcMotor.class, "leftLift");
             rightLift = hardwareMap.get(DcMotor.class, "rightLift");
-            leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         public class SetLiftIdle implements Action {

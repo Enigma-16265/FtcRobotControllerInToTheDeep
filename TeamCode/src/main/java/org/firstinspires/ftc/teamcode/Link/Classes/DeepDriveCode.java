@@ -29,7 +29,7 @@ public class DeepDriveCode extends DriveCodeAbstract {
         double boostMultiplier = 1.5; //probably should be 1.25 (reciprocal of speed)
 
         double drive = -gamepad1.left_stick_y;
-        double turn = gamepad1.right_stick_x;
+        double turn = gamepad1.right_stick_x/2;
         double strafe = gamepad1.left_stick_x;
 
 

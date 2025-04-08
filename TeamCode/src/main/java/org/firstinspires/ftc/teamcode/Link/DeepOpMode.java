@@ -29,6 +29,9 @@
 
 package org.firstinspires.ftc.teamcode.Link;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -39,6 +42,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Link.Classes.DeepOuttake;
 import org.firstinspires.ftc.teamcode.Link.Classes.DeepDriveCode;
 import org.firstinspires.ftc.teamcode.Link.Classes.IntakeClass;
+import org.firstinspires.ftc.teamcode.Link.Classes.PIDF_Lift;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 
@@ -79,6 +83,19 @@ import org.firstinspires.ftc.teamcode.Mantas.DriveCodes.DriveCodeAbstract;
 //@Disabled
 public class
 DeepOpMode extends LinearOpMode {
+    int counter = 0;
+    private PIDController controller;
+
+    public static double p = PIDF_Lift.p, i = PIDF_Lift.i, d = PIDF_Lift.d;
+    public static double f = PIDF_Lift.f;
+
+    public static int target = 0;
+
+    private final double ticks_in_degree = 700  / 180.0;
+
+
+    private boolean dpadRightPrevUpdate = false;
+
 
 
     @Override
@@ -88,6 +105,7 @@ DeepOpMode extends LinearOpMode {
         DeepDriveCode wheelCode = new DeepDriveCode(hardwareMap, gamepad1);
         DeepOuttake outtakeCode = new DeepOuttake(hardwareMap, gamepad2);
         IntakeClass intakeCode = new IntakeClass(hardwareMap, gamepad1, gamepad2);
+
 
         DcMotor leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         DcMotor rightLift = hardwareMap.get(DcMotor.class, "rightLift");
@@ -106,27 +124,65 @@ DeepOpMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            counter = counter + 1; //had to do this for sake of lift pid
+            if(counter == 50) {
+                counter = 0;
+                wheelCode.runWheels();
+                wheelCode.spinAroundFunction();
+                outtakeCode.outtake();
+                intakeCode.runIntake();
 
-           //rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            //leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                whatServoAt();
+            }
 
-            wheelCode.runWheels();
-            wheelCode.spinAroundFunction();
-            outtakeCode.outtake();
-            intakeCode.runIntake();
-            /*if (intakeCode.isWristDown() && !wheelCode.areWheelsMoving()){
-                SmartServo.setSmartPos(hardwareMap, "intakePivot", 0.6);
-            }*/
+            telemetry.addData("counter = ", counter);
 
-            // Send telemetry message to signify robot running
-            whatServoAt();
+
+            controller.setPID(p, i, d);
+            int liftPos = leftLift.getCurrentPosition();
+            double pid = controller.calculate(liftPos, target);
+            double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+
+            double power = pid + ff;
+
+
+            if (power < -0.25) {
+                power = -0.25;
+            }
+
+
+
+            leftLift.setPower(power);
+            rightLift.setPower(power);
+
+            liftManager();
+
             telemetry.update();
-
-            // Pace this loop so jaw action is reasonable speed.
-            sleep(50);
             idle();
         }
     }
+
+    private void liftManager() {
+        if (gamepad2.dpad_up) {
+            target = 830;
+        }
+        if (gamepad2.dpad_left) {
+            target = 300;
+        }
+        if (gamepad2.dpad_right && dpadRightPrevUpdate == false) {
+            if (target == 400) {
+                target = 450;
+            }
+            else {
+                target = 400;
+            }
+        }
+        if (gamepad2.dpad_down) {
+            target = 5;
+        }
+        dpadRightPrevUpdate = gamepad2.dpad_right;
+    }
+
     // puts position of all servos on screen
 
     private void whatServoAt() {
@@ -138,6 +194,7 @@ DeepOpMode extends LinearOpMode {
         telemetry.addData("outtakeRight = ", hardwareMap.get(Servo.class,"outtakeRight").getPosition());
         telemetry.addData("claw         = ", hardwareMap.get(Servo.class,"claw").getPosition());
         telemetry.addData("driverMotorPower", hardwareMap.get(DcMotor.class, "rightFront").getPower());
+
         //telemetry.addData("lid          = ", hardwareMap.get(Servo.class,"lid").getPosition());
         //telemetry.addData("intakePivot  = ", hardwareMap.get(Servo.class,"intakePivot").getPosition());
         //telemetry.addData("if transfer requested?", intakeCode.transferRequested);
@@ -156,11 +213,8 @@ DeepOpMode extends LinearOpMode {
         CRServo intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
         CRServo intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
         Servo wristLeft = hardwareMap.get(Servo.class,"wristLeft");
-        Servo wristRight = hardwareMap.get(Servo.class,"wristLeft");
         Servo claw = hardwareMap.get(Servo.class, "claw");
 
-
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         slideLeft.setDirection(Servo.Direction.REVERSE);
@@ -182,5 +236,8 @@ DeepOpMode extends LinearOpMode {
         SmartServo.setSmartPos(hardwareMap,"outtakeRight", 0.18);
         SmartServo.setSmartPos(hardwareMap,"outtakeLeft", 0.18);
         //SmartServo.setSmartPos(hardwareMap,"lid", 0.6);
+
+        controller = new PIDController(p, i, d);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 }

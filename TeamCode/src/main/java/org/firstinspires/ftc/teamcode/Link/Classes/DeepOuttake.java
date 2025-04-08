@@ -54,8 +54,7 @@ public class DeepOuttake {
         outtakeRight = hardwareMap.get(Servo.class, "outtakeRight");
 
 
-        // reverse necessary motor
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
 
@@ -87,6 +86,8 @@ public class DeepOuttake {
         }
 
         // control the lifts with some other buttons
+
+        /*
         if (gamepad.dpad_up) {
             rightLift.setPower(1);
             leftLift.setPower(1);
@@ -100,7 +101,9 @@ public class DeepOuttake {
             leftLift.setPower(0);
         }
 
-        if (gamepad.dpad_left) {
+         */
+
+        /*if (gamepad.dpad_left) {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()+0.1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()+0.1);
         }
@@ -108,6 +111,8 @@ public class DeepOuttake {
             SmartServo.setSmartPos(hardwareMap,"outtakeRight",outtakeRight.getPosition()-0.1);
             SmartServo.setSmartPos(hardwareMap,"outtakeLeft",outtakeLeft.getPosition()-0.1);
         }
+
+         */
 
         yWasPressed = gamepad.y;
         xWasPressed = gamepad.x;

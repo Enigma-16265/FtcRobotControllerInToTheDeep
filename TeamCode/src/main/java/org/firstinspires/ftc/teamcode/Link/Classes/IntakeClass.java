@@ -56,9 +56,10 @@ public class IntakeClass {
     CRServo intakeLeft;
     CRServo intakeRight;
     Servo wristLeft;
-    Servo wristRight;
     Servo claw;
 
+    CRServo hangLeft;
+    CRServo hangRight;
     //RevColorSensorV3 colorSensor;
 
     // lots of usage variables
@@ -91,6 +92,8 @@ public class IntakeClass {
     public static double extendoOffset = 0.05;
     private double intakeWristThreshold = 0.4;
 
+    public int liftTarget = 0;
+
 
     //String team = "red";
 
@@ -114,7 +117,6 @@ public class IntakeClass {
         intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
         intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
         wristLeft = hardwareMap.get(Servo.class,"wristLeft");
-        wristRight = hardwareMap.get(Servo.class,"wristLeft");
         claw = hardwareMap.get(Servo.class, "claw");
 
 
@@ -205,6 +207,7 @@ public class IntakeClass {
              */
         }
 
+
         //Safety
         if (spitToggle == true && intakeToggle == true) {
             intakeLeft.setPower(1);
@@ -277,14 +280,26 @@ public class IntakeClass {
     }
 
     private void specimenIntakePos() {
-        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 1);
-        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 1);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.34);
+        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.03);
     }
     private void specimenOuttakePos() {
-        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1678);
-        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1678);
-        SmartServo.setSmartPos(hardwareMap, "wristRight", 0.75);
-        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.75);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.85);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.85);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.49);
+    }
+
+    private void hangControl() {
+        if (1 == 2) {
+            hangLeft.setPower(1);
+            hangRight.setPower(1);
+        }
+        if (2 == 1) {
+            hangLeft.setPower(-1);
+            hangRight.setPower(-1);
+        }
     }
 
 
@@ -294,11 +309,9 @@ public class IntakeClass {
     private void wristRotation() {
         if (gamepad2.left_bumper && gamepad2.right_bumper == false) {
             SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
-            SmartServo.setSmartPos(hardwareMap,"wristRight", 0.57);
         }
         else if (gamepad2.right_bumper && gamepad2.left_bumper == false) {
-            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0);
-            SmartServo.setSmartPos(hardwareMap,"wristRight", 0);
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.99);
         }
     }
 
@@ -383,10 +396,10 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
-                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.53);
-                SmartServo.setSmartPos(hardwareMap,"wristRight", 0.53);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.05);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.05);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.37);
+                SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.3);
 
                 transferState = transferringStates.RETRACTING_EXTENDO;
                 transferTime = 0;
@@ -457,7 +470,7 @@ public class IntakeClass {
         bWasPressed = gamepad2.b;
     }
 
-//mfbrm
+
 
     // control extendo
     private void extendoHandler() {
@@ -479,11 +492,11 @@ public class IntakeClass {
     }
 
     private void closeClaw() {
-        SmartServo.setSmartPos(hardwareMap, "claw", 0);
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.6);
         clawState = clawStates.CLOSE;
     }
     private void openClaw() {
-        SmartServo.setSmartPos(hardwareMap, "claw", 0.3);
+        SmartServo.setSmartPos(hardwareMap, "claw", 0.92);
         clawState = clawStates.OPEN;
     }
 
@@ -520,6 +533,7 @@ public class IntakeClass {
         specimenPosHandler();
         toggleClaw();
         armPos();
+        hangControl();
 
         oneAndDone();
     }
