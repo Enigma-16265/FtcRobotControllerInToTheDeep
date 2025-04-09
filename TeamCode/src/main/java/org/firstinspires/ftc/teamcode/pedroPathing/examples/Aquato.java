@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.pedroPathing.examples;
 
 import static android.os.SystemClock.sleep;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
@@ -16,6 +19,8 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Link.Classes.PIDF_Lift;
+import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.Link.IntoTheAuto;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
@@ -27,6 +32,7 @@ enum AutoTypes {
 
 @Autonomous(name = "Aquato [Pedro auto]")
 public class Aquato extends OpMode {
+    int waitTimer1 = -1;
 
     Servo claw;
     Servo outtakeLeft;
@@ -37,6 +43,19 @@ public class Aquato extends OpMode {
     //MUY IMPORTANTE
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
+
+    private PIDController controller;
+
+    public static double p = PIDF_Lift.p, i = PIDF_Lift.i, d = PIDF_Lift.d;
+    public static double f = PIDF_Lift.f;
+
+    public static int target = 0;
+
+    private final double ticks_in_degree = 700  / 180.0;
+
+    private DcMotor liftLeft;
+    private DcMotor liftRight;
+
 
     /** This is the variable where we store the state of our auto.
      * It is used by the pathUpdate method. */
@@ -76,21 +95,21 @@ public class Aquato extends OpMode {
 
     //SPECIMEN \/
     private final Pose specimenStartPose = new Pose(85, 8.5, Math.toRadians(270));
-    private final Pose hangPose = new Pose(72,35, Math.toRadians(270));
-    private final Pose behindSample1 = new Pose(111, 60, Math.toRadians(270));
+    private final Pose hangPose = new Pose(66,40, Math.toRadians(270));
+    private final Pose behindSample1 = new Pose(113, 60, Math.toRadians(270));
     private final Pose behindSample1Control1 = new Pose(98, 0, Math.toRadians(270));
     private final Pose behindSample1Control2 = new Pose(108, 60, Math.toRadians(270));
-    private final Pose humanPlayerPose = new Pose(111, 16, Math.toRadians(270));
-    private final Pose behindSample2 = new Pose(120, 60, Math.toRadians(270));
+    private final Pose humanPlayerPose = new Pose(111, 20, Math.toRadians(270));
+    private final Pose behindSample2 = new Pose(123, 60, Math.toRadians(270));
     private final Pose behindSample2Control = new Pose(115, 66, Math.toRadians(270));
-    private final Pose humanPlayerPose2 = new Pose(120, 16, Math.toRadians(270));
-    private final Pose behindSample3 = new Pose(128, 60, Math.toRadians(270));
+    private final Pose humanPlayerPose2 = new Pose(120, 20, Math.toRadians(270));
+    private final Pose behindSample3 = new Pose(131, 60, Math.toRadians(270));
     private final Pose behindSample3Control = new Pose(113, 66, Math.toRadians(270));
-    private final Pose humanPlayerPose3 = new Pose(129, 16, Math.toRadians(270));
-    private final Pose grab2 = new Pose(118,11.243, Math.toRadians(270));
+    private final Pose humanPlayerPose3 = new Pose(129, 17, Math.toRadians(270));
+    private final Pose grab2 = new Pose(118,15, Math.toRadians(270));
     private final Pose grab2Control = new Pose(120,20, Math.toRadians(270));
-    private final Pose hangPose2 = new Pose(74,35, Math.toRadians(270));
-    private final Pose hangControl = new Pose(72, 20, Math.toRadians(270));
+    private final Pose hangPose2 = new Pose(68,40, Math.toRadians(270));
+    private final Pose hangControl = new Pose(70, 20, Math.toRadians(270));
     private final Pose grab3 = new Pose(118, 11.25, Math.toRadians(270));
     private Path scoreSpecimenPreload, specimenPark;
     private PathChain moveBehindSample1, giveSample1, moveBehindSample2, giveSample2, moveBehindSample3, giveSample3, grab2nd, grab3rd, hang2nd, hang3rd, grab4th, hang4th, grab5th, hang5th;
@@ -309,46 +328,46 @@ public class Aquato extends OpMode {
                     break;
             }
         }
-        if (autoType == AutoTypes.SAMPLE || 1==1) {
+        if (autoType == AutoTypes.SPECIMEN || 1==1) {
             switch (pathState2) {
                 case 0:
+                    scoreSpecimenPos();
                     follower.followPath(scoreSpecimenPreload);
 
                     setPathState2(1);
                     break;
                 case 1:
                     if (!follower.isBusy()) {
-                        sleep(500);
-                        scoreSpecimenPos();
-                        sleep(200);
+                        sleep(300);
                         openClaw();
-                        sleep(50);
+                        sleep(100);
                         follower.followPath(moveBehindSample1, true);
+                        waitTimer1 = 0;
                         setPathState2(2);
                     }
                     break;
                 case 2:
                     if (!follower.isBusy()) {
-                        follower.followPath(giveSample1, true);
+                        follower.followPath(giveSample1, false);
                         intakeSpecimenPos();
                         setPathState2(3);
                     }
                     break;
                 case 3:
                     if (!follower.isBusy()) {
-                        follower.followPath(moveBehindSample2, true);
+                        follower.followPath(moveBehindSample2, false);
                         setPathState2(4);
                     }
                     break;
                 case 4:
                     if (!follower.isBusy()) {
-                        follower.followPath(giveSample2, true);
+                        follower.followPath(giveSample2, false);
                         setPathState2(5);
                     }
                     break;
                 case 5:
                     if (!follower.isBusy()) {
-                        follower.followPath(moveBehindSample3, true);
+                        follower.followPath(moveBehindSample3, false);
                         setPathState2(6);
                     }
                     break;
@@ -370,20 +389,20 @@ public class Aquato extends OpMode {
                         intakeSpecimenPos();
                         sleep(1000);
                         closeClaw();
-                        sleep(100);
-                        outtakeSpecimenPos();
                         sleep(200);
+                        scoreSpecimenPos();
+                        sleep(300);
                         follower.followPath(hang2nd, true);
                         setPathState2(9);
                     }
                     break;
                 case 9:
                     if (!follower.isBusy()) {
-                        sleep(1000);
-                        scoreSpecimenPos();
-                        sleep(200);
+                        sleep(300);
                         openClaw();
-                        sleep(50);
+                        sleep(100);
+                        follower.followPath(moveBehindSample1, true);
+                        waitTimer1 = 0;
                         setPathState2(10);
                     }
             }
@@ -420,23 +439,24 @@ public class Aquato extends OpMode {
 
 
     private void intakeSpecimenPos() {
-        outtakeRight.setPosition(0.06);
-        outtakeLeft.setPosition(0.06);
-    }
-    private void outtakeSpecimenPos() {
-        outtakeRight.setPosition(0.73);
-        outtakeLeft.setPosition(0.73);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.34);
+        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.03);
+        target = 5;
     }
 
     private void scoreSpecimenPos() {
-        outtakeRight.setPosition(0.5);
-        outtakeLeft.setPosition(0.5);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.85);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.85);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.49);
+        target = 400;
     }
     private void closeClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.6);
     }
     private void openClaw() {
-        claw.setPosition(0.3);
+        claw.setPosition(0.92);
     }
 
 
@@ -445,6 +465,40 @@ public class Aquato extends OpMode {
     /** This is the main loop of the OpMode, it will run repeatedly after clicking "Play". **/
     @Override
     public void loop() {
+
+        controller.setPID(p, i, d);
+        int liftPos = liftLeft.getCurrentPosition();
+        double pid = controller.calculate(liftPos, target);
+        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+
+        double power = pid + ff;
+
+
+
+        if (power < -0.25) {
+            power = -0.25;
+        }
+
+
+
+        liftLeft.setPower(power);
+        liftRight.setPower(power);
+
+        if (waitTimer1 >= 0) {
+            waitTimer1 = waitTimer1 + 1;
+            if (waitTimer1 >= 1000) {
+                intakeSpecimenPos();
+                waitTimer1 = -1;
+            }
+        }
+
+
+
+
+
+
+
+
 
         // These loop the movements of the robot
         follower.update();
@@ -461,6 +515,14 @@ public class Aquato extends OpMode {
     /** This method is called once at the init of the OpMode. **/
     @Override
     public void init() {
+        controller = new PIDController(p, i, d);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        liftLeft = hardwareMap.get(DcMotor.class, "leftLift");
+        liftRight = hardwareMap.get(DcMotor.class, "rightLift");
+
+        target = 5;
+
         autoType = AutoTypes.SPECIMEN;
         pathTimer = new Timer();
         opmodeTimer = new Timer();
@@ -477,14 +539,16 @@ public class Aquato extends OpMode {
 
     /** This method is called continuously after Init while waiting for "play". **/
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+
+    }
 
     /** This method is called once at the start of the OpMode.
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        outtakeSpecimenPos();
+        scoreSpecimenPos();
         setPathState(0);
         setPathState2(0);
     }

@@ -89,7 +89,7 @@ public class IntakeClass {
 
     double wrist_rotation_speed = 0.05;
 
-    public static double extendoOffset = 0.05;
+    public static double extendoOffset = 0.0;
     private double intakeWristThreshold = 0.4;
 
     public int liftTarget = 0;
@@ -124,7 +124,7 @@ public class IntakeClass {
         slideRight.setDirection(Servo.Direction.REVERSE);
         claw.setDirection(Servo.Direction.REVERSE);
 
-        intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         //intakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
@@ -396,16 +396,18 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.05);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.05);
-                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.37);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.1);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.1);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.35);
                 SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.3);
+                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.11);
+                SmartServo.setSmartPos(hardwareMap, "slideRight", 0.11);
 
                 transferState = transferringStates.RETRACTING_EXTENDO;
                 transferTime = 0;
             }
             if (transferState == transferringStates.RETRACTING_EXTENDO) {
-                if (transferTime >= 12) {
+                if (transferTime >= 6) {
                     SmartServo.setSmartPos(hardwareMap,"slideLeft", 0 + extendoOffset);
                     SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
                     transferState = transferringStates.CLOSING_CLAW;
@@ -416,7 +418,7 @@ public class IntakeClass {
                 }
             }
             if (transferState == transferringStates.CLOSING_CLAW) {
-                if (transferTime >= 10) {
+                if (transferTime >= 5) {
                     closeClaw();
                     transferState = transferringStates.MAIN_TRANSFER;
                     transferTime = 0;
