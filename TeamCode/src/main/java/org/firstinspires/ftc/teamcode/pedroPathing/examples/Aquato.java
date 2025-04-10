@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.Link.IntoTheAuto;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
+import org.opencv.core.Mat;
 
 enum AutoTypes {
     SAMPLE,
@@ -95,24 +96,29 @@ public class Aquato extends OpMode {
 
     //SPECIMEN \/
     private final Pose specimenStartPose = new Pose(85, 8.5, Math.toRadians(270));
-    private final Pose hangPose = new Pose(66,40, Math.toRadians(270));
+    private final Pose hangPose = new Pose(66,40.5, Math.toRadians(270));
     private final Pose behindSample1 = new Pose(113, 60, Math.toRadians(270));
-    private final Pose behindSample1Control1 = new Pose(98, 0, Math.toRadians(270));
+    private final Pose behindSample1Control1 = new Pose(99, 0, Math.toRadians(270));
     private final Pose behindSample1Control2 = new Pose(108, 60, Math.toRadians(270));
-    private final Pose humanPlayerPose = new Pose(111, 20, Math.toRadians(270));
-    private final Pose behindSample2 = new Pose(123, 60, Math.toRadians(270));
-    private final Pose behindSample2Control = new Pose(115, 66, Math.toRadians(270));
-    private final Pose humanPlayerPose2 = new Pose(120, 20, Math.toRadians(270));
-    private final Pose behindSample3 = new Pose(131, 60, Math.toRadians(270));
-    private final Pose behindSample3Control = new Pose(113, 66, Math.toRadians(270));
-    private final Pose humanPlayerPose3 = new Pose(129, 17, Math.toRadians(270));
-    private final Pose grab2 = new Pose(118,15, Math.toRadians(270));
-    private final Pose grab2Control = new Pose(120,20, Math.toRadians(270));
-    private final Pose hangPose2 = new Pose(68,40, Math.toRadians(270));
+    private final Pose humanPlayerPose = new Pose(111, 24, Math.toRadians(270));
+    private final Pose behindSample2 = new Pose(123, 58, Math.toRadians(270));
+    private final Pose behindSample2Control = new Pose(120, 58, Math.toRadians(270));
+    private final Pose humanPlayerPose2 = new Pose(122, 21, Math.toRadians(270));
+    private final Pose behindSample3 = new Pose(131, 58, Math.toRadians(270));
+    private final Pose behindSample3Control = new Pose(128, 58, Math.toRadians(270));
+    private final Pose humanPlayerPose3 = new Pose(131, 24, Math.toRadians(270));
+    private final Pose grab2 = new Pose(118,13.25, Math.toRadians(270));
+    private final Pose grab2Control = new Pose(120,18, Math.toRadians(270));
+    private final Pose hangPose2 = new Pose(68,39, Math.toRadians(270));
     private final Pose hangControl = new Pose(70, 20, Math.toRadians(270));
-    private final Pose grab3 = new Pose(118, 11.25, Math.toRadians(270));
+    private final Pose grab3 = new Pose(118, 10.5, Math.toRadians(270));
+    private final Pose cycleControl = new Pose(88, 20, Math.toRadians(270));
+    private final Pose hangPose3 = new Pose(70,39, Math.toRadians(270));
+    private final Pose grab4 = new Pose(118, 10.5, Math.toRadians(270));
+    private final Pose hangControl2 = new Pose(78, 20, Math.toRadians(270));
+    private final Pose hangPose4 = new Pose(71,40, Math.toRadians(270));
     private Path scoreSpecimenPreload, specimenPark;
-    private PathChain moveBehindSample1, giveSample1, moveBehindSample2, giveSample2, moveBehindSample3, giveSample3, grab2nd, grab3rd, hang2nd, hang3rd, grab4th, hang4th, grab5th, hang5th;
+    private PathChain moveSamples, moveBehindSample1, giveSample1, moveBehindSample2, giveSample2, moveBehindSample3, giveSample3, grab2nd, grab2ndAlt, grab3rd, hang2nd, hang3rd, grab4th, hang4th, grab5th, hang5th;
     private int pathState2;
 
     /** Build the paths for the auto (adds, for example, constant/linear headings while doing paths)
@@ -187,34 +193,73 @@ public class Aquato extends OpMode {
         scoreSpecimenPreload = new Path(new BezierLine(new Point(specimenStartPose), new Point(hangPose)));
         scoreSpecimenPreload.setLinearHeadingInterpolation(specimenStartPose.getHeading(), hangPose.getHeading());
 
+        moveSamples = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(hangPose), new Point(behindSample1Control1), new Point(behindSample1Control2), new Point(behindSample1)))
+                .setConstantHeadingInterpolation(behindSample1.getHeading())
+                .addPath(new BezierLine(new Point(behindSample1), new Point(humanPlayerPose)))
+                .setConstantHeadingInterpolation(behindSample1.getHeading())
+                //.addPath(new BezierCurve(new Point(humanPlayerPose), new Point(behindSample2Control), new Point(behindSample2)))
+                //.setConstantHeadingInterpolation(humanPlayerPose.getHeading())
+                .addPath(new BezierLine(new Point(humanPlayerPose), new Point(behindSample2Control)))
+                .setConstantHeadingInterpolation(behindSample2Control.getHeading())
+                .addPath(new BezierLine(new Point(behindSample2Control), new Point(behindSample2)))
+                .setConstantHeadingInterpolation(behindSample2.getHeading())
+                .addPath(new BezierLine(new Point(behindSample2), new Point(humanPlayerPose2)))
+                .setConstantHeadingInterpolation(humanPlayerPose2.getHeading())
+
+
+                /*
+                .addPath(new BezierLine(new Point(humanPlayerPose2), new Point(behindSample3Control)))
+                .setConstantHeadingInterpolation(behindSample3Control.getHeading())
+                .addPath(new BezierLine(new Point(behindSample3Control), new Point(behindSample3)))
+                .setConstantHeadingInterpolation(behindSample3.getHeading())
+                .addPath(new BezierLine(new Point(behindSample3), new Point(humanPlayerPose3)))
+                .setConstantHeadingInterpolation(humanPlayerPose3.getHeading())
+
+                 */
+
+
+
+                //.addPath(new BezierLine(new Point(behindSample2Control), new Point(humanPlayerPose2))) specimen old
+                //.addPath(new BezierLine(new Point(behindSample2), new Point(humanPlayerPose2))) specimen old
+                //.setConstantHeadingInterpolation(behindSample2.getHeading()) specimen old
+                //.addPath(new BezierCurve(new Point(humanPlayerPose2), new Point(behindSample3Control), new Point(behindSample3))) specimen old
+                //.setConstantHeadingInterpolation(humanPlayerPose2.getHeading()) specimen old
+                //.addPath(new BezierLine(new Point(behindSample3), new Point(humanPlayerPose3)))
+                //.setConstantHeadingInterpolation(behindSample3.getHeading())
+                //.addPath(new BezierCurve(new Point(humanPlayerPose3), new Point(grab2Control), new Point(grab2)))
+                //.setLinearHeadingInterpolation(humanPlayerPose3.getHeading(), grab2.getHeading())
+                .build();
+
+
         moveBehindSample1 = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(hangPose), new Point(behindSample1Control1), new Point(behindSample1Control2), new Point(behindSample1)))
-                .setLinearHeadingInterpolation(hangPose.getHeading(), behindSample1.getHeading())
+                .setConstantHeadingInterpolation(behindSample1.getHeading())
                 .build();
 
         giveSample1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(behindSample1), new Point(humanPlayerPose)))
-                .setLinearHeadingInterpolation(behindSample1.getHeading(), humanPlayerPose.getHeading())
+                .setConstantHeadingInterpolation(behindSample1.getHeading())
                 .build();
 
         moveBehindSample2 = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(humanPlayerPose), new Point(behindSample2Control), new Point(behindSample2)))
-                .setLinearHeadingInterpolation(humanPlayerPose.getHeading(), behindSample2.getHeading())
+                .setConstantHeadingInterpolation(humanPlayerPose.getHeading())
                 .build();
 
         giveSample2 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(behindSample2), new Point(humanPlayerPose2)))
-                .setLinearHeadingInterpolation(behindSample2.getHeading(), humanPlayerPose2.getHeading())
+                .setConstantHeadingInterpolation(behindSample2.getHeading())
                 .build();
 
         moveBehindSample3 = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(humanPlayerPose2), new Point(behindSample3Control), new Point(behindSample3)))
-                .setLinearHeadingInterpolation(humanPlayerPose2.getHeading(), behindSample3.getHeading())
+                .setConstantHeadingInterpolation(humanPlayerPose2.getHeading())
                 .build();
 
         giveSample3 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(behindSample3), new Point(humanPlayerPose3)))
-                .setLinearHeadingInterpolation(behindSample3.getHeading(), humanPlayerPose3.getHeading())
+                .setConstantHeadingInterpolation(behindSample3.getHeading())
                 .build();
 
         grab2nd = follower.pathBuilder()
@@ -222,9 +267,34 @@ public class Aquato extends OpMode {
                 .setLinearHeadingInterpolation(humanPlayerPose3.getHeading(), grab2.getHeading())
                 .build();
 
+        grab2ndAlt = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(humanPlayerPose2), new Point(grab2Control), new Point(grab2)))
+                .setLinearHeadingInterpolation(humanPlayerPose2.getHeading(), grab2.getHeading())
+                .build();
+
         hang2nd = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(grab2), new Point(hangControl), new Point(hangPose2)))
                 .setLinearHeadingInterpolation(grab2.getHeading(), hangPose2.getHeading())
+                .build();
+
+        grab3rd = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(hangPose2), new Point(cycleControl), new Point(grab3)))
+                .setLinearHeadingInterpolation(hangPose2.getHeading(), grab3.getHeading())
+                .build();
+
+        hang3rd = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(grab3), new Point(hangControl), new Point(hangPose3)))
+                .setLinearHeadingInterpolation(grab3.getHeading(), hangPose3.getHeading())
+                .build();
+
+        grab4th = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(hangPose3), new Point(cycleControl), new Point(grab4)))
+                .setLinearHeadingInterpolation(hangPose3.getHeading(), grab4.getHeading())
+                .build();
+
+        hang4th = follower.pathBuilder()
+                .addPath(new BezierCurve(new Point(grab4), new Point(hangControl2), new Point(hangPose4)))
+                .setLinearHeadingInterpolation(grab4.getHeading(), hangPose4.getHeading())
                 .build();
     }
 
@@ -341,69 +411,77 @@ public class Aquato extends OpMode {
                         sleep(300);
                         openClaw();
                         sleep(100);
-                        follower.followPath(moveBehindSample1, true);
+                        follower.followPath(moveSamples, true); //behind sample
+                        sleep(400);
+                        drivePos();
                         waitTimer1 = 0;
                         setPathState2(2);
                     }
                     break;
                 case 2:
                     if (!follower.isBusy()) {
-                        follower.followPath(giveSample1, false);
-                        intakeSpecimenPos();
+                        follower.followPath(grab2ndAlt, true);
                         setPathState2(3);
                     }
                     break;
                 case 3:
                     if (!follower.isBusy()) {
-                        follower.followPath(moveBehindSample2, false);
+                        intakeSpecimenPos();
+                        sleep(600);
+                        closeClaw();
+                        sleep(200);
+                        scoreSpecimenPos();
+                        sleep(200);
+                        follower.followPath(hang2nd, true);
                         setPathState2(4);
                     }
                     break;
                 case 4:
                     if (!follower.isBusy()) {
-                        follower.followPath(giveSample2, false);
+                        sleep(300);
+                        openClaw();
+                        sleep(200);
+                        drivePos();
+                        sleep(200);
+                        //follower.followPath(moveBehindSample1, true);
+                        waitTimer1 = 0;
                         setPathState2(5);
                     }
-                    break;
                 case 5:
                     if (!follower.isBusy()) {
-                        follower.followPath(moveBehindSample3, false);
+                        follower.followPath(grab3rd, true);
                         setPathState2(6);
                     }
-                    break;
                 case 6:
                     if (!follower.isBusy()) {
-                        follower.followPath(giveSample3, true);
+                        intakeSpecimenPos();
+                        sleep(600);
+                        closeClaw();
+                        sleep(200);
+                        scoreSpecimenPos();
+                        sleep(200);
+                        follower.followPath(hang3rd, true);
                         setPathState2(7);
                     }
-                    break;
                 case 7:
                     if (!follower.isBusy()) {
-                        follower.followPath(grab2nd, true);
-                        intakeSpecimenPos();
+                        sleep(300);
+                        openClaw();
+                        sleep(600);
+                        drivePos();
+                        follower.followPath(grab4th, true); //behind sample
                         setPathState2(8);
                     }
-                    break;
                 case 8:
                     if (!follower.isBusy()) {
                         intakeSpecimenPos();
-                        sleep(1000);
+                        sleep(500);
                         closeClaw();
                         sleep(200);
                         scoreSpecimenPos();
                         sleep(300);
-                        follower.followPath(hang2nd, true);
+                        follower.followPath(hang4th, true);
                         setPathState2(9);
-                    }
-                    break;
-                case 9:
-                    if (!follower.isBusy()) {
-                        sleep(300);
-                        openClaw();
-                        sleep(100);
-                        follower.followPath(moveBehindSample1, true);
-                        waitTimer1 = 0;
-                        setPathState2(10);
                     }
             }
         }
@@ -439,17 +517,25 @@ public class Aquato extends OpMode {
 
 
     private void intakeSpecimenPos() {
-        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0);
-        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.07);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.07);
         SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.34);
         SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.03);
-        target = 5;
+        target = 3;
+    }
+
+    private void drivePos() {
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.3);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.3);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.34);
+        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.03);
+        target = 3;
     }
 
     private void scoreSpecimenPos() {
         SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.85);
         SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.85);
-        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.49);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.55);
         target = 400;
     }
     private void closeClaw() {
@@ -487,7 +573,7 @@ public class Aquato extends OpMode {
         if (waitTimer1 >= 0) {
             waitTimer1 = waitTimer1 + 1;
             if (waitTimer1 >= 1000) {
-                intakeSpecimenPos();
+                //intakeSpecimenPos();
                 waitTimer1 = -1;
             }
         }
