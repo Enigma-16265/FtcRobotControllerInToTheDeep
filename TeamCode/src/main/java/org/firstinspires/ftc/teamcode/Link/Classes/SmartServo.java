@@ -31,7 +31,7 @@ public class SmartServo {
             constraintsForEachServo.put("outtakeLeft", new SingleServoConstraints(0, 1)); //Arm btw
             constraintsForEachServo.put("outtakeRight", new SingleServoConstraints(0, 1)); //Init .51
             constraintsForEachServo.put("intake", new SingleServoConstraints(0.3, 0.075)); //.75
-            constraintsForEachServo.put("wristLeft", new SingleServoConstraints(0, 0.96));
+            constraintsForEachServo.put("wristLeft", new SingleServoConstraints(0, 1));
             constraintsForEachServo.put("claw", new SingleServoConstraints(0.6, 0.92));
             constraintsForEachServo.put("clawWrist", new SingleServoConstraints(0, 0.55));
         }

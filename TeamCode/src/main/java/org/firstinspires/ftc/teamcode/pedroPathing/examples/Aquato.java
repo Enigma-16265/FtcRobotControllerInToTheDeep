@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Link.Classes.IntakeClass;
 import org.firstinspires.ftc.teamcode.Link.Classes.PIDF_Lift;
 import org.firstinspires.ftc.teamcode.Link.Classes.SmartServo;
 import org.firstinspires.ftc.teamcode.Link.IntoTheAuto;
@@ -32,6 +33,14 @@ enum AutoTypes {
     SAMPLE,
     SPECIMEN
         }
+enum transferringStates {
+    IDLE,
+    OPENING_AND_MOVING_SERVOS,
+    RETRACTING_EXTENDO,
+    CLOSING_CLAW,
+    MAIN_TRANSFER,
+    FINISH
+}
 
 @Autonomous(name = "Aquato [Pedro auto]")
 public class Aquato extends OpMode {
@@ -49,6 +58,8 @@ public class Aquato extends OpMode {
     CRServo intakeRight;
 
     AutoTypes autoType;
+
+    transferringStates transferState = transferringStates.IDLE;
 
     //MUY IMPORTANTE
     private Follower follower;
@@ -86,14 +97,13 @@ public class Aquato extends OpMode {
     /** Start Pose of our robot for robot*/
     private final Pose sampleStartPose = new Pose(24, 8.5, Math.toRadians(90));
 
-    private final Pose scorePose = new Pose(8, /*57*/ 8, Math.toRadians(45)); //change radian to 45, is @ 90 for testing, also used to be 18, 18
+    private final Pose scorePose = new Pose(4, /*57*/ 4, Math.toRadians(45));
 
+    private final Pose pickup1Pose = new Pose(12, 30, Math.toRadians(90));
 
-    private final Pose pickup1Pose = new Pose(12, 22, Math.toRadians(90));
+    private final Pose pickup2Pose = new Pose(6, 30, Math.toRadians(90));
 
-    private final Pose pickup2Pose = new Pose(6, 22, Math.toRadians(90));
-
-    private final Pose pickup3Pose = new Pose(6, 26, Math.toRadians(135));
+    private final Pose pickup3Pose = new Pose(6, 28, Math.toRadians(135));
 
     private final Pose sampleParkPose = new Pose(36, 60, Math.toRadians(90));
 
@@ -316,17 +326,9 @@ public class Aquato extends OpMode {
             switch (pathState) {
                 case 0:
                     follower.followPath(scoreSamplePreload);
-                    scoreSamplePos();
+                    liftsUp();
                     sampleDrivePos();
-                    /*clawWrist.setPosition(0);
-                    sleep(300);
-                    clawWrist.setPosition(0.3);
-                    sleep(300);
-                    clawWrist.setPosition(0);
-                    sleep(300);
-                    clawWrist.setPosition(0.3);
 
-                     */
                     setPathState(1);
                     break;
                 case 1:
@@ -342,10 +344,17 @@ public class Aquato extends OpMode {
                         /* Score Preload */
 
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                        sleep(1500);
+                        scoreSamplePos();
                         sleep(500);
                         openClaw();
                         sleep(300);
                         preTransferPos();
+                        sleep(500);
+                        sampleIntakePos();
+                        intakeSample();
+                        sleep(300);
+
 
                         follower.followPath(grabPickup1, true);
                         setPathState(2);
@@ -359,11 +368,9 @@ public class Aquato extends OpMode {
 
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
 
-                        sampleIntakePos();
-                        sleep(500);
-                        intakeSample();
-                        sleep(500);
                         extendSlides();
+                        sleep(300);
+                        sampleDrivePos();
                         sleep(500);
                         follower.followPath(scorePickup1, true);
                         setPathState(3);
@@ -373,6 +380,9 @@ public class Aquato extends OpMode {
                     /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                     if (!follower.isBusy()) {
                         /* Score Sample */
+                        transfer();
+                        sleep(300);
+                        scoreSamplePos();
 
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
                         sleep(500);
@@ -419,6 +429,8 @@ public class Aquato extends OpMode {
                         /* Score Sample */
 
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are parked */
+
+                        retractSlides();
                         follower.followPath(samplePark, true);
                         sleep(500);
                         setPathState(8);
@@ -619,12 +631,12 @@ public class Aquato extends OpMode {
     }
 
     private void sampleIntakePos() {
-        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.91);
+        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.89);
     }
 
     private void extendSlides() {
-        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.8);
-        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.8);
+        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.07);
+        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.07);
     }
 
     private void retractSlides() {
@@ -642,9 +654,48 @@ public class Aquato extends OpMode {
         SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.7);
         SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.7);
         SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.55);
+    }
+
+    private void liftsUp() {
         SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
         SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
-        target = 800;
+        target = 870;
+    }
+
+    private void transfer() {
+
+        openClaw();
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+        SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.35);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.3);
+        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.05);
+        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.05);
+
+        sleep(300);
+
+
+        SmartServo.setSmartPos(hardwareMap,"slideLeft", 0);
+        SmartServo.setSmartPos(hardwareMap,"slideRight", 0);
+
+        sleep(250);
+
+        closeClaw();
+
+        sleep(350);
+
+        intakeLeft.setPower(1);
+        intakeRight.setPower(1);
+        sleep(500);
+        SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.7);
+        SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.7);
+
+        sleep(200);
+
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
+
+
     }
 
     private void sampleDrivePos() {
@@ -653,6 +704,10 @@ public class Aquato extends OpMode {
     private void intakeSample() {
         intakeLeft.setPower(1);
         intakeRight.setPower(1);
+    }
+    private void stopIntake() {
+        intakeLeft.setPower(0);
+        intakeRight.setPower(0);
     }
 
 

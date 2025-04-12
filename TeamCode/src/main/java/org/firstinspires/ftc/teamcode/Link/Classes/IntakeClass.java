@@ -311,7 +311,7 @@ public class IntakeClass {
             SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.57);
         }
         else if (gamepad2.right_bumper && gamepad2.left_bumper == false) {
-            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.92);
+            SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.90);
         }
     }
 
@@ -396,12 +396,12 @@ public class IntakeClass {
             if (transferState == transferringStates.OPENING_AND_MOVING_SERVOS) {
 
                 openClaw();
-                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.08);
-                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.08);
-                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.35);
+                SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.09);
+                SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.09);
+                SmartServo.setSmartPos(hardwareMap,"wristLeft", 0.3);
                 SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.3);
-                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.11);
-                SmartServo.setSmartPos(hardwareMap, "slideRight", 0.11);
+                SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.05);
+                SmartServo.setSmartPos(hardwareMap, "slideRight", 0.05);
 
                 transferState = transferringStates.RETRACTING_EXTENDO;
                 transferTime = 0;
