@@ -95,15 +95,15 @@ public class Aquato extends OpMode {
     //SAMPLE \/
 
     /** Start Pose of our robot for robot*/
-    private final Pose sampleStartPose = new Pose(8,112.5, Math.toRadians(0));//(32, 8.5, Math.toRadians(90)); Try the ones that I don't have commented out. They might work. Otherwise, try the ones that are commented out, they get you 1 sample auto
+    private final Pose sampleStartPose = new Pose(32, 8.5, Math.toRadians(90)); //Try the ones that I don't have commented out. They might work. Otherwise, try the ones that are commented out, they get you 1 sample auto
 
-    private final Pose scorePose = new Pose(13,131, Math.toRadians(135));//(12,/*57*/ 5, Math.toRadians(45));
+    private final Pose scorePose = new Pose(12,/*57*/ 5, Math.toRadians(45));
 
-    private final Pose pickup1Pose = new Pose(31,121, Math.toRadians(180));//(12, 30, Math.toRadians(90));
+    private final Pose pickup1Pose = new Pose(22, 28, Math.toRadians(90));
 
-    private final Pose pickup2Pose = new Pose(31,131, Math.toRadians(-180));//(6, 30, Math.toRadians(90));
+    private final Pose pickup2Pose = new Pose(16, 28, Math.toRadians(90));
 
-    private final Pose pickup3Pose = new Pose(46,127, Math.toRadians(-90));//(6, 28, Math.toRadians(135));
+    private final Pose pickup3Pose = new Pose(16, 28, Math.toRadians(135));
 
     private final Pose sampleParkPose = new Pose(36, 60, Math.toRadians(90));
 
@@ -351,9 +351,7 @@ public class Aquato extends OpMode {
                         sleep(300);
                         preTransferPos();
                         sleep(500);
-                        sampleIntakePos();
                         intakeSample();
-                        sleep(300);
 
 
                         follower.followPath(grabPickup1, true);
@@ -368,10 +366,14 @@ public class Aquato extends OpMode {
 
                         /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
 
-                        extendSlides();
+                        sampleIntakePos();
                         sleep(300);
-                        sampleDrivePos();
+                        extendSlides();
                         sleep(500);
+                        sampleDrivePos();
+                        sleep(2000);
+                        retractSlides();
+                        sleep(5000);
                         follower.followPath(scorePickup1, true);
                         setPathState(3);
                     }
@@ -637,8 +639,8 @@ public class Aquato extends OpMode {
     }
 
     private void extendSlides() {
-        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.07);
-        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.07);
+        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.15);
+        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.15);
     }
 
     private void retractSlides() {
@@ -815,6 +817,7 @@ public class Aquato extends OpMode {
         setPathState2(0);
         SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
         SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
+        SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.3);
 
         if (autoType == AutoTypes.SAMPLE) {
             follower.setStartingPose(sampleStartPose);

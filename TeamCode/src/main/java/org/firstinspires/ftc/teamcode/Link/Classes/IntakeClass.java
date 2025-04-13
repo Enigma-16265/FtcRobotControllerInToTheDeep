@@ -52,7 +52,8 @@ public class IntakeClass {
     DcMotor leftLift;
     DcMotor rightLift;
     //CRServo intake = hardwareMap.get(CRServo.class, "intake");
-
+    DcMotor leftClimb;
+    DcMotor RightClimb;
     CRServo intakeLeft;
     CRServo intakeRight;
     Servo wristLeft;
@@ -72,7 +73,8 @@ public class IntakeClass {
     boolean gamepad2_y_OAD = false;
     boolean gamepad2_y_LU = false;
     boolean gamepad2_y_release_OAD = false;
-
+    boolean climbUpToggle;
+    boolean climbDownToggle;
     boolean gamepad2_b_OAD = false;
     boolean gamepad2_b_LU = false;
     boolean gamepad2_b_release_OAD = false;
@@ -113,7 +115,8 @@ public class IntakeClass {
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         //CRServo intake = hardwareMap.get(CRServo.class, "intake");
-
+        leftClimb = hardwareMap.get(DcMotor.class, "leftClimb");
+        RightClimb = hardwareMap.get(DcMotor.class, "RightClimb");
         intakeLeft = hardwareMap.get(CRServo.class, "intakeLeft");
         intakeRight = hardwareMap.get(CRServo.class, "intakeRight");
         wristLeft = hardwareMap.get(Servo.class,"wristLeft");
@@ -184,9 +187,11 @@ public class IntakeClass {
         }
         if (intakeToggle == false && spitToggle == false) {
             intakeLeft.setPower(0);
-            intakeRight.setPower(0);
+            intakeRight.setPower(0); }
+//Hang Code
+         {
 
-            /*
+                  /*
             if (team.equals("red")) {
                 //If robot has sample
                 if (colorDetection() == colorSensorReturns.BLUE) {
@@ -207,12 +212,53 @@ public class IntakeClass {
              */
         }
 
-
         //Safety
         if (spitToggle == true && intakeToggle == true) {
             intakeLeft.setPower(1);
             intakeRight.setPower(1);
         }
+
+        //Toggle spit on/off
+
+        if (gamepad1.right_trigger > triggerThreshold && gamepad1.left_trigger < triggerThreshold) {
+            climbUpToggle = true;
+        }
+        if (gamepad1.right_trigger < triggerThreshold) {
+            climbUpToggle= false;
+        }
+
+
+        if (gamepad1.left_trigger > triggerThreshold && gamepad1.right_trigger < triggerThreshold) {
+            climbDownToggle = true;
+        }
+        if (gamepad1.left_trigger < triggerThreshold) {
+            climbDownToggle = false;
+        }
+
+        if (gamepad1.left_trigger > triggerThreshold && gamepad1.right_trigger > triggerThreshold) {
+            climbUpToggle = false;
+            climbDownToggle = false;
+        }
+        if (gamepad1.left_trigger < triggerThreshold && gamepad1.right_trigger < triggerThreshold) {
+            climbUpToggle = false;
+            climbDownToggle = false;
+        }
+
+
+        //Set Power based on logic
+        if (climbDownToggle == true && climbUpToggle == false) {
+            leftClimb.setPower(-1);
+            RightClimb.setPower(-1);
+        }
+        if (climbDownToggle == false && climbUpToggle == true) {
+            leftClimb.setPower(1);
+            RightClimb.setPower(1);
+        }
+        if (climbDownToggle == false && climbUpToggle == false) {
+            leftClimb.setPower(0);
+            RightClimb.setPower(0);
+        }
+
 
 
         //Update current wasPressed state
