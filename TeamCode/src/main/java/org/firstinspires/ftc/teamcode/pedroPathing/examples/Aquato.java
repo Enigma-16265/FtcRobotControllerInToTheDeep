@@ -95,15 +95,15 @@ public class Aquato extends OpMode {
     //SAMPLE \/
 
     /** Start Pose of our robot for robot*/
-    private final Pose sampleStartPose = new Pose(24, 8.5, Math.toRadians(90));
+    private final Pose sampleStartPose = new Pose(8,112.5, Math.toRadians(0));//(32, 8.5, Math.toRadians(90)); Try the ones that I don't have commented out. They might work. Otherwise, try the ones that are commented out, they get you 1 sample auto
 
-    private final Pose scorePose = new Pose(4, /*57*/ 4, Math.toRadians(45));
+    private final Pose scorePose = new Pose(13,131, Math.toRadians(135));//(12,/*57*/ 5, Math.toRadians(45));
 
-    private final Pose pickup1Pose = new Pose(12, 30, Math.toRadians(90));
+    private final Pose pickup1Pose = new Pose(31,121, Math.toRadians(180));//(12, 30, Math.toRadians(90));
 
-    private final Pose pickup2Pose = new Pose(6, 30, Math.toRadians(90));
+    private final Pose pickup2Pose = new Pose(31,131, Math.toRadians(-180));//(6, 30, Math.toRadians(90));
 
-    private final Pose pickup3Pose = new Pose(6, 28, Math.toRadians(135));
+    private final Pose pickup3Pose = new Pose(46,127, Math.toRadians(-90));//(6, 28, Math.toRadians(135));
 
     private final Pose sampleParkPose = new Pose(36, 60, Math.toRadians(90));
 
@@ -115,7 +115,7 @@ public class Aquato extends OpMode {
 
     //SPECIMEN \/
     private final Pose specimenStartPose = new Pose(85, 8.5, Math.toRadians(270));
-    private final Pose hangPose = new Pose(66,41.5, Math.toRadians(270));
+    private final Pose hangPose = new Pose(65,41.5, Math.toRadians(270));
     private final Pose behindSample1 = new Pose(113, 60, Math.toRadians(270));
     private final Pose behindSample1Control1 = new Pose(99, 0, Math.toRadians(270));
     private final Pose behindSample1Control2 = new Pose(108, 60, Math.toRadians(270));
@@ -128,14 +128,14 @@ public class Aquato extends OpMode {
     private final Pose humanPlayerPose3 = new Pose(131, 24, Math.toRadians(270));
     private final Pose grab2 = new Pose(118,13.5, Math.toRadians(270));
     private final Pose grab2Control = new Pose(120,18, Math.toRadians(270));
-    private final Pose hangPose2 = new Pose(68,39, Math.toRadians(270));
+    private final Pose hangPose2 = new Pose(67,39, Math.toRadians(270));
     private final Pose hangControl = new Pose(70, 20, Math.toRadians(270));
     private final Pose grab3 = new Pose(118, 11.75, Math.toRadians(270));
     private final Pose cycleControl = new Pose(88, 20, Math.toRadians(270));
     private final Pose hangPose3 = new Pose(70,39, Math.toRadians(270));
     private final Pose grab4 = new Pose(118, 11.75, Math.toRadians(270));
     private final Pose hangControl2 = new Pose(78, 20, Math.toRadians(270));
-    private final Pose hangPose4 = new Pose(71,40, Math.toRadians(270));
+    private final Pose hangPose4 = new Pose(72,40, Math.toRadians(270));
     private Path scoreSpecimenPreload, specimenPark;
     private PathChain moveSamples, moveBehindSample1, giveSample1, moveBehindSample2, giveSample2, moveBehindSample3, giveSample3, grab2nd, grab2ndAlt, grab3rd, hang2nd, hang3rd, grab4th, hang4th, grab5th, hang5th;
     private int pathState2;
@@ -598,10 +598,10 @@ public class Aquato extends OpMode {
     private void intakeSpecimenPos() {
         SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.0);
         SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.0);
-        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.34);
+        SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.35);
         SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.03);
-        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
-        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
+        //SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+        //SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
         target = 3;
     }
 
@@ -610,8 +610,8 @@ public class Aquato extends OpMode {
         SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.01);
         SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.34);
         SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.03);
-        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
-        SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
+        //SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+        //SmartServo.setSmartPos(hardwareMap, "slideRight", 0.0);
         target = 3;
     }
 
@@ -619,8 +619,8 @@ public class Aquato extends OpMode {
         SmartServo.setSmartPos(hardwareMap, "outtakeLeft", 0.85);
         SmartServo.setSmartPos(hardwareMap, "outtakeRight", 0.85);
         SmartServo.setSmartPos(hardwareMap, "clawWrist", 0.55);
-        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
-        SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+        //SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
+        //SmartServo.setSmartPos(hardwareMap, "slideLeft", 0.0);
         target = 450;
     }
     private void preTransferPos() {
@@ -632,6 +632,8 @@ public class Aquato extends OpMode {
 
     private void sampleIntakePos() {
         SmartServo.setSmartPos(hardwareMap, "wristLeft", 0.89);
+        intakeLeft.setPower(-1);
+        intakeRight.setPower(-1);
     }
 
     private void extendSlides() {
